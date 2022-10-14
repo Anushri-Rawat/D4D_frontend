@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;800&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Poppins", sans-serif;
+}
+.css-sghohy-MuiButtonBase-root-MuiButton-root,
+.css-1nclpby-MuiButtonBase-root-MuiButton-root {
+  background-color: #111dfa !important;
+}
+.dynamic-text > div {
+  display: block;
+  overflow: hidden;
+  font-size: 40px;
+  position: relative;
+  padding-left: 0.5rem;
+  border-right: 2px solid #000;
+  animation: openclose 5s ease-in-out infinite, blink 0.75s step-end infinite;
+}
+@keyframes openclose {
+  0% {
+    top: 0;
+    width: 0;
+  }
+  30% {
+    top: 0;
+    width: 600px;
+  }
+  35% {
+    top: 0;
+    width: 0;
+  }
+  38% {
+    top: -4rem;
+    width: 0px;
+  }
+  62% {
+    top: -4rem;
+    width: 800px;
+  }
+  69% {
+    top: -4rem;
+    width: 0;
+  }
+  75% {
+    top: -7.4rem;
+    width: 0;
+  }
+  95% {
+    top: -7.4rem;
+    width: 700px;
+  }
+  98% {
+    top: -7.4rem;
+    width: 0;
+  }
+  100% {
+    top: 0;
+    width: 0;
+  }
+}
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #000;
+  }
+}
+.description {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+}
