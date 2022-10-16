@@ -10,17 +10,20 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import img1 from "../images/DrawKit Vector Illustration Project Manager (6).png";
+import img2 from "../images/DrawKit Vector Illustration Project Manager (1).png";
+import img3 from "../images/DrawKit Vector Illustration Project Manager (10).png";
 
 const HomePage = () => {
   return (
     <>
       <HeroSection />
-      <Box sx={{ flexGrow: 1, marginTop: "30px" }}>
+      <Box sx={{ flexGrow: 1 }}>
         <h5
           style={{
             textAlign: "center",
-            fontSize: "45px",
-            padding: "20px 0",
+            fontSize: "35px",
+            padding: "18px 0",
             fontWeight: 600,
           }}
         >
@@ -121,24 +124,28 @@ const HomePage = () => {
         <h5
           style={{
             textAlign: "center",
-            fontSize: "45px",
-            padding: "20px 0",
+            fontSize: "35px",
+            padding: "18px 0",
             fontWeight: 600,
           }}
         >
           Features
         </h5>
-        <Box sx={{ display: "flex" }}>
-          <img
-            src="https://img.freepik.com/free-vector/modern-productivity-concept-with-flat-design_23-2147972848.jpg?w=740&t=st=1665594057~exp=1665594657~hmac=b2fe4196354aef239a9e17552bde7788e091a39fa1ccc8ff8f967d66e29c04d1"
-            alt="projects"
-            style={{ width: "50%" }}
-          />
-          <div className="description">
+        <Box
+          sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}
+        >
+          <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <img
+              src={img1}
+              style={{ width: "100%", objectFit: "cover" }}
+              alt="projects"
+            />
+          </Box>
+          <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
             <h2
               style={{
-                fontSize: "32px",
-                padding: "60px 0 10px",
+                fontSize: "28px",
+                padding: "50px 0 10px",
                 fontWeight: 600,
               }}
             >
@@ -149,13 +156,15 @@ const HomePage = () => {
               source code and videos attached to their projects provide others
               with a better understanding of the projects content.
             </p>
-          </div>
+          </Box>
         </Box>
-        <Box sx={{ display: "flex" }}>
-          <div className="description">
+        <Box
+          sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}
+        >
+          <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
             <h2
               style={{
-                fontSize: "32px",
+                fontSize: "28px",
                 padding: "60px 0 10px",
                 fontWeight: 600,
               }}
@@ -168,23 +177,29 @@ const HomePage = () => {
               code. A simple glance at your showcased projects will connect you
               directly with startups and top-notch companies.
             </p>
-          </div>
-          <img
-            src="https://img.freepik.com/free-vector/push-notifications-concept-illustration_114360-4986.jpg?w=740&t=st=1665593989~exp=1665594589~hmac=41d1f5f60f6d5b0cad44b8a7b42484695b495eebfc21b8379bba1a2de7f82f0b"
-            alt="chats"
-            style={{ width: "50%" }}
-          />
+          </Box>
+          <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <img
+              src={img2}
+              style={{ width: "100%", objectFit: "cover" }}
+              alt="chats"
+            />
+          </Box>
         </Box>
-        <Box sx={{ display: "flex" }}>
-          <img
-            src="https://img.freepik.com/free-vector/illustration-characters-fixing-cogwheel_53876-40796.jpg?w=740&t=st=1665594167~exp=1665594767~hmac=ea199f49d33dea4abdb02ed664e515b9b691a55a2999b7a7ae54c4492783170f"
-            alt="portfolio"
-            style={{ width: "50%" }}
-          />
-          <div className="description">
+        <Box
+          sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}
+        >
+          <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <img
+              src={img3}
+              style={{ width: "100%", objectFit: "cover" }}
+              alt="portfolio"
+            />
+          </Box>
+          <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
             <h2
               style={{
-                fontSize: "32px",
+                fontSize: "28px",
                 padding: "60px 0 10px",
                 fontWeight: 600,
               }}
@@ -195,7 +210,7 @@ const HomePage = () => {
               It will add to your portfolio.Having been part of many tech
               community is a sign of good geek.
             </p>
-          </div>
+          </Box>
         </Box>
       </Box>
     </>
