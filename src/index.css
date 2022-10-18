@@ -1,15 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Belleza&display=swap");
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: "Belleza", sans-serif !important;
 }
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Belleza", sans-serif !important;
   background: #dff4f1;
 }
 .css-sghohy-MuiButtonBase-root-MuiButton-root,
-.css-1nclpby-MuiButtonBase-root-MuiButton-root {
+.css-1nclpby-MuiButtonBase-root-MuiButton-root,
+.css-ettv54-MuiButtonBase-root-MuiButton-root {
   background-color: #4cacbc !important;
   font-weight: 600 !important;
 }
@@ -17,4 +20,24 @@ body {
   display: flex;
   flex-direction: column;
   padding: 30px 0;
+}
+.spinner {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  border-bottom-color: transparent;
+  animation: spin infinite 1s linear;
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: -4px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
