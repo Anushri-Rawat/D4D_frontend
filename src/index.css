@@ -1,15 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Belleza&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;800&display=swap");
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: "Belleza", sans-serif !important;
 }
 body {
-  font-family: "Belleza", sans-serif;
-  /* background: #dff4f1; */
+  font-family: "Poppins", sans-serif;
+  background: #dff4f1;
 }
 .css-sghohy-MuiButtonBase-root-MuiButton-root,
-.css-1nclpby-MuiButtonBase-root-MuiButton-root {
+.css-1nclpby-MuiButtonBase-root-MuiButton-root,
+.css-ettv54-MuiButtonBase-root-MuiButton-root {
   background-color: #4cacbc !important;
   border-radius: 50px !important;
   font-size: 12px !important;
@@ -20,66 +22,4 @@ body {
   display: flex;
   flex-direction: column;
   padding: 30px 0;
-}
-.pattern {
-  position: relative;
-  background-color: #4cacbc;
-  background-image: linear-gradient(315deg, #4cacbc 0%, #dff4f1 74%);
-  z-index: -2;
-}
-
-.pattern:before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 215px;
-  background: url("https://media.geeksforgeeks.org/wp-content/uploads/20200326181026/wave3.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  z-index: -1;
-}
-.circles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-.circles > div {
-  position: absolute;
-  display: block;
-  list-style: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50% !important;
-  background: #4cacbc;
-  z-index: -1;
-}
-.circles div:nth-child(1) {
-  left: 0.5%;
-  top: 9%;
-  width: 80px;
-  height: 80px;
-}
-
-.circles div:nth-child(2) {
-  right: 3%;
-  top: 5%;
-  width: 150px;
-  height: 150px;
-}
-.circles div:nth-child(3) {
-  left: -3%;
-  bottom: -8%;
-  width: 80px;
-  height: 80px;
-}
-.circles div:nth-child(4) {
-  right: -3%;
-  bottom: -8%;
-  width: 100px;
-  height: 100px;
 }

@@ -3,15 +3,31 @@ import { Container } from "@mui/material";
 import Footer from "./component/Footer";
 import Header from "./component/Header";
 import HomePage from "./pages/HomePage";
-
+import { Route, Routes } from "react-router-dom";
+import SignupPage from "./pages/SignupPage";
+import SigninPage from "./pages/SigninPage";
 function App() {
   return (
     <div className="App">
-      <header>
-        <Header />
-      </header>
       <main>
-        <HomePage />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <header>
+                  <Header />
+                </header>
+                <Container>
+                  <HomePage />{" "}
+                </Container>
+              </>
+            }
+          />
+
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signin" element={<SigninPage />} />
+        </Routes>
       </main>
       <footer>
         <Footer />
