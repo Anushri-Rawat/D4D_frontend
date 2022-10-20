@@ -11,9 +11,7 @@ function App() {
         <Header />
       </header>
       <main>
-        <Container>
-          <HomePage />
-        </Container>
+        <HomePage />
       </main>
       <footer>
         <Footer />
