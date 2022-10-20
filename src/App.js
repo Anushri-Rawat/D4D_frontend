@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "@mui/material";
 import Footer from "./component/Footer";
 import Header from "./component/Header";
 import HomePage from "./pages/HomePage";
@@ -18,9 +17,7 @@ function App() {
                 <header>
                   <Header />
                 </header>
-                <Container>
-                  <HomePage />{" "}
-                </Container>
+                <HomePage />
               </>
             }
           />
