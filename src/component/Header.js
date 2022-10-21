@@ -3,7 +3,7 @@ import { Container, Button, Box, Paper } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 const Header = () => {
   return (
-    <Paper elevation={2} sx={{ background: "#dff4f1" }}>
+    <Paper elevation={2}>
       <Container
         sx={{
           display: "flex",
