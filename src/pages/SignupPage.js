@@ -2,13 +2,15 @@ import { Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import img from "./../images/DrawKit Vector Illustration Project Manager (4).png";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import SignupForm from "../component/SignupForm";
-import { StayPrimaryLandscape } from "@mui/icons-material";
 import { register } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useEffect } from "react";
 
 const validationSchema = yup.object({
   email: yup
@@ -31,6 +33,12 @@ const Signup = () => {
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loading && !error && userInfo) {
+      navigate("/profile");
+    }
+  }, [userInfo, loading, error, navigate]);
 
   const formik = useFormik({
     initialValues: {
@@ -44,6 +52,10 @@ const Signup = () => {
       dispatch(register(values));
     },
   });
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const matchessm = useMediaQuery(theme.breakpoints.down("sm"));
+  const matchesxs = useMediaQuery("(min-width:500px)");
 
   return (
     <Container maxWidth="xl" sx={{}}>
@@ -57,39 +69,46 @@ const Signup = () => {
         }}
       >
         <Grid item xs={12} md={6}>
-          <div
-            style={{
-              backgroundColor: "#4cacbc",
-              width: "90px",
-              height: "90px",
-              borderRadius: "50%",
-              position: "absolute",
-              left: "10px",
-              top: "10px",
-            }}
-          ></div>
-          <div
-            style={{
-              backgroundColor: "#4cacbc",
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              position: "absolute",
-              left: "100px",
-              top: "100px",
-            }}
-          ></div>
+          {matchesxs && (
+            <>
+              <div
+                style={{
+                  backgroundColor: "#4cacbc",
+                  width: matchessm ? "60px" : "90px",
+                  height: matchessm ? "60px" : "90px",
+                  borderRadius: "50%",
+                  position: "absolute",
+                  zIndex: "-1",
+                  left: "10px",
+                  top: "10px",
+                }}
+              ></div>
 
-          <img src={img} alt="" style={{ width: "100%" }} />
+              <div
+                style={{
+                  backgroundColor: "#4cacbc",
+                  width: matchessm ? "20px" : "40px",
+                  height: matchessm ? "20px" : "40px",
+                  borderRadius: "50%",
+                  position: "absolute",
+                  zIndex: "-1",
+                  left: matchessm ? "70px" : "100px",
+                  top: matchessm ? "70px" : "100px",
+                }}
+              ></div>
+            </>
+          )}
+          {matches && <img src={img} alt="" style={{ width: "100%" }} />}
         </Grid>
         <Grid item xs={12} md={6}>
           <div
             style={{
               backgroundColor: "#4cacbc",
-              width: "100px",
-              height: "100px",
+              width: !matchesxs ? "70px" : "100px",
+              height: !matchesxs ? "70px" : "100px",
               borderRadius: "0 0 0 100%",
               position: "absolute",
+              zIndex: "-1",
               right: "0",
               top: "0",
             }}
@@ -126,33 +145,40 @@ const Signup = () => {
               height: "150px",
               borderRadius: "0 100% 0 0",
               position: "absolute",
+              zIndex: "-1",
               left: "0",
               bottom: "0",
             }}
           ></div>
 
-          <div
-            style={{
-              backgroundColor: "#4cacbc",
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              position: "absolute",
-              right: "100px",
-              bottom: "100px",
-            }}
-          ></div>
-          <div
-            style={{
-              backgroundColor: "#4cacbc",
-              width: "90px",
-              height: "90px",
-              borderRadius: "50%",
-              position: "absolute",
-              right: "10px",
-              bottom: "10px",
-            }}
-          ></div>
+          {matchesxs && (
+            <>
+              <div
+                style={{
+                  backgroundColor: "#4cacbc",
+                  width: matchessm ? "20px" : "40px",
+                  height: matchessm ? "20px" : "40px",
+                  borderRadius: "50%",
+                  position: "absolute",
+                  zIndex: "-1",
+                  right: matchessm ? "70px" : "100px",
+                  bottom: matchessm ? "70px" : "100px",
+                }}
+              ></div>
+              <div
+                style={{
+                  backgroundColor: "#4cacbc",
+                  width: matchessm ? "60px" : "90px",
+                  height: matchessm ? "60px" : "90px",
+                  borderRadius: "50%",
+                  position: "absolute",
+                  zIndex: "-1",
+                  right: "10px",
+                  bottom: "10px",
+                }}
+              ></div>
+            </>
+          )}
         </Grid>
       </Grid>
     </Container>

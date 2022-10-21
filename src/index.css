@@ -10,14 +10,16 @@ body {
   /* background: #dff4f1; */
 }
 .css-sghohy-MuiButtonBase-root-MuiButton-root,
-.css-1nclpby-MuiButtonBase-root-MuiButton-root,
-.css-ettv54-MuiButtonBase-root-MuiButton-root {
+.css-1nclpby-MuiButtonBase-root-MuiButton-root {
   background-color: #4cacbc !important;
   border-radius: 50px !important;
   font-size: 12px !important;
   box-shadow: none !important;
   padding: 6px 20px !important;
   font-weight: 600 !important;
+}
+[class*="MuiButtonBase"] {
+  background-color: #4cacbc !important;
 }
 .description {
   display: flex;
