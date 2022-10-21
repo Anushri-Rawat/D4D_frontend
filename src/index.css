@@ -12,7 +12,7 @@ body {
 }
 .css-sghohy-MuiButtonBase-root-MuiButton-root,
 .css-1nclpby-MuiButtonBase-root-MuiButton-root,
-.css-ettv54-MuiButtonBase-root-MuiButton-root {
+[class*="MuiButtonBase"] {
   background-color: #4cacbc !important;
   font-weight: 600 !important;
 }
