@@ -9,19 +9,12 @@ import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
     <div className="App">
+      <header>
+        <Header />
+      </header>
       <main>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <header>
-                  <Header />
-                </header>
-                <HomePage />
-              </>
-            }
-          />
+          <Route path="/" element={<HomePage />} />
 
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/signin" element={<SigninPage />} />

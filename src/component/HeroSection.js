@@ -20,7 +20,7 @@ const HeroSection = () => {
       >
         <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
           <Typography
-            as="h4"
+            variant="h4"
             sx={{
               fontSize: { xs: "35px", sm: "35px", md: "42px" },
               padding: "20px 0 0 0",

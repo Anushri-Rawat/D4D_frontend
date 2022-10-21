@@ -9,6 +9,9 @@ body {
   font-family: "Poppins", sans-serif;
   /* background: #dff4f1; */
 }
+a {
+  text-decoration: none !important;
+}
 .css-sghohy-MuiButtonBase-root-MuiButton-root,
 .css-1nclpby-MuiButtonBase-root-MuiButton-root {
   background-color: #4cacbc !important;
