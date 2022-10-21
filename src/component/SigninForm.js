@@ -6,12 +6,16 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import Spinner from "./Spinner";
 
 const SigninForm = ({ formik }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Grid container justifyContent="center">
       <form
@@ -34,7 +38,7 @@ const SigninForm = ({ formik }) => {
               </InputAdornment>
             ),
           }}
-          sx={{ width: "500px" }}
+          sx={{ width: matches ? "350px" : "470px" }}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -54,7 +58,7 @@ const SigninForm = ({ formik }) => {
               </InputAdornment>
             ),
           }}
-          sx={{ width: "500px" }}
+          sx={{ width: matches ? "350px" : "470px" }}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}

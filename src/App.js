@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import { Route, Routes } from "react-router-dom";
 import SignupPage from "./pages/SignupPage";
 import SigninPage from "./pages/SigninPage";
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
 
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/signin" element={<SigninPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </main>
       <footer>
