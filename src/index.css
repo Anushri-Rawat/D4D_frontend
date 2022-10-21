@@ -29,9 +29,9 @@ body {
   background-color: #4cacbc;
   background-image: linear-gradient(315deg, #4cacbc 0%, #dff4f1 74%);
   z-index: -2;
-}
+} */
 
-.pattern:before {
+/* .pattern:before {
   content: "";
   position: absolute;
   bottom: 0;

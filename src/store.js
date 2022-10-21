@@ -7,7 +7,7 @@ const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
 });
-const initialState = { openLogin: false };
+const initialState = {};
 
 const store = createStore(
   reducers,

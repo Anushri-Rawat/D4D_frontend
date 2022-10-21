@@ -15,10 +15,10 @@ const HeroSection = () => {
       <Container
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { xs: "column", sm: "column", md: "row" },
         }}
       >
-        <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+        <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
           <Typography
             as="h4"
             sx={{
@@ -39,7 +39,7 @@ const HeroSection = () => {
             Explore work
           </Button>
         </Box>
-        <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+        <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
           <img src={img} style={{ width: "100%", objectFit: "cover" }} />
         </Box>
       </Container>

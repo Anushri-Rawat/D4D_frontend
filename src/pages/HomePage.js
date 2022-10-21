@@ -176,16 +176,19 @@ const HomePage = () => {
             Features
           </h5>
           <Box
-            sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "column", md: "row" },
+            }}
           >
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
               <img
                 src={img1}
                 style={{ width: "100%", objectFit: "cover" }}
                 alt="projects"
               />
             </Box>
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
               <h2
                 style={{
                   fontSize: "28px",
@@ -203,9 +206,12 @@ const HomePage = () => {
             </Box>
           </Box>
           <Box
-            sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "column", md: "row" },
+            }}
           >
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
               <h2
                 style={{
                   fontSize: "28px",
@@ -222,7 +228,7 @@ const HomePage = () => {
                 you directly with startups and top-notch companies.
               </p>
             </Box>
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
               <img
                 src={img2}
                 style={{ width: "100%", objectFit: "cover" }}
@@ -231,16 +237,19 @@ const HomePage = () => {
             </Box>
           </Box>
           <Box
-            sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "column", md: "row" },
+            }}
           >
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
               <img
                 src={img3}
                 style={{ width: "100%", objectFit: "cover" }}
                 alt="portfolio"
               />
             </Box>
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+            <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
               <h2
                 style={{
                   fontSize: "28px",
