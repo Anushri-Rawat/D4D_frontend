@@ -4,7 +4,6 @@ import Grid from "@mui/material/Grid";
 import InputAdornment from "@mui/material/InputAdornment";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -13,7 +12,7 @@ import Spinner from "./Spinner";
 
 const SigninForm = ({ formik }) => {
   const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
+  const { loading, error } = userLogin;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   return (
@@ -85,6 +84,7 @@ const SigninForm = ({ formik }) => {
             padding: "10px 64px",
             margin: "30px auto",
             display: "block",
+            backgroundColor: "#4cacbc",
           }}
         >
           {" "}

@@ -12,7 +12,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Spinner from "./Spinner";
 const SignupForm = ({ formik }) => {
   const userRegister = useSelector((state) => state.userRegister);
-  const { loading, error, userInfo } = userRegister;
+  const { loading, error } = userRegister;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   return (
@@ -122,6 +122,7 @@ const SignupForm = ({ formik }) => {
             padding: "10px 64px",
             margin: "30px auto",
             display: "block",
+            backgroundColor: "#4cacbc",
           }}
         >
           {loading && <Spinner />}

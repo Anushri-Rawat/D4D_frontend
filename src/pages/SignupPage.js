@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const validationSchema = yup.object({
   email: yup
@@ -36,7 +37,10 @@ const Signup = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
+      toast.success("User successfully registered in");
       navigate("/profile");
+    } else {
+      toast.error(error);
     }
   }, [userInfo, loading, error, navigate]);
 

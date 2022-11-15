@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Skeleton } from "@mui/material";
 import img from "../images/DrawKit Vector Illustration Project Manager (7).png";
 import { Container } from "@mui/system";
 
@@ -40,7 +40,15 @@ const HeroSection = () => {
           </Button>
         </Box>
         <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
-          <img src={img} style={{ width: "100%", objectFit: "cover" }} />
+          {img ? (
+            <img
+              src={img}
+              style={{ width: "100%", objectFit: "cover" }}
+              alt="vectorimg"
+            />
+          ) : (
+            <Skeleton variant="rectangular" width="100%" height="370px" />
+          )}
         </Box>
       </Container>
     </Box>

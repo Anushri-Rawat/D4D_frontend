@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <Container fluid sx={{ textAlign: "center", marginTop: "30px" }}>
+    <Container sx={{ textAlign: "center", marginTop: "30px" }}>
       <p>Created by me &copy; Anushri Rawat and Nikita Bhatnagar</p>
     </Container>
   );

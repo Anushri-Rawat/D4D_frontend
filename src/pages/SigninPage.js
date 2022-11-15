@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+
 const validationSchema = yup.object({
   email: yup
     .string("Enter your email")
@@ -30,7 +32,10 @@ const Signup = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
+      toast.success("User successfully logged in");
       navigate("/profile");
+    } else {
+      toast.error(error);
     }
   }, [userInfo, loading, error, navigate]);
 
@@ -71,7 +76,6 @@ const Signup = () => {
                   borderRadius: "50%",
                   position: "absolute",
                   zIndex: "-1",
-                  zIndex: "-1",
                   left: "10px",
                   top: "10px",
                 }}
@@ -84,7 +88,6 @@ const Signup = () => {
                   height: matchessm ? "20px" : "40px",
                   borderRadius: "50%",
                   position: "absolute",
-                  zIndex: "-1",
                   zIndex: "-1",
                   left: matchessm ? "70px" : "100px",
                   top: matchessm ? "70px" : "100px",
@@ -156,7 +159,6 @@ const Signup = () => {
                   borderRadius: "50%",
                   position: "absolute",
                   zIndex: "-1",
-                  zIndex: "-1",
                   right: matchessm ? "70px" : "100px",
                   bottom: matchessm ? "70px" : "100px",
                 }}
@@ -168,7 +170,6 @@ const Signup = () => {
                   height: matchessm ? "60px" : "90px",
                   borderRadius: "50%",
                   position: "absolute",
-                  zIndex: "-1",
                   zIndex: "-1",
                   right: "10px",
                   bottom: "10px",

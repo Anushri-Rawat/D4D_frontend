@@ -21,9 +21,6 @@ a {
   padding: 6px 20px !important;
   font-weight: 600 !important;
 }
-[class*="MuiButtonBase"] {
-  background-color: #4cacbc !important;
-}
 .description {
   display: flex;
   flex-direction: column;
