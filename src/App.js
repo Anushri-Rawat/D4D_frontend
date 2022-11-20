@@ -8,6 +8,7 @@ import SigninPage from "./pages/SigninPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProjectPage from "./pages/ProjectPage";
 import { ToastContainer } from "react-toastify";
+
 function App() {
   return (
     <div className="App">
