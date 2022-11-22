@@ -16,6 +16,7 @@ const HeroSection = () => {
         sx={{
           display: "flex",
           flexDirection: { xs: "column", sm: "column", md: "row" },
+          alignItems: { xs: "flex-start", sm: "center" },
         }}
       >
         <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
@@ -23,7 +24,6 @@ const HeroSection = () => {
             variant="h4"
             sx={{
               fontSize: { xs: "35px", sm: "35px", md: "42px" },
-              padding: "20px 0 0 0",
               fontWeight: "600",
               fontFamily: "Belleza",
               marginTop: { xs: 0, sm: "30px" },

@@ -1,6 +1,4 @@
-import { Typography } from "@mui/material";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import { Typography, useMediaQuery, Grid, Container } from "@mui/material";
 import img from "./../images/DrawKit Vector Illustration Project Manager (4).png";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -9,7 +7,6 @@ import SignupForm from "../component/SignupForm";
 import { register } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -34,13 +31,19 @@ const Signup = () => {
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
+  const { profileInfo } = useSelector((state) => state.userDetails);
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
-      toast.success("User successfully registered in");
-      navigate("/profile");
+      if (!profileInfo) {
+        toast.success("User successfully logged in");
+      }
+      navigate("/edit/basic-details");
     } else {
       toast.error(error);
+    }
+    if (profileInfo) {
+      navigate("/");
     }
   }, [userInfo, loading, error, navigate]);
 

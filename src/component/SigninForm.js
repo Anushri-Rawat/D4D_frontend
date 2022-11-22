@@ -1,12 +1,13 @@
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import InputAdornment from "@mui/material/InputAdornment";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Typography } from "@mui/material";
+import { LockOutlined, MailOutline } from "@mui/icons-material";
+import {
+  Typography,
+  useMediaQuery,
+  InputAdornment,
+  Grid,
+  Button,
+  TextField,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import Spinner from "./Spinner";
 
@@ -33,7 +34,7 @@ const SigninForm = ({ formik }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <MailOutlineIcon />
+                <MailOutline />
               </InputAdornment>
             ),
           }}
@@ -53,7 +54,7 @@ const SigninForm = ({ formik }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <LockOutlinedIcon />
+                <LockOutlined />
               </InputAdornment>
             ),
           }}

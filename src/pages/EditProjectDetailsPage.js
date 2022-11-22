@@ -4,7 +4,7 @@ import StepComponent from "../component/StepComponent";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const ProjectPage = () => {
+const EditProjectDetailsPage = () => {
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.userLogin);
 
@@ -55,4 +55,4 @@ const ProjectPage = () => {
   );
 };
 
-export default ProjectPage;
+export default EditProjectDetailsPage;
