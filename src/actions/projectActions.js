@@ -2,6 +2,18 @@ import {
   PROJECT_ADD_FAIL,
   PROJECT_ADD_REQUEST,
   PROJECT_ADD_SUCCESS,
+  PROJECT_LIST_FAIL,
+  PROJECT_LIST_REQUEST,
+  PROJECT_LIST_SUCCESS,
+  PROJECT_DETAILS_FAIL,
+  PROJECT_DETAILS_REQUEST,
+  PROJECT_DETAILS_SUCCESS,
+  PROJECT_DELETE_FAIL,
+  PROJECT_DELETE_REQUEST,
+  PROJECT_DELETE_SUCCESS,
+  PROJECT_UPDATE_FAIL,
+  PROJECT_UPDATE_REQUEST,
+  PROJECT_UPDATE_SUCCESS,
 } from "../constants/projectConstants";
 import axios from "axios";
 
@@ -34,3 +46,102 @@ export const createProject =
       });
     }
   };
+
+export const getProjectList = (id, userInfo) => async (dispatch) => {
+  try {
+    dispatch({ type: PROJECT_LIST_REQUEST });
+
+    const url = `http://127.0.0.1:5000/api/project/all/${id}`;
+    const res = await axios.get(url, {
+      headers: {
+        authorization: `Bearer ${userInfo.token}`,
+      },
+    });
+
+    dispatch({ type: PROJECT_LIST_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_LIST_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};
+
+export const getProjectDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: PROJECT_DETAILS_REQUEST });
+
+    const url = `http://127.0.0.1:5000/api/project/${id}`;
+    const res = await axios.get(url);
+    const url2 = `http://127.0.0.1:5000/api/comment/${id}`;
+    const res2 = await axios.get(url2);
+    const output = { ...res.data, ...res2.data };
+    dispatch({ type: PROJECT_DETAILS_SUCCESS, payload: output });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_DETAILS_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};
+
+export const deleteProject = (userInfo, id) => async (dispatch) => {
+  try {
+    dispatch({ type: PROJECT_DELETE_REQUEST });
+    const url = `http://127.0.0.1:5000/api/project/${id}`;
+    await axios.delete(url, {
+      headers: {
+        authorization: `Bearer ${userInfo.token}`,
+      },
+    });
+    dispatch({ type: PROJECT_DELETE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_DELETE_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};
+
+export const updateProject = (userInfo, id) => async (dispatch) => {
+  try {
+    dispatch({ type: PROJECT_UPDATE_REQUEST });
+
+    const url = `http://127.0.0.1:5000/api/project/${id}`;
+    const res = await axios.patch(url, {
+      headers: {
+        authorization: `Bearer ${userInfo.token}`,
+      },
+    });
+
+    dispatch({ type: PROJECT_UPDATE_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_UPDATE_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};
+
+export const updateLikesOfProject = (userInfo, id) => async (dispatch) => {
+  try {
+    dispatch({ type: PROJECT_UPDATE_REQUEST });
+
+    const url = `http://127.0.0.1:5000/api/project/like/${id}`;
+    const res = await axios.post(
+      url,
+      {},
+      {
+        headers: {
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+    );
+    dispatch({ type: PROJECT_UPDATE_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_UPDATE_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};

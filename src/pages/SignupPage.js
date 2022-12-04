@@ -31,21 +31,21 @@ const Signup = () => {
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
-  const { profileInfo } = useSelector((state) => state.userDetails);
+  const { user } = useSelector((state) => state.userDetails);
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
-      if (!profileInfo) {
+      if (!user) {
         toast.success("User successfully logged in");
       }
       navigate("/edit/basic-details");
     } else {
       toast.error(error);
     }
-    if (profileInfo) {
+    if (user) {
       navigate("/");
     }
-  }, [userInfo, loading, error, navigate]);
+  }, [userInfo, loading, error, navigate, user]);
 
   const formik = useFormik({
     initialValues: {

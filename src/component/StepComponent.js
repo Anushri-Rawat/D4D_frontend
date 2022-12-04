@@ -9,7 +9,7 @@ const StepComponent = ({ step1, step2 }) => {
       <Box
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <RouterLink to="/profile">
+        <RouterLink to="/edit/basic-details">
           {!step1 ? (
             <Box
               sx={{
@@ -54,7 +54,7 @@ const StepComponent = ({ step1, step2 }) => {
             padding: 0,
           }}
         ></div>
-        <RouterLink to="/profile/projects-gallery">
+        <RouterLink to="/edit/projects-gallery">
           {!step2 ? (
             <Box
               sx={{

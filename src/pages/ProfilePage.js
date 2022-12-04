@@ -19,6 +19,7 @@ import {
   Edit,
   Add,
   Science,
+  Chat,
 } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
 import { Container } from "@mui/system";
@@ -27,6 +28,7 @@ import { getProfileById } from "../actions/userActions";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../component/Loader";
 import { toast } from "react-toastify";
+import { getProjectList } from "../actions/projectActions";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -46,10 +48,17 @@ const ProfilePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, profileInfo, success } = useSelector(
-    (state) => state.userProfile
-  );
+  const { loading, profileInfo } = useSelector((state) => state.userProfile);
   const { userInfo } = useSelector((state) => state.userLogin);
+
+  const { projects, loading: projectLoading } = useSelector(
+    (state) => state.projectList
+  );
+
+  const { success: deleteSuccess } = useSelector(
+    (state) => state.projectDelete
+  );
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
@@ -62,28 +71,37 @@ const ProfilePage = () => {
     } else {
       dispatch(getProfileById(id));
     }
-  }, [id, userInfo, profileInfo]);
+    if (deleteSuccess) {
+      toast.success("project delted successfully!");
+    }
+    dispatch(getProjectList(id, userInfo));
+  }, [id, userInfo, profileInfo, deleteSuccess]);
   return !loading ? (
     <Container
       sx={{
-        padding: "40px",
-        background: "rgb(250 251 255/1)",
+        padding: { xs: "0", sm: "40px" },
       }}
     >
-      <Stack direction="row" spacing={4}>
+      <Stack
+        direction="row"
+        sx={{
+          flexDirection: { xs: "column", sm: "row" },
+          gap: { xs: 0, sm: "1.5rem" },
+        }}
+      >
         <Item
           elevation={2}
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "30%",
+            width: { xs: "100%", sm: "32%" },
             textAlign: "left",
             color: "#000",
             padding: 0,
           }}
         >
           <Box as="div" sx={{ position: "relative" }}>
-            <img src={bg} alt="background" height={112} width={"100%"} />
+            <img src={bg} alt="background" height={130} width={"100%"} />
             <Avatar
               src={profileInfo?.profile_image}
               alt="profile-picture"
@@ -91,7 +109,7 @@ const ProfilePage = () => {
                 width: "100px",
                 height: "100px",
                 position: "absolute",
-                bottom: "-50px",
+                bottom: "-40px",
                 left: "10px",
                 border: "2px solid #fff",
               }}
@@ -135,18 +153,32 @@ const ProfilePage = () => {
                 </span>
               ))}
             </Box>
-            <Button
-              variant="outlined"
-              startIcon={<EditRounded />}
-              sx={{ margin: "20px 0 10px" }}
-              onClick={() => navigate("/edit/basic-details")}
-            >
-              Edit Profile
-            </Button>
+            {userInfo._id === profileInfo?._id ? (
+              <Button
+                variant="outlined"
+                startIcon={<EditRounded />}
+                sx={{ margin: "20px 0 10px" }}
+                onClick={() => navigate("/edit/basic-details")}
+              >
+                Edit Profile
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<Chat />}
+                sx={{ margin: "20px 0 10px" }}
+              >
+                Request Chat
+              </Button>
+            )}
             <Button
               variant="contained"
               startIcon={<Share />}
-              sx={{ borderRadius: "2px", background: "#4cacbc " }}
+              sx={{
+                borderRadius: "2px",
+                background: "#4cacbc ",
+                marginBottom: "15px",
+              }}
             >
               Share
             </Button>
@@ -157,10 +189,11 @@ const ProfilePage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "70%",
+            width: { xs: "100%", sm: "68%" },
             textAlign: "left",
             color: "#000",
             padding: 0,
+            marginLeft: { xs: 0 },
           }}
         >
           <TabContext value={value}>
@@ -168,7 +201,6 @@ const ProfilePage = () => {
               sx={{
                 borderBottom: 1,
                 borderColor: "divider",
-                background: "rgb(250 251 255/1)",
               }}
             >
               <TabList onChange={handleChange}>
@@ -191,7 +223,6 @@ const ProfilePage = () => {
               value="1"
               sx={{
                 padding: "24px 0",
-                background: "rgb(250 251 255/1)",
               }}
             >
               <Box sx={{ padding: "5px" }}>
@@ -215,12 +246,14 @@ const ProfilePage = () => {
                     >
                       About me
                     </Typography>
-                    <IconButton
-                      sx={{ padding: 0, color: "#000" }}
-                      onClick={() => navigate("/edit/basic-details")}
-                    >
-                      <Edit />
-                    </IconButton>
+                    {userInfo._id === profileInfo?._id && (
+                      <IconButton
+                        sx={{ padding: 0, color: "#000" }}
+                        onClick={() => navigate("/edit/basic-details")}
+                      >
+                        <Edit />
+                      </IconButton>
+                    )}
                   </Stack>
                   <Typography variant="p">
                     {profileInfo?.description}
@@ -247,17 +280,18 @@ const ProfilePage = () => {
                     >
                       Top Projects
                     </Typography>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <Add />
-                      <IconButton
-                        sx={{ padding: 0, color: "#000" }}
-                        onClick={() => navigate("/edit/basic-details")}
-                      >
-                        <Edit />
-                      </IconButton>
-                    </div>
+                    {userInfo._id === profileInfo?._id && (
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <Add />
+                        <IconButton
+                          sx={{ padding: 0, color: "#000" }}
+                          onClick={() => navigate("/edit/basic-details")}
+                        >
+                          <Edit />
+                        </IconButton>
+                      </div>
+                    )}
                   </Stack>
-                  <ProjectCard />
                 </Paper>
               </Box>
             </TabPanel>
@@ -272,19 +306,32 @@ const ProfilePage = () => {
                   border: "1px solid rgb(226 232 239)",
                 }}
               >
-                <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, marginBottom: "15px" }}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "15px",
+                  }}
                 >
-                  All Projects
-                </Typography>
-                <Box sx={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
-                  <ProjectCard />
-                  <ProjectCard />
-                  <ProjectCard />
-                  <ProjectCard />
-                  <ProjectCard />
-                  <ProjectCard />
+                  <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                    All Projects
+                  </Typography>
+                  {userInfo._id === profileInfo?._id && (
+                    <IconButton
+                      onClick={() => {
+                        navigate("/edit/projects-gallery");
+                      }}
+                    >
+                      <Add sx={{ color: "#000" }} />
+                    </IconButton>
+                  )}
+                </Box>
+                <Box sx={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+                  {!projectLoading &&
+                    projects.map((project) => (
+                      <ProjectCard project={project} key={project._id} />
+                    ))}
                 </Box>
               </Paper>
             </TabPanel>

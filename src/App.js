@@ -7,6 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import SigninPage from "./pages/SigninPage";
 import EditDetailsPage from "./pages/EditDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
 import { ToastContainer } from "react-toastify";
 
@@ -27,7 +28,15 @@ function App() {
             path="/edit/projects-gallery"
             element={<EditProjectDetailsPage />}
           />
+          <Route
+            path="/edit/projects-gallery/:id"
+            element={<EditProjectDetailsPage />}
+          />
           <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route
+            path="/project/:project_name/:id"
+            element={<ProjectDetailsPage />}
+          />
         </Routes>
         <ToastContainer
           position="top-right"

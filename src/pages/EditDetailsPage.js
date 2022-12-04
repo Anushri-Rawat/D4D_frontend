@@ -23,11 +23,6 @@ import stateCountry from "state-country";
 const EditDetailsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const usernameRef = useRef();
-  const titleRef = useRef();
-  const githubRef = useRef();
-  const linkedinRef = useRef();
-  const descriptionRef = useRef();
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
@@ -35,6 +30,11 @@ const EditDetailsPage = () => {
     (state) => state.userDetails
   );
 
+  const [username, setUsername] = useState();
+  const [title, setTitle] = useState();
+  const [githubUrl, setGithubUrl] = useState();
+  const [linkedinUrl, setLinkedinUrl] = useState();
+  const [description, setDescription] = useState();
   const [tags, setTags] = useState([]);
   const [country, setCountry] = useState(user?.country || "");
   const [state, setState] = useState(user?.country || "");
@@ -51,11 +51,11 @@ const EditDetailsPage = () => {
         dispatch({ type: USER_DETAILS_UPDATE_RESET });
         dispatch(getMyProfile(userInfo));
       } else {
-        usernameRef.current.value = user?.username || "";
-        descriptionRef.current.value = user?.description || "";
-        titleRef.current.value = user?.title || "";
-        githubRef.current.value = user?.github_profile_link || "";
-        linkedinRef.current.value = user?.linkedin_profile_link || "";
+        setUsername(user?.username || "");
+        setDescription(user?.description || "");
+        setTitle(user?.title || "");
+        setGithubUrl(user?.github_profile_link || "");
+        setLinkedinUrl(user?.linkedin_profile_link || "");
         setCountry(user?.country || "");
         setState(user?.state || "");
         setTags(user?.skills || []);
@@ -87,14 +87,14 @@ const EditDetailsPage = () => {
     e.preventDefault();
     const form = new FormData();
     form.append("profile_image", profile.profileImg);
-    form.append("username", usernameRef.current.value);
-    form.append("title", titleRef.current.value);
+    form.append("username", username);
+    form.append("title", title);
     form.append("state", state);
     form.append("country", country);
-    form.append("description", descriptionRef.current.value);
+    form.append("description", description);
     tags.map((tag) => form.append("skills", tag));
-    form.append("linkedin_profile_link", linkedinRef.current.value);
-    form.append("github_profile_link", githubRef.current.value);
+    form.append("linkedin_profile_link", linkedinUrl);
+    form.append("github_profile_link", githubUrl);
     dispatch(updateSelfProfile(userInfo, form));
   };
 
@@ -157,7 +157,8 @@ const EditDetailsPage = () => {
                     type="text"
                     size="small"
                     fullWidth
-                    inputRef={usernameRef}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                     required
                   />
@@ -193,7 +194,8 @@ const EditDetailsPage = () => {
                     label="Title"
                     type="text"
                     size="small"
-                    inputRef={titleRef}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                     required
                   ></TextField>
@@ -243,7 +245,8 @@ const EditDetailsPage = () => {
                     label="Github Link"
                     type="text"
                     size="small"
-                    inputRef={githubRef}
+                    value={githubUrl}
+                    onChange={(e) => setGithubUrl(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   ></TextField>
                 </Grid>
@@ -254,7 +257,8 @@ const EditDetailsPage = () => {
                     label="Linkedin Link"
                     size="small"
                     type="text"
-                    inputRef={linkedinRef}
+                    value={linkedinUrl}
+                    onChange={(e) => setLinkedinUrl(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   ></TextField>
                 </Grid>
@@ -263,6 +267,7 @@ const EditDetailsPage = () => {
                     fullWidth
                     size="small"
                     id="tags"
+                    placeHolder="My Skills"
                     maxTags={10}
                     value={tags}
                     onChange={handleChange}
@@ -276,7 +281,8 @@ const EditDetailsPage = () => {
                     type="text"
                     multiline
                     rows={5}
-                    inputRef={descriptionRef}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   ></TextField>
                 </Grid>
