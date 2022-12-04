@@ -1,14 +1,16 @@
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import InputAdornment from "@mui/material/InputAdornment";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useSelector } from "react-redux";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  useMediaQuery,
+  InputAdornment,
+  Grid,
+  Button,
+  TextField,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Spinner from "./Spinner";
 const SignupForm = ({ formik }) => {
   const userRegister = useSelector((state) => state.userRegister);

@@ -1,288 +1,300 @@
-import React, { useState, useEffect, useRef } from "react";
-import StepComponent from "../component/StepComponent";
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
 import {
-  Button,
-  TextField,
-  Grid,
-  Container,
+  Stack,
+  Paper,
   Box,
-  Avatar,
   Typography,
+  Button,
+  Avatar,
+  IconButton,
+  Tab,
 } from "@mui/material";
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { TagsInput } from "react-tag-input-component";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getMyProfile, updateProfile } from "../actions/userActions";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import bg from "../images/background-wallpaper-with-polygons-in-gradient-colors-vector.jpg";
+import {
+  EditRounded,
+  PersonRounded,
+  Share,
+  Edit,
+  Add,
+  Science,
+} from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
+import { Container } from "@mui/system";
+import ProjectCard from "../component/ProjectCard";
+import { getProfileById } from "../actions/userActions";
+import { useNavigate, useParams } from "react-router-dom";
+import Loader from "../component/Loader";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { USER_PROFILE_UPDATE_RESET } from "../constants/userConstants";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  borderRadius: "2px",
+}));
 
 const ProfilePage = () => {
+  const [value, setValue] = useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const usernameRef = useRef();
-  const titleRef = useRef();
-  const cityRef = useRef();
-  const countryRef = useRef();
-  const githubRef = useRef();
-  const linkedinRef = useRef();
-  const descriptionRef = useRef();
-
-  const { userInfo } = useSelector((state) => state.userLogin);
-
-  const { success: profileSuccess, error: profileError } = useSelector(
+  const { loading, profileInfo, success } = useSelector(
     (state) => state.userProfile
   );
-
-  const { profileInfo } = useSelector((state) => state.userDetails);
-
-  const [tags, setTags] = useState(
-    profileInfo?.skills ? profileInfo.skills : []
-  );
-  const [profile, setProfile] = useState({
-    profileImg: profileInfo?.profile_image ? profileInfo.profile_image : null,
-    photoUrl: null,
-  });
-
+  const { userInfo } = useSelector((state) => state.userLogin);
   useEffect(() => {
     if (!userInfo) {
-      navigate("/signin");
-    } else {
-      if (!profileInfo || profileSuccess) {
-        dispatch({ type: USER_PROFILE_UPDATE_RESET });
-        dispatch(getMyProfile(userInfo));
+      navigate("/login");
+    }
+    if (profileInfo) {
+      if (!profileInfo.username) {
+        toast.error("profile with this id does not exist");
+        navigate("/");
       }
-    }
-    if (!profileSuccess) {
-      toast.error(profileError);
     } else {
-      toast.success("successfully updated personal information");
-      navigate("/profile/projects-gallery");
+      dispatch(getProfileById(id));
     }
-  }, [userInfo, navigate, dispatch, profileSuccess, profileInfo, profileError]);
-
-  const handleChange = (value) => {
-    setTags(value);
-  };
-
-  const uploadImageHandler = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProfile({
-        ...profile,
-        profileImg: file,
-        photoUrl: URL.createObjectURL(e.target.files[0]),
-      });
-    }
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const form = new FormData();
-    form.append("profile_image", profile.profileImg);
-    form.append("username", usernameRef.current.value);
-    form.append("title", titleRef.current.value);
-    form.append("city", cityRef.current.value);
-    form.append("country", countryRef.current.value);
-    form.append("description", descriptionRef.current.value);
-    tags.map((tag) => form.append("skills", tag));
-    form.append("linkedin_profile_link", linkedinRef.current.value);
-    form.append("github_profile_link", githubRef.current.value);
-    dispatch(updateProfile(userInfo, form));
-  };
-
-  return (
-    <>
-      <Container sx={{ minHeight: "75vh" }}>
-        <Box sx={{ textAlign: "center", margin: "30px 0 0" }}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: "600", fontSize: "2.25rem" }}
+  }, [id, userInfo, profileInfo]);
+  return !loading ? (
+    <Container
+      sx={{
+        padding: "40px",
+        background: "rgb(250 251 255/1)",
+      }}
+    >
+      <Stack direction="row" spacing={4}>
+        <Item
+          elevation={2}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "30%",
+            textAlign: "left",
+            color: "#000",
+            padding: 0,
+          }}
+        >
+          <Box as="div" sx={{ position: "relative" }}>
+            <img src={bg} alt="background" height={112} width={"100%"} />
+            <Avatar
+              src={profileInfo?.profile_image}
+              alt="profile-picture"
+              sx={{
+                width: "100px",
+                height: "100px",
+                position: "absolute",
+                bottom: "-50px",
+                left: "10px",
+                border: "2px solid #fff",
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              marginTop: "52px",
+              padding: "0 15px",
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            Lets get your profile ready!!
-          </Typography>
-          <Typography variant="p" style={{ opacity: "0.8", margin: "10px 0" }}>
-            Remember, advertise best version of your work with clarity in
-            vision. So that others find it easy to approach you. Vague words and
-            numbers makes you unapproachable.
-          </Typography>
-        </Box>
-        <StepComponent />
-        <Box sx={{ padding: "1.5rem 0" }}>
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Grid container spacing={2}>
-              <Grid
-                item
-                xs={12}
-                sm={4}
-                md={3}
+            <Typography variant="h5" sx={{ fontWeight: 600 }}>
+              {profileInfo?.full_name}
+            </Typography>
+            <Typography variant="p">@{profileInfo?.username}</Typography>
+            <Typography variant="p" sx={{ color: "#777" }}>
+              {profileInfo?.title}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: "1.15rem", marginTop: "10px", fontWeight: 600 }}
+            >
+              My skills are
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+              {profileInfo?.skills.map((skill, i) => (
+                <span
+                  key={i}
+                  style={{
+                    padding: "4px 8px",
+                    borderRadius: "5px",
+                    background: "#fff",
+                    border: "1.5px solid rgba(23,124,226,.5)",
+                    color: "rgba(23,124,226,.5)",
+                    fontWeight: 600,
+                  }}
+                >
+                  {skill}
+                </span>
+              ))}
+            </Box>
+            <Button
+              variant="outlined"
+              startIcon={<EditRounded />}
+              sx={{ margin: "20px 0 10px" }}
+              onClick={() => navigate("/edit/basic-details")}
+            >
+              Edit Profile
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Share />}
+              sx={{ borderRadius: "2px", background: "#4cacbc " }}
+            >
+              Share
+            </Button>
+          </Box>
+        </Item>
+        <Item
+          elevation={0}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "70%",
+            textAlign: "left",
+            color: "#000",
+            padding: 0,
+          }}
+        >
+          <TabContext value={value}>
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                background: "rgb(250 251 255/1)",
+              }}
+            >
+              <TabList onChange={handleChange}>
+                <Tab
+                  icon={<PersonRounded />}
+                  label="Profile"
+                  value="1"
+                  sx={{ display: "flex", flexDirection: "row" }}
+                />
+                <Tab
+                  label="Projects"
+                  icon={<Science />}
+                  value="2"
+                  sx={{ display: "flex", flexDirection: "row" }}
+                />
+              </TabList>
+            </Box>
+
+            <TabPanel
+              value="1"
+              sx={{
+                padding: "24px 0",
+                background: "rgb(250 251 255/1)",
+              }}
+            >
+              <Box sx={{ padding: "5px" }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    padding: "10px 16px",
+                    border: "1px solid rgb(226 232 239)",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    sx={{
+                      justifyContent: "space-between",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    <Typography
+                      variant="p"
+                      sx={{ fontSize: "1.25rem", fontWeight: 600 }}
+                    >
+                      About me
+                    </Typography>
+                    <IconButton
+                      sx={{ padding: 0, color: "#000" }}
+                      onClick={() => navigate("/edit/basic-details")}
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Stack>
+                  <Typography variant="p">
+                    {profileInfo?.description}
+                  </Typography>
+                </Paper>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    padding: "10px 16px",
+                    margin: "15px 0",
+                    border: "1px solid rgb(226 232 239)",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    sx={{
+                      justifyContent: "space-between",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <Typography
+                      variant="p"
+                      sx={{ fontSize: "1.25rem", fontWeight: 600 }}
+                    >
+                      Top Projects
+                    </Typography>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <Add />
+                      <IconButton
+                        sx={{ padding: 0, color: "#000" }}
+                        onClick={() => navigate("/edit/basic-details")}
+                      >
+                        <Edit />
+                      </IconButton>
+                    </div>
+                  </Stack>
+                  <ProjectCard />
+                </Paper>
+              </Box>
+            </TabPanel>
+            <TabPanel
+              value="2"
+              sx={{ padding: "24px 0", background: "rgb(250 251 255/1)" }}
+            >
+              <Paper
+                elevation={0}
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
+                  padding: "15px",
+                  border: "1px solid rgb(226 232 239)",
                 }}
               >
-                <label htmlFor="profilePhoto">
-                  <Avatar
-                    src={
-                      profile.photoUrl
-                        ? profile.photoUrl
-                        : profileInfo?.profile_image
-                    }
-                    sx={{
-                      width: "180px",
-                      height: "180px",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <input
-                    accept="image/*"
-                    id="profilePhoto"
-                    type="file"
-                    name="image"
-                    onChange={uploadImageHandler}
-                  />
-                </label>
-              </Grid>
-              <Grid item container spacing={3} xs={12} sm={8} md={9}>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    type="text"
-                    size="small"
-                    inputRef={usernameRef}
-                    defaultValue={profileInfo?.username}
-                    required
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="fullname"
-                    label="Full Name"
-                    type="text"
-                    size="small"
-                    required
-                    defaultValue={
-                      userInfo?.first_name + " " + userInfo?.last_name
-                    }
-                    disabled
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    type="email"
-                    size="small"
-                    value={userInfo?.email}
-                    required
-                    disabled
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="title"
-                    label="Title"
-                    type="text"
-                    size="small"
-                    inputRef={titleRef}
-                    defaultValue={profileInfo?.title}
-                    required
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="city"
-                    label="City"
-                    size="small"
-                    type="text"
-                    defaultValue={profileInfo?.city}
-                    inputRef={cityRef}
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="country"
-                    label="Country"
-                    type="text"
-                    size="small"
-                    inputRef={countryRef}
-                    defaultValue={profileInfo?.country}
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="githubLink"
-                    label="Github Link"
-                    type="text"
-                    size="small"
-                    inputRef={githubRef}
-                    defaultValue={profileInfo?.github_profile_link}
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="linkedinLink"
-                    label="Linkedin Link"
-                    type="text"
-                    size="small"
-                    inputRef={linkedinRef}
-                    defaultValue={profileInfo?.linkedin_profile_link}
-                  ></TextField>
-                </Grid>
-                <Grid item sm={12}>
-                  <TagsInput
-                    fullWidth
-                    size="small"
-                    id="skills"
-                    placeHolder="My Skills"
-                    maxTags={10}
-                    value={tags}
-                    onChange={handleChange}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="aboutYou"
-                    label="About Yourself(Max 300 words)"
-                    type="aboutYou"
-                    multiline
-                    rows={5}
-                    inputRef={descriptionRef}
-                    defaultValue={profileInfo?.descriptionRef}
-                  ></TextField>
-                </Grid>
-                <Grid item sx={{ paddingTop: "15px" }}>
-                  <Button
-                    type="submit"
-                    sx={{
-                      borderRadius: "4px",
-                      fontWeight: "600",
-                      backgroundColor: "#4cacbc",
-                    }}
-                    variant="contained"
-                    startIcon={<SaveAltIcon />}
-                  >
-                    Save
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </form>
-        </Box>
-      </Container>
-    </>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 600, marginBottom: "15px" }}
+                >
+                  All Projects
+                </Typography>
+                <Box sx={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
+                  <ProjectCard />
+                  <ProjectCard />
+                  <ProjectCard />
+                  <ProjectCard />
+                  <ProjectCard />
+                  <ProjectCard />
+                </Box>
+              </Paper>
+            </TabPanel>
+          </TabContext>
+        </Item>
+      </Stack>
+    </Container>
+  ) : (
+    <Loader />
   );
 };
+
 export default ProfilePage;

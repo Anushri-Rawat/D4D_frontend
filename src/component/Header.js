@@ -14,7 +14,7 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
-import { AccountCircle, Logout } from "@mui/icons-material";
+import { AccountCircle, Logout, Edit } from "@mui/icons-material";
 import logo from "../images/logo1.png";
 
 const Header = () => {
@@ -29,108 +29,103 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userLogin);
-  const { profileInfo } = useSelector((state) => state.userDetails);
+  const { user } = useSelector((state) => state.userDetails);
+
   return (
-    <AppBar position="static" sx={{ background: "white" }}>
-      <Container
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          padding: "5px 0",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* <Typography
-          variant="h5"
-          onClick={() => navigate("/")}
+    <header>
+      <AppBar position="static" sx={{ background: "white" }}>
+        <Container
           sx={{
-            flexGrow: 1,
-            color: "black",
-            fontWeight: "800",
-            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          D4D
-        </Typography> */}
-        <img
-          src={logo}
-          alt="D4D"
-          style={{ height: "60px", cursor: "pointer" }}
-          onClick={() => navigate("/")}
-        />
-        <Box>
-          {userInfo ? (
-            <>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu}>
-                  <Avatar
-                    src={profileInfo?.profile_image}
-                    alt="profile photo"
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem sx={{ display: "flex", gap: "0.5rem" }}>
-                  <Avatar
-                    src={profileInfo?.profile_image}
-                    alt="profile photo"
-                  />
-                  <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      {userInfo.first_name + " " + userInfo.last_name}
-                    </Typography>
-                    <Typography variant="p" sx={{ color: "#777" }}>
-                      @{profileInfo?.username}
-                    </Typography>
-                  </Box>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    navigate("profile");
+          <img
+            src={logo}
+            alt="D4D"
+            style={{ height: "50px", cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
+          <Box>
+            {userInfo ? (
+              <>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu}>
+                    <Avatar src={user?.profile_image} alt="profile photo" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
                   }}
-                >
-                  <AccountCircle />
-                  <Typography textAlign="center" sx={{ marginLeft: "5px" }}>
-                    Profile
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    dispatch(logout());
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
                   }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
                 >
-                  <Logout />
-                  <Typography textAlign="center" sx={{ marginLeft: "3px" }}>
-                    Logout
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </>
-          ) : (
-            <RouterLink to="/signup" style={{ textDecoration: "none" }}>
-              <Button variant="contained">Signin</Button>
-            </RouterLink>
-          )}
-        </Box>
-      </Container>
-    </AppBar>
+                  <MenuItem sx={{ display: "flex", gap: "0.5rem" }}>
+                    <Avatar src={user?.profile_image} alt="profile photo" />
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        {userInfo.full_name}
+                      </Typography>
+                      <Typography variant="p" sx={{ color: "#777" }}>
+                        @{user?.username}
+                      </Typography>
+                    </Box>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      navigate(`/profile/${userInfo._id}`);
+                    }}
+                  >
+                    <AccountCircle />
+                    <Typography textAlign="center" sx={{ marginLeft: "5px" }}>
+                      Profile
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      navigate("/edit/basic-details");
+                    }}
+                  >
+                    <Edit />
+                    <Typography textAlign="center" sx={{ marginLeft: "5px" }}>
+                      Edit Profile
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      dispatch(logout());
+                    }}
+                  >
+                    <Logout />
+                    <Typography textAlign="center" sx={{ marginLeft: "3px" }}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <RouterLink to="/signup" style={{ textDecoration: "none" }}>
+                <Button variant="contained">Signin</Button>
+              </RouterLink>
+            )}
+          </Box>
+        </Container>
+      </AppBar>
+    </header>
   );
 };
 

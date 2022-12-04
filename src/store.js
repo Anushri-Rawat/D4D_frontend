@@ -6,6 +6,7 @@ import {
   userLoginReducer,
   userProfileReducer,
   userRegisterReducer,
+  userUpdateReducer,
 } from "./reducers/userReducers";
 import {
   likedProjectReducer,
@@ -25,12 +26,11 @@ const reducers = combineReducers({
 const userInfoFromStorage =
   JSON.parse(localStorage.getItem("userInfo")) || null;
 
-const userDetailsFromStorage =
-  JSON.parse(localStorage.getItem("profileInfo")) || null;
+const userFromStorage = JSON.parse(localStorage.getItem("userDetails")) || null;
 
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  userDetails: { profileInfo: userDetailsFromStorage },
+  userDetails: { user: userFromStorage },
 };
 
 const store = createStore(

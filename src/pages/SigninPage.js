@@ -1,6 +1,4 @@
-import { Typography } from "@mui/material";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import { Typography, useMediaQuery, Grid, Container } from "@mui/material";
 import img from "./../images/DrawKit Vector Illustration Project Manager (5).png";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -9,7 +7,6 @@ import SigninForm from "../component/SigninForm";
 import { login } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -28,16 +25,22 @@ const Signup = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
+  const { profileInfo } = useSelector((state) => state.userDetails);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
-      toast.success("User successfully logged in");
-      navigate("/profile");
+      if (!profileInfo) {
+        toast.success("User successfully logged in");
+      }
+      navigate("/edit/basic-details");
     } else {
       toast.error(error);
     }
-  }, [userInfo, loading, error, navigate]);
+    if (profileInfo) {
+      navigate("/");
+    }
+  }, [profileInfo, userInfo, error, navigate, loading]);
 
   const formik = useFormik({
     initialValues: {
