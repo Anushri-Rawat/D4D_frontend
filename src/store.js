@@ -8,14 +8,19 @@ import {
   userRegisterReducer,
   userUpdateReducer,
 } from "./reducers/userReducers";
-import { projectDetailsReducer } from "./reducers/projectReducer";
+import {
+  likedProjectReducer,
+  projectDetailsReducer,
+  viewedProjectReducer,
+} from "./reducers/projectReducer";
 const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userProfile: userProfileReducer,
   userDetails: userDetailsReducer,
-  userUpdate:userUpdateReducer,
   projectDetails: projectDetailsReducer,
+  likedProjects: likedProjectReducer,
+  viewedProjects: viewedProjectReducer,
 });
 
 const userInfoFromStorage =

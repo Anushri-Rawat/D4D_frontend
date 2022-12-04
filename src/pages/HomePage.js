@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeroSection from "../component/HeroSection";
+import ProjectCard from "../component/ProjectCard";
+import Spinner from "./../component/Spinner";
 import {
   Grid,
   Card,
@@ -14,12 +16,77 @@ import {
 import img1 from "../images/DrawKit Vector Illustration Project Manager (6).png";
 import img2 from "../images/DrawKit Vector Illustration Project Manager (1).png";
 import img3 from "../images/DrawKit Vector Illustration Project Manager (10).png";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getMostLikedProjects,
+  getMostViewedProjects,
+} from "../actions/projectActions";
 
 const HomePage = () => {
+  const {
+    success: likedProjectsSuccess,
+    error: likedProjectsError,
+    projects: likedProjects,
+    loading: likedProjectsLoading,
+  } = useSelector((state) => state.likedProjects);
+
+  const {
+    success: viewedProjectsSuccess,
+    error: viewedProjectsError,
+    projects: viewedProjects,
+    loading: viewedProjectsLoading,
+  } = useSelector((state) => state.viewedProjects);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMostLikedProjects());
+    dispatch(getMostViewedProjects());
+    console.log("in useeffect");
+  }, [dispatch]);
   return (
     <>
       <HeroSection />
       <Container>
+        <Box sx={{ flexGrow: 1, marginBottom: "30px" }}>
+          <h5
+            style={{
+              textAlign: "center",
+              fontSize: "35px",
+              padding: "18px 0",
+              fontWeight: 600,
+            }}
+          >
+            Top Liked Projects
+          </h5>
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              minHeight: "250px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {likedProjectsLoading && <Spinner />}
+
+            {!likedProjectsLoading &&
+              likedProjectsSuccess &&
+              likedProjects.map((elem) => {
+                return (
+                  <Grid item xs={12} sm={6} lg={3}>
+                    <ProjectCard key={elem._id} data={elem} />
+                  </Grid>
+                );
+              })}
+            {!likedProjectsLoading &&
+              likedProjectsSuccess &&
+              likedProjects.length === 0 && <p>No projects to display</p>}
+            {!likedProjectsLoading && likedProjectsError && (
+              <p>Something went wrong.</p>
+            )}
+          </Grid>
+        </Box>
         <Box sx={{ flexGrow: 1 }}>
           <h5
             style={{
@@ -29,137 +96,33 @@ const HomePage = () => {
               fontWeight: 600,
             }}
           >
-            Top Projects
+            Top Viewed Projects
           </h5>
-          <Grid container spacing={3}>
-            <Grid item sm={6} md={3}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="https://th.bing.com/th/id/OIP.MMbedKRM_zUpxYlyuBl7GQHaDt?pid=ImgDet&rs=1"
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with
-                    over 6,000 species, ranging across all continents except
-                    Antarctica
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-            <Grid item sm={6} md={3}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="https://th.bing.com/th/id/OIP.MMbedKRM_zUpxYlyuBl7GQHaDt?pid=ImgDet&rs=1"
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with
-                    over 6,000 species, ranging across all continents except
-                    Antarctica
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-            <Grid item sm={6} md={3}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="https://th.bing.com/th/id/OIP.MMbedKRM_zUpxYlyuBl7GQHaDt?pid=ImgDet&rs=1"
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with
-                    over 6,000 species, ranging across all continents except
-                    Antarctica
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-            <Grid item sm={6} md={3}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="https://th.bing.com/th/id/OIP.MMbedKRM_zUpxYlyuBl7GQHaDt?pid=ImgDet&rs=1"
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ fontFamily: "Belleza" }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with
-                    over 6,000 species, ranging across all continents except
-                    Antarctica
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-            </Grid>
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              minHeight: "250px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {viewedProjectsLoading && <Spinner />}
+            {!viewedProjectsLoading &&
+              viewedProjectsSuccess &&
+              viewedProjects.map((elem) => {
+                return (
+                  <Grid item xs={12} sm={6} lg={3}>
+                    <ProjectCard key={elem._id} data={elem} />
+                  </Grid>
+                );
+              })}
+            {!viewedProjectsLoading &&
+              viewedProjectsSuccess &&
+              viewedProjects.length === 0 && <p>No projects to display</p>}
+            {!viewedProjectsLoading && viewedProjectsError && (
+              <p>Something went wrong.</p>
+            )}
           </Grid>
         </Box>
         <Box
