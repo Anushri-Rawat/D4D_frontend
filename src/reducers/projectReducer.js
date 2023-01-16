@@ -1,4 +1,7 @@
 import {
+  LIKED_PROJECT_FAIL,
+  LIKED_PROJECT_REQUEST,
+  LIKED_PROJECT_SUCCESS,
   PROJECT_ADD_FAIL,
   PROJECT_ADD_REQUEST,
   PROJECT_ADD_RESET,
@@ -17,10 +20,13 @@ import {
   PROJECT_UPDATE_REQUEST,
   PROJECT_UPDATE_SUCCESS,
   PROJECT_UPDATE_RESET,
+  VIEWED_PROJECT_FAIL,
+  VIEWED_PROJECT_REQUEST,
+  VIEWED_PROJECT_SUCCESS,
 } from "./../constants/projectConstants";
 
 export const projectCreateReducer = (
-  state = { loading: false, success: false, error: "" },
+  state = { loading: false, success: false },
   action
 ) => {
   switch (action.type) {
@@ -31,7 +37,7 @@ export const projectCreateReducer = (
     case PROJECT_ADD_FAIL:
       return { loading: false, success: false, error: action.payload };
     case PROJECT_ADD_RESET:
-      return { loading: false, success: false, error: "" };
+      return { loading: false, success: false };
     default:
       return state;
   }
@@ -45,6 +51,19 @@ export const projectListReducer = (state = { projects: [] }, action) => {
       return { loading: false, projects: action.payload };
     case PROJECT_LIST_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const likedProjectReducer = (state = { projects: [] }, action) => {
+  switch (action.type) {
+    case LIKED_PROJECT_REQUEST:
+      return { loading: true, success: false };
+    case LIKED_PROJECT_SUCCESS:
+      return { loading: false, success: true, projects: action.payload };
+    case LIKED_PROJECT_FAIL:
+      return { loading: false, success: false, error: action.payload };
     default:
       return state;
   }
@@ -73,7 +92,7 @@ export const projectDeleteReducer = (state = {}, action) => {
     case PROJECT_DELETE_REQUEST:
       return { loading: true };
     case PROJECT_DELETE_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, success: true, id: action.payload };
     case PROJECT_DELETE_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -90,7 +109,20 @@ export const projectUpdateReducer = (state = { project: {} }, action) => {
     case PROJECT_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case PROJECT_UPDATE_RESET:
-      return { project: {} };
+      return { loading: false, success: false, project: {} };
+    default:
+      return state;
+  }
+};
+
+export const viewedProjectReducer = (state = { projects: [] }, action) => {
+  switch (action.type) {
+    case VIEWED_PROJECT_REQUEST:
+      return { loading: true, success: false };
+    case VIEWED_PROJECT_SUCCESS:
+      return { loading: false, success: true, projects: action.payload };
+    case VIEWED_PROJECT_FAIL:
+      return { loading: false, success: false, error: action.payload };
     default:
       return state;
   }

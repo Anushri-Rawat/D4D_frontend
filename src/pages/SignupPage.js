@@ -35,17 +35,16 @@ const Signup = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
-      if (!user) {
-        toast.success("User successfully logged in");
-      }
+      toast.success("User successfully logged in");
       navigate("/edit/basic-details");
-    } else {
+    }
+    if (error && !userInfo) {
       toast.error(error);
     }
-    if (user) {
+    if (user?.username) {
       navigate("/");
     }
-  }, [userInfo, loading, error, navigate, user]);
+  }, [userInfo, loading, error, navigate]);
 
   const formik = useFormik({
     initialValues: {

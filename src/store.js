@@ -14,13 +14,25 @@ import {
   projectCreateReducer,
   projectUpdateReducer,
   projectDeleteReducer,
+  likedProjectReducer,
+  viewedProjectReducer,
 } from "./reducers/projectReducer";
 import {
-  commentDetailsReducer,
+  commentListReducer,
   commentCreateReducer,
   commentDeleteReducer,
   commentUpdateReducer,
+  replyCreateReducer,
 } from "./reducers/CommentReducers";
+import {
+  collectionCreateReducer,
+  collectionDeleteReducer,
+  collectionDetailsReducer,
+  collectionListReducer,
+  collectionUpdateReducer,
+  saveProjectReducer,
+} from "./reducers/CollectionReducer";
+
 const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -33,9 +45,19 @@ const reducers = combineReducers({
   projectUpdate: projectUpdateReducer,
   projectDelete: projectDeleteReducer,
   commentCreate: commentCreateReducer,
-  commentDetails: commentDetailsReducer,
+  commentList: commentListReducer,
   commentDelete: commentDeleteReducer,
   commentUpdate: commentUpdateReducer,
+  projectDetails: projectDetailsReducer,
+  likedProjects: likedProjectReducer,
+  viewedProjects: viewedProjectReducer,
+  replyCreate: replyCreateReducer,
+  collectionCreate: collectionCreateReducer,
+  collectionUpdate: collectionUpdateReducer,
+  collectionDelete: collectionDeleteReducer,
+  collectionList: collectionListReducer,
+  collectionDetails: collectionDetailsReducer,
+  saveProject: saveProjectReducer,
 });
 
 const userInfoFromStorage =

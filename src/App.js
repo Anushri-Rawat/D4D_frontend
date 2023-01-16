@@ -10,6 +10,8 @@ import ProfilePage from "./pages/ProfilePage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
 import { ToastContainer } from "react-toastify";
+import CollectionsPage from "./pages/CollectionsPage";
+import CollectionDetailsPage from "./pages/CollectionDetailsPage";
 
 function App() {
   const location = useLocation();
@@ -37,6 +39,8 @@ function App() {
             path="/project/:project_name/:id"
             element={<ProjectDetailsPage />}
           />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/collections/:id" element={<CollectionDetailsPage />} />
         </Routes>
         <ToastContainer
           position="top-right"

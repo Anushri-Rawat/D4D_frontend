@@ -14,7 +14,7 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
-import { AccountCircle, Logout, Edit } from "@mui/icons-material";
+import { AccountCircle, Logout, Edit, Bookmarks } from "@mui/icons-material";
 import logo from "../images/logo1.png";
 
 const Header = () => {
@@ -102,6 +102,17 @@ const Header = () => {
                     <Edit />
                     <Typography textAlign="center" sx={{ marginLeft: "5px" }}>
                       Edit Profile
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      navigate("/collections");
+                    }}
+                  >
+                    <Bookmarks />
+                    <Typography textAlign="center" sx={{ marginLeft: "5px" }}>
+                      Collections
                     </Typography>
                   </MenuItem>
                   <MenuItem

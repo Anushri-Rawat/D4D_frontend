@@ -9,6 +9,7 @@ import {
   Avatar,
   IconButton,
   Tab,
+  Grid,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import bg from "../images/background-wallpaper-with-polygons-in-gradient-colors-vector.jpg";
@@ -26,9 +27,13 @@ import { Container } from "@mui/system";
 import ProjectCard from "../component/ProjectCard";
 import { getProfileById } from "../actions/userActions";
 import { useNavigate, useParams } from "react-router-dom";
-import Loader from "../component/Loader";
+import Spinner from "../component/Spinner";
 import { toast } from "react-toastify";
-import { getProjectList } from "../actions/projectActions";
+import {
+  getMostViewedProjects,
+  getProjectList,
+} from "../actions/projectActions";
+import { PROJECT_LIST_SUCCESS } from "../constants/projectConstants";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -55,27 +60,45 @@ const ProfilePage = () => {
     (state) => state.projectList
   );
 
-  const { success: deleteSuccess } = useSelector(
+  const { success: deleteSuccess, id: deletedId } = useSelector(
     (state) => state.projectDelete
   );
 
+  const {
+    success: viewedProjectsSuccess,
+    error: viewedProjectsError,
+    projects: viewedProjects,
+    loading: viewedProjectsLoading,
+  } = useSelector((state) => state.viewedProjects);
+
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login");
-    }
-    if (profileInfo) {
-      if (!profileInfo.username) {
-        toast.error("profile with this id does not exist");
-        navigate("/");
-      }
-    } else {
-      dispatch(getProfileById(id));
-    }
-    if (deleteSuccess) {
-      toast.success("project delted successfully!");
+      navigate("/signin");
     }
     dispatch(getProjectList(id, userInfo));
-  }, [id, userInfo, profileInfo, deleteSuccess]);
+    dispatch(getMostViewedProjects());
+  }, [id, userInfo]);
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      dispatch({
+        type: PROJECT_LIST_SUCCESS,
+        payload: projects.filter((p) => p._id !== deletedId),
+      });
+      toast.success("project delted successfully!");
+    }
+  }, [deleteSuccess, deletedId]);
+
+  useEffect(() => {
+    if (profileInfo && !profileInfo.username) {
+      toast.error("profile with this id does not exist");
+      navigate("/");
+    }
+    if (!profileInfo) {
+      dispatch(getProfileById(id));
+    }
+  }, [profileInfo]);
+
   return !loading ? (
     <Container
       sx={{
@@ -292,6 +315,39 @@ const ProfilePage = () => {
                       </div>
                     )}
                   </Stack>
+                  <Grid
+                    container
+                    spacing={3}
+                    sx={{
+                      minHeight: "250px",
+                    }}
+                  >
+                    {viewedProjectsLoading && <Spinner />}
+                    {!viewedProjectsLoading &&
+                      viewedProjectsSuccess &&
+                      viewedProjects.map((elem) => {
+                        return (
+                          <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={6}
+                            lg={4}
+                            key={elem._id}
+                          >
+                            <ProjectCard data={elem} />
+                          </Grid>
+                        );
+                      })}
+                    {!viewedProjectsLoading &&
+                      viewedProjectsSuccess &&
+                      viewedProjects.length === 0 && (
+                        <p>No projects to display</p>
+                      )}
+                    {!viewedProjectsLoading && viewedProjectsError && (
+                      <p>Something went wrong.</p>
+                    )}
+                  </Grid>
                 </Paper>
               </Box>
             </TabPanel>
@@ -330,7 +386,7 @@ const ProfilePage = () => {
                 <Box sx={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
                   {!projectLoading &&
                     projects.map((project) => (
-                      <ProjectCard project={project} key={project._id} />
+                      <ProjectCard data={project} key={project._id} />
                     ))}
                 </Box>
               </Paper>
@@ -340,7 +396,7 @@ const ProfilePage = () => {
       </Stack>
     </Container>
   ) : (
-    <Loader />
+    <Spinner />
   );
 };
 

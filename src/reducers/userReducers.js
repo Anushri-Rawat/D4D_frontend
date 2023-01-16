@@ -47,31 +47,37 @@ export const userLoginReducer = (state = {}, action) => {
   }
 };
 
-export const userDetailsReducer = (state = {}, action) => {
+export const userDetailsReducer = (
+  state = { loading: true, success: false, user: {} },
+  action
+) => {
   switch (action.type) {
     case USER_DETAILS_REQUEST:
-      return { loading: true };
+      return { loading: true, success: false };
     case USER_DETAILS_SUCCESS:
       return { loading: false, user: action.payload, success: true };
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case USER_DETAILS_RESET:
-      return { user: {} };
+      return { loading: true, success: false, user: {} };
     default:
       return state;
   }
 };
 
-export const userUpdateReducer = (state = {}, action) => {
+export const userUpdateReducer = (
+  state = { loading: false, success: false },
+  action
+) => {
   switch (action.type) {
     case USER_DETAILS_UPDATE_REQUEST:
-      return { loading: true };
+      return { loading: true, success: false };
     case USER_DETAILS_UPDATE_SUCCESS:
       return { loading: false, user: action.payload, success: true };
     case USER_DETAILS_UPDATE_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, success: false, error: action.payload };
     case USER_DETAILS_UPDATE_RESET:
-      return {};
+      return { loading: false, success: false };
     default:
       return state;
   }

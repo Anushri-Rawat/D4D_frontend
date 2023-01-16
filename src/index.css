@@ -10,6 +10,10 @@ body {
   font-family: "Poppins", sans-serif;
   /* background: #d4f1ff; */
 }
+main {
+  height: 100%;
+  min-height: 85vh;
+}
 a {
   text-decoration: none !important;
 }
@@ -80,6 +84,7 @@ a {
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
 @media (min-width: 1400px) {
   .MuiContainer-root {
     max-width: 1400px !important;
@@ -98,7 +103,64 @@ a {
   justify-content: center;
   align-items: center;
 }
-
-.loading-container img {
-  max-height: 50px;
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #4cacbc;
+  border-radius: 50%;
+  animation: spinner 1s infinite linear;
+  border-bottom: none;
+}
+
+/*------------card css-----------------*/
+
+.MuiCardHeader-title {
+  font-size: 18px !important;
+  /*text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 200px;
+  padding-right: 20px !important; */
+  white-space: nowrap;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+}
+.MuiCardHeader-subheader {
+  font-weight: 600 !important;
+  opacity: 0.8;
+}
+.MuiCardHeader-avatar {
+  font-weight: 700 !important;
+}
+.MuiCardContent-root {
+  padding: 8px !important;
+}
+/*----------Collection card Delete Functionality---------*/
+/* .project-functionality {
+  flex-direction: column;
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  gap: 10px;
+  display: none;
+}
+.project-functionality .btn {
+  border-radius: 50% !important;
+  color: #000 !important;
+  background: #fff !important;
+  padding: 0.3rem 0.5rem;
+}
+.project-functionality .btn i {
+  font-size: 15px;
+}
+.project-functionality .btn:hover {
+  background-color: #f33c3c !important;
+  color: #fff !important;
+} */

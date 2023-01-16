@@ -17,7 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMyProfile, updateSelfProfile } from "../actions/userActions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { USER_DETAILS_UPDATE_RESET } from "../constants/userConstants";
+import {
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_RESET,
+  USER_DETAILS_UPDATE_RESET,
+} from "../constants/userConstants";
 import stateCountry from "state-country";
 
 const EditDetailsPage = () => {
@@ -26,9 +30,17 @@ const EditDetailsPage = () => {
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
-  const { user, userSuccess, userError } = useSelector(
-    (state) => state.userDetails
-  );
+  const {
+    user,
+    success: userSuccess,
+    error: userError,
+  } = useSelector((state) => state.userDetails);
+
+  const {
+    user: updatedUser,
+    success: userUpdateSuccess,
+    error: userUpdateError,
+  } = useSelector((state) => state.userUpdate);
 
   const [username, setUsername] = useState();
   const [title, setTitle] = useState();
@@ -37,7 +49,7 @@ const EditDetailsPage = () => {
   const [description, setDescription] = useState();
   const [tags, setTags] = useState([]);
   const [country, setCountry] = useState(user?.country || "");
-  const [state, setState] = useState(user?.country || "");
+  const [state, setState] = useState(user?.state || "");
   const [profile, setProfile] = useState({
     profileImg: user?.profile_image ? user.profile_image : null,
     photoUrl: null,
@@ -46,28 +58,47 @@ const EditDetailsPage = () => {
   useEffect(() => {
     if (!userInfo) {
       navigate("/signin");
-    } else {
-      if (!user || !user.username || userSuccess) {
-        dispatch({ type: USER_DETAILS_UPDATE_RESET });
-        dispatch(getMyProfile(userInfo));
-      } else {
-        setUsername(user?.username || "");
-        setDescription(user?.description || "");
-        setTitle(user?.title || "");
-        setGithubUrl(user?.github_profile_link || "");
-        setLinkedinUrl(user?.linkedin_profile_link || "");
-        setCountry(user?.country || "");
-        setState(user?.state || "");
-        setTags(user?.skills || []);
-      }
     }
-    if (!userSuccess) {
+    dispatch(getMyProfile(userInfo));
+  }, [userInfo, navigate, dispatch]);
+
+  useEffect(() => {
+    if (user?.username) {
+      navigate("/");
+    }
+    if (!userSuccess && userError) {
       toast.error(userError);
-    } else {
-      toast.success("successfully updated personal information");
-      navigate("/profile/projects-gallery");
     }
-  }, [userInfo, navigate, dispatch, userSuccess, user, userError]);
+    if (userSuccess || userUpdateSuccess) {
+      setUsername(user?.username);
+      setDescription(user?.description);
+      setTitle(user?.title);
+      setGithubUrl(!user?.github_profile_link ? "" : user?.github_profile_link);
+      setLinkedinUrl(
+        !user?.linkedin_profile_link ? "" : user?.linkedin_profile_link
+      );
+      setCountry(user?.country || "");
+      setState(user?.state || "");
+      setTags(user?.skills || []);
+    }
+    if (userUpdateSuccess) {
+      dispatch({ type: USER_DETAILS_RESET });
+      dispatch({ type: USER_DETAILS_UPDATE_RESET });
+      toast.success("successfully updated personal information");
+      navigate("/edit/projects-gallery");
+    }
+
+    if (!userUpdateSuccess && userUpdateError) {
+      toast.error(userUpdateError);
+    }
+  }, [
+    dispatch,
+    userUpdateSuccess,
+    userUpdateError,
+    userSuccess,
+    userError,
+    userSuccess,
+  ]);
 
   const handleChange = (value) => {
     setTags(value);
@@ -96,6 +127,7 @@ const EditDetailsPage = () => {
     form.append("linkedin_profile_link", linkedinUrl);
     form.append("github_profile_link", githubUrl);
     dispatch(updateSelfProfile(userInfo, form));
+    dispatch({ type: USER_DETAILS_UPDATE_RESET });
   };
 
   return (

@@ -7,7 +7,11 @@ const Footer = () => {
       <Container
         sx={{
           textAlign: "center",
-          marginTop: "30px",
+          marginTop: "auto",
+          display: "absolute",
+          bottom: "0",
+          left: "0",
+          right: "0",
         }}
       >
         <p>Created by me &copy; Anushri Rawat and Nikita Bhatnagar</p>

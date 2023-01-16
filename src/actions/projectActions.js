@@ -1,4 +1,7 @@
 import {
+  LIKED_PROJECT_FAIL,
+  LIKED_PROJECT_REQUEST,
+  LIKED_PROJECT_SUCCESS,
   PROJECT_ADD_FAIL,
   PROJECT_ADD_REQUEST,
   PROJECT_ADD_SUCCESS,
@@ -14,7 +17,11 @@ import {
   PROJECT_UPDATE_FAIL,
   PROJECT_UPDATE_REQUEST,
   PROJECT_UPDATE_SUCCESS,
+  VIEWED_PROJECT_FAIL,
+  VIEWED_PROJECT_REQUEST,
+  VIEWED_PROJECT_SUCCESS,
 } from "../constants/projectConstants";
+
 import axios from "axios";
 
 export const createProject =
@@ -89,12 +96,12 @@ export const deleteProject = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_DELETE_REQUEST });
     const url = `http://127.0.0.1:5000/api/project/${id}`;
-    await axios.delete(url, {
+    const res = await axios.delete(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
       },
     });
-    dispatch({ type: PROJECT_DELETE_SUCCESS });
+    dispatch({ type: PROJECT_DELETE_SUCCESS, payload: res.data.id });
   } catch (err) {
     dispatch({
       type: PROJECT_DELETE_FAIL,
@@ -143,5 +150,27 @@ export const updateLikesOfProject = (userInfo, id) => async (dispatch) => {
       type: PROJECT_UPDATE_FAIL,
       payload: err.response.data.message,
     });
+  }
+};
+
+export const getMostLikedProjects = () => async (dispatch) => {
+  try {
+    dispatch({ type: LIKED_PROJECT_REQUEST });
+    const url = "http://127.0.0.1:5000/api/project/most_liked";
+    const res = await axios.get(url);
+    dispatch({ type: LIKED_PROJECT_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({ type: LIKED_PROJECT_FAIL, payload: err });
+  }
+};
+
+export const getMostViewedProjects = () => async (dispatch) => {
+  try {
+    dispatch({ type: VIEWED_PROJECT_REQUEST });
+    const url = "http://127.0.0.1:5000/api/project/most_viewed";
+    const res = await axios.get(url);
+    dispatch({ type: VIEWED_PROJECT_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({ type: VIEWED_PROJECT_FAIL, payload: err });
   }
 };

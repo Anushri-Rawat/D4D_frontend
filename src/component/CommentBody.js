@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
@@ -6,11 +6,15 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  TextField,
+  Button,
+  Link,
 } from "@mui/material";
-import { MoreVert, Edit, Delete } from "@mui/icons-material";
+import { MoreVert, Edit, Delete, Send } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteComment } from "../actions/commentAction";
+import { createReply, deleteComment } from "../actions/commentAction";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const CommentBody = ({
   comment,
@@ -19,9 +23,13 @@ const CommentBody = ({
   setEditComment,
   setCommentId,
 }) => {
+  const [replyModal, setReplyModal] = useState(false);
+  const [viewReply, setViewReply] = useState(false);
+  const [reply, setReply] = useState("");
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userLogin);
+  const { user } = useSelector((state) => state.userDetails);
 
   const handleOpenProjectMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -66,17 +74,30 @@ const CommentBody = ({
               justifyContent: "flex-start",
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{
-                textTransform: "capitalize",
-                fontWeight: "600",
-                lineHeight: "1.4",
+            <div
+              style={{
+                display: "flex",
+                gap: "0.7rem",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {comment?.user_id?.first_name + " " + comment?.user_id?.last_name}
-              <span style={{ paddingLeft: "5px" }}>{comment.createdAt}</span>
-            </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  textTransform: "capitalize",
+                  fontWeight: "600",
+                  lineHeight: "1.4",
+                }}
+              >
+                {comment?.user_id?.first_name +
+                  " " +
+                  comment?.user_id?.last_name}
+              </Typography>
+              <span style={{ paddingLeft: "5px" }}>
+                {moment(comment.createdAt).fromNow()}
+              </span>
+            </div>
             <Typography variant="p" sx={{ color: "rgb(115 121 128/1)" }}>
               {comment?.user_id?.title}
             </Typography>
@@ -90,7 +111,13 @@ const CommentBody = ({
               alignItems: "center",
             }}
           >
-            <p>Reply</p>
+            <Button
+              onClick={() => {
+                setReplyModal(!replyModal);
+              }}
+            >
+              Reply
+            </Button>
             <Box sx={{ flexGrow: 0 }}>
               <IconButton aria-label="settings" onClick={handleOpenProjectMenu}>
                 <MoreVert />
@@ -129,16 +156,154 @@ const CommentBody = ({
           </div>
         </div>
         <Typography variant="p">{comment.body}</Typography>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            gap: ".5rem",
-          }}
-        >
-          <span>View replies</span>|<span>repliesCount</span>
-        </div>
+        {replyModal && (
+          <Box
+            sx={{
+              padding: "20px 0 15px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+              gap: "0.75rem",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                flex: 1,
+                width: "100%",
+              }}
+            >
+              <Avatar src={user.profile_image} />
+              <TextField
+                placeholder={`comment as ${user.full_name}`}
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                fullWidth
+                size="small"
+              />
+            </div>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <Button variant="text" onClick={() => setReplyModal(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="outlined"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  dispatch(createReply(userInfo, { body: reply }, comment._id));
+                  setReply("");
+                  setViewReply(true);
+                }}
+              >
+                <Send />
+                Post
+              </Button>
+            </div>
+          </Box>
+        )}
+        {viewReply &&
+          comment?.replies?.map((r, i) => (
+            <Box
+              sx={{ padding: "1rem 0", display: "flex", gap: ".75rem" }}
+              key={i}
+            >
+              <Avatar src={r?.user_id?.profile_image} />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                  width: "100%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "0.7rem",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          textTransform: "capitalize",
+                          fontWeight: "600",
+                          lineHeight: "1.4",
+                        }}
+                      >
+                        {r?.user_id?.first_name +
+                          " " +
+                          comment?.user_id?.last_name}
+                      </Typography>
+                      <span style={{ paddingLeft: "5px" }}>
+                        {moment(comment.createdAt).fromNow()}
+                      </span>
+                    </div>
+
+                    <Typography
+                      variant="p"
+                      sx={{ color: "rgb(115 121 128/1)" }}
+                    >
+                      {r?.user_id?.title}
+                    </Typography>
+                  </div>
+                </div>
+                <Typography variant="p">{r.body}</Typography>
+              </Box>
+            </Box>
+          ))}
+        {comment?.replies?.length > 0 && !viewReply ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              gap: ".5rem",
+            }}
+          >
+            <Link
+              sx={{ cursor: "pointer" }}
+              onClick={() => {
+                setViewReply(true);
+              }}
+            >
+              View replies
+            </Link>
+            |<span>{comment.replies.length} Reply</span>
+          </div>
+        ) : comment?.replies?.length > 0 && viewReply ? (
+          <Link
+            sx={{ cursor: "pointer" }}
+            onClick={() => {
+              setViewReply(false);
+            }}
+          >
+            Show less
+          </Link>
+        ) : (
+          ""
+        )}
       </Box>
     </Box>
   );
