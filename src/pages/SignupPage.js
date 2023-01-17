@@ -31,18 +31,17 @@ const Signup = () => {
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
-  const { profileInfo } = useSelector((state) => state.userDetails);
+  const { user } = useSelector((state) => state.userDetails);
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
-      if (!profileInfo) {
-        toast.success("User successfully logged in");
-      }
+      toast.success("User successfully logged in");
       navigate("/edit/basic-details");
-    } else {
+    }
+    if (error && !userInfo) {
       toast.error(error);
     }
-    if (profileInfo) {
+    if (user?.username) {
       navigate("/");
     }
   }, [userInfo, loading, error, navigate]);

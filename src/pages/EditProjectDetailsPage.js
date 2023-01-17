@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Container } from "@mui/material";
 import StepComponent from "../component/StepComponent";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -12,14 +12,17 @@ import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { createProject } from "../actions/projectActions";
+import { createProject, getProjectDetails } from "../actions/projectActions";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PROJECT_ADD_RESET } from "../constants/projectConstants";
+import {
+  PROJECT_ADD_RESET,
+  PROJECT_DETAILS_RESET,
+} from "../constants/projectConstants";
 const urlRegex =
   /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
 
@@ -78,36 +81,61 @@ const validationSchema = yup.object({
 });
 
 const EditProjectDetailsPage = () => {
+  const { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userLogin);
   const { success, error, loading } = useSelector(
-    (state) => state.projectDetails
+    (state) => state.projectCreate
   );
+  const { projectInfo } = useSelector((state) => state.projectDetails);
+
+  const [photoURL, setPhotoURL] = useState();
+  const [videoURL, setVideoURL] = useState();
+
+  const [startDate, setStartDate] = useState(dayjs());
+  const [endDate, setEndDate] = useState(dayjs());
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    dispatch({ type: PROJECT_ADD_RESET });
-
     if (!userInfo) {
       navigate("/signin");
     }
     if (!loading && error) {
       toast.error(error);
+      dispatch({ type: PROJECT_ADD_RESET });
     } else if (!loading && success) {
       toast.success("project successfully added");
       dispatch({ type: PROJECT_ADD_RESET });
-      navigate("/");
+      navigate(`/profile/${userInfo._id}`);
     }
-  }, [userInfo, navigate, error, success, loading, dispatch]);
+    if (id && !projectInfo?.name) {
+      dispatch(getProjectDetails(id));
+    }
+    if (!id && projectInfo?.name) {
+      dispatch({ type: PROJECT_DETAILS_RESET });
+    }
+    if (projectInfo?.name) {
+      formik.values.project_title = projectInfo?.name;
+      formik.values.source_code_link = projectInfo?.source_code_link;
+      formik.values.deployed_link = projectInfo?.deployed_link;
+      formik.values.project_description = projectInfo?.description;
+      setTags(projectInfo?.required_skills);
+      setStartDate(projectInfo?.project_start_date);
+      setEndDate(projectInfo?.project_end_date);
+      formik.values.image = projectInfo?.images_url;
+    }
+  }, [userInfo, navigate, error, success, loading, dispatch, id, projectInfo]);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [photoURL, setPhotoURL] = useState();
+  //const [photoURL, setPhotoURL] = useState();
   //const [videoURL, setVideoURL] = useState();
 
-  const [startDate, setStartDate] = useState(dayjs());
-  const [endDate, setEndDate] = useState(dayjs());
+  //const [startDate, setStartDate] = useState(dayjs());
+  //const [endDate, setEndDate] = useState(dayjs());
 
   const formik = useFormik({
     initialValues: {
@@ -136,7 +164,6 @@ const EditProjectDetailsPage = () => {
       dispatch(createProject(userInfo, form));
     },
   });
-  const [tags, setTags] = useState([]);
 
   return (
     <Container>

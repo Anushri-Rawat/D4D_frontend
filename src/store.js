@@ -10,21 +10,58 @@ import {
   searchProfileReducer,
 } from "./reducers/userReducers";
 import {
-  likedProjectReducer,
   projectDetailsReducer,
+  projectListReducer,
+  projectCreateReducer,
+  projectUpdateReducer,
+  projectDeleteReducer,
+  likedProjectReducer,
   viewedProjectReducer,
   searchProjectReducer,
 } from "./reducers/projectReducer";
+import {
+  commentListReducer,
+  commentCreateReducer,
+  commentDeleteReducer,
+  commentUpdateReducer,
+  replyCreateReducer,
+} from "./reducers/CommentReducers";
+import {
+  collectionCreateReducer,
+  collectionDeleteReducer,
+  collectionDetailsReducer,
+  collectionListReducer,
+  collectionUpdateReducer,
+  saveProjectReducer,
+} from "./reducers/CollectionReducer";
+
 const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userProfile: userProfileReducer,
   userDetails: userDetailsReducer,
+  userUpdate: userUpdateReducer,
+  projectDetails: projectDetailsReducer,
+  projectList: projectListReducer,
+  projectCreate: projectCreateReducer,
+  projectUpdate: projectUpdateReducer,
+  projectDelete: projectDeleteReducer,
+  commentCreate: commentCreateReducer,
+  commentList: commentListReducer,
+  commentDelete: commentDeleteReducer,
+  commentUpdate: commentUpdateReducer,
   projectDetails: projectDetailsReducer,
   likedProjects: likedProjectReducer,
   viewedProjects: viewedProjectReducer,
   searchProjects: searchProjectReducer,
   searchProfiles: searchProfileReducer,
+  replyCreate: replyCreateReducer,
+  collectionCreate: collectionCreateReducer,
+  collectionUpdate: collectionUpdateReducer,
+  collectionDelete: collectionDeleteReducer,
+  collectionList: collectionListReducer,
+  collectionDetails: collectionDetailsReducer,
+  saveProject: saveProjectReducer,
 });
 
 const userInfoFromStorage =

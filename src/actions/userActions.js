@@ -20,6 +20,7 @@ import {
   SEARCH_PROFILE_REQUEST,
   SEARCH_PROFILE_SUCCESS,
   SEARCH_PROFILE_FAIL,
+  USER_PROFILE_RESET,
 } from "../constants/userConstants";
 
 export const register = (data) => async (dispatch) => {
@@ -52,6 +53,7 @@ export const logout = () => async (dispatch) => {
   localStorage.removeItem("userDetails");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
+  dispatch({ type: USER_PROFILE_RESET });
 };
 
 export const updateSelfProfile = (userInfo, data) => async (dispatch) => {
@@ -99,7 +101,7 @@ export const getProfileById = (id) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-    console.log(userInfo);
+
     const url = `http://127.0.0.1:5000/api/users/${id}`;
     const res = await axios.get(url, {
       headers: {

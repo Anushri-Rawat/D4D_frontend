@@ -7,10 +7,13 @@ import SignupPage from "./pages/SignupPage";
 import SigninPage from "./pages/SigninPage";
 import EditDetailsPage from "./pages/EditDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
 import SearchProjectPage from "./pages/SearchProjectPage";
 import SearchProfilePage from "./pages/SearchProfilePage";
 import { ToastContainer } from "react-toastify";
+import CollectionsPage from "./pages/CollectionsPage";
+import CollectionDetailsPage from "./pages/CollectionDetailsPage";
 
 function App() {
   const location = useLocation();
@@ -29,9 +32,19 @@ function App() {
             path="/edit/projects-gallery"
             element={<EditProjectDetailsPage />}
           />
+          <Route
+            path="/edit/projects-gallery/:id"
+            element={<EditProjectDetailsPage />}
+          />
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/search/projects" element={<SearchProjectPage />} />
           <Route path="/search/profiles" element={<SearchProfilePage />} />
+          <Route
+            path="/project/:project_name/:id"
+            element={<ProjectDetailsPage />}
+          />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/collections/:id" element={<CollectionDetailsPage />} />
         </Routes>
         <ToastContainer
           position="top-right"

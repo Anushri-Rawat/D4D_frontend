@@ -2,17 +2,7 @@ import React, { useEffect } from "react";
 import HeroSection from "../component/HeroSection";
 import ProjectCard from "../component/ProjectCard";
 import Spinner from "./../component/Spinner";
-import {
-  Grid,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Typography,
-  Box,
-  Container,
-} from "@mui/material";
+import { Grid, Box, Container } from "@mui/material";
 import img1 from "../images/DrawKit Vector Illustration Project Manager (6).png";
 import img2 from "../images/DrawKit Vector Illustration Project Manager (1).png";
 import img3 from "../images/DrawKit Vector Illustration Project Manager (10).png";
@@ -42,7 +32,6 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(getMostLikedProjects());
     dispatch(getMostViewedProjects());
-    console.log("in useeffect");
   }, [dispatch]);
   return (
     <>
@@ -65,17 +54,16 @@ const HomePage = () => {
             sx={{
               minHeight: "250px",
               justifyContent: "center",
-              alignItems: "center",
             }}
           >
             {likedProjectsLoading && <Spinner />}
 
             {!likedProjectsLoading &&
               likedProjectsSuccess &&
-              likedProjects.map((elem) => {
+              likedProjects.map((elem, i) => {
                 return (
-                  <Grid item xs={12} sm={6} lg={3}>
-                    <ProjectCard key={elem._id} data={elem} />
+                  <Grid item xs={12} sm={6} lg={3} key={elem._id}>
+                    <ProjectCard data={elem} />
                   </Grid>
                 );
               })}
@@ -104,7 +92,6 @@ const HomePage = () => {
             sx={{
               minHeight: "250px",
               justifyContent: "center",
-              alignItems: "center",
             }}
           >
             {viewedProjectsLoading && <Spinner />}
@@ -112,8 +99,8 @@ const HomePage = () => {
               viewedProjectsSuccess &&
               viewedProjects.map((elem) => {
                 return (
-                  <Grid item xs={12} sm={6} lg={3}>
-                    <ProjectCard key={elem._id} data={elem} />
+                  <Grid item xs={12} sm={6} lg={3} key={elem._id}>
+                    <ProjectCard data={elem} />
                   </Grid>
                 );
               })}

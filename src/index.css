@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Belleza&display=swap");
+@import "~react-image-gallery/styles/css/image-gallery.css";
 * {
   padding: 0;
   margin: 0;
@@ -8,6 +9,10 @@
 body {
   font-family: "Poppins", sans-serif;
   /* background: #d4f1ff; */
+}
+main {
+  height: 100%;
+  min-height: 85vh;
 }
 a {
   text-decoration: none !important;
@@ -26,25 +31,6 @@ a {
   flex-direction: column;
   padding: 30px 0;
 }
-/* .pattern {
-  position: relative;
-  background-color: #4cacbc;
-  background-image: linear-gradient(315deg, #4cacbc 0%, #dff4f1 74%);
-  z-index: -2;
-} */
-
-/* .pattern:before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 215px;
-  background: url("https://media.geeksforgeeks.org/wp-content/uploads/20200326181026/wave3.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  z-index: -1;
-} */
 .circles {
   position: absolute;
   top: 0;
@@ -98,24 +84,24 @@ a {
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
-.MuiCardHeader-title {
-  font-size: 18px !important;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 200px;
-  padding-right: 20px !important;
-  white-space: nowrap;
-  font-weight: 600 !important;
+
+@media (min-width: 1400px) {
+  .MuiContainer-root {
+    max-width: 1400px !important;
+  }
 }
-.MuiCardHeader-subheader {
-  font-weight: 600 !important;
-  opacity: 0.8;
+/*--------------carasoul------*/
+.image-gallery-slide .image-gallery-image {
+  width: 100%;
+  object-fit: cover;
 }
-.MuiCardHeader-avatar {
-  font-weight: 700 !important;
-}
-.MuiCardContent-root {
-  padding: 8px !important;
+/*-------loader-----*/
+.loading-container {
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @keyframes spinner {
   0% {
@@ -150,4 +136,82 @@ a {
 }
 .MuiInputBase-root {
   margin: 0 15px;
+
+/*------------card css-----------------*/
+
+.MuiCardHeader-title {
+  font-size: 18px !important;
+  /*text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 200px;
+  padding-right: 20px !important; */
+  white-space: nowrap;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+}
+.MuiCardHeader-subheader {
+  font-weight: 600 !important;
+  opacity: 0.8;
+}
+.MuiCardHeader-avatar {
+  font-weight: 700 !important;
+}
+.MuiCardContent-root {
+  padding: 8px !important;
+}
+/*----------Collection card Delete Functionality---------*/
+/* .project-functionality {
+  flex-direction: column;
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  gap: 10px;
+  display: none;
+}
+.project-functionality .btn {
+  border-radius: 50% !important;
+  color: #000 !important;
+  background: #fff !important;
+  padding: 0.3rem 0.5rem;
+}
+.project-functionality .btn i {
+  font-size: 15px;
+  margin: 0 auto;
+}
+.navlinks {
+  color: #888;
+  font-size: 17px;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.navlinks:hover {
+  color: #4cacbc;
+  border-bottom: 2px solid #4cacbc;
+}
+/* .MuiFormLabel-root#keyword-select-label,
+.MuiFormLabel-root#tech-select-label {
+  padding-left: 15px;
+}
+.project-functionality .btn:hover {
+  background-color: #f33c3c !important;
+  color: #fff !important;
 } */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #4cacbc;
+  border-radius: 50%;
+  animation: spinner 1s infinite linear;
+  border-bottom: none;
+  margin: 0 auto;
+}
+.navlinks {
+  color: #888;
+  font-size: 17px;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.navlinks:hover {
+  color: #4cacbc;
+  border-bottom: 2px solid #4cacbc;
+}

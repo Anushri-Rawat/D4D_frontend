@@ -17,27 +17,39 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMyProfile, updateSelfProfile } from "../actions/userActions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { USER_DETAILS_UPDATE_RESET } from "../constants/userConstants";
+import {
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_RESET,
+  USER_DETAILS_UPDATE_RESET,
+} from "../constants/userConstants";
 import stateCountry from "state-country";
 
 const EditDetailsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const usernameRef = useRef();
-  const titleRef = useRef();
-  const githubRef = useRef();
-  const linkedinRef = useRef();
-  const descriptionRef = useRef();
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
-  const { user, userSuccess, userError } = useSelector(
-    (state) => state.userDetails
-  );
+  const {
+    user,
+    success: userSuccess,
+    error: userError,
+  } = useSelector((state) => state.userDetails);
 
+  const {
+    user: updatedUser,
+    success: userUpdateSuccess,
+    error: userUpdateError,
+  } = useSelector((state) => state.userUpdate);
+
+  const [username, setUsername] = useState();
+  const [title, setTitle] = useState();
+  const [githubUrl, setGithubUrl] = useState();
+  const [linkedinUrl, setLinkedinUrl] = useState();
+  const [description, setDescription] = useState();
   const [tags, setTags] = useState([]);
   const [country, setCountry] = useState(user?.country || "");
-  const [state, setState] = useState(user?.country || "");
+  const [state, setState] = useState(user?.state || "");
   const [profile, setProfile] = useState({
     profileImg: user?.profile_image ? user.profile_image : null,
     photoUrl: null,
@@ -46,28 +58,47 @@ const EditDetailsPage = () => {
   useEffect(() => {
     if (!userInfo) {
       navigate("/signin");
-    } else {
-      if (!user || !user.username || userSuccess) {
-        dispatch({ type: USER_DETAILS_UPDATE_RESET });
-        dispatch(getMyProfile(userInfo));
-      } else {
-        usernameRef.current.value = user?.username || "";
-        descriptionRef.current.value = user?.description || "";
-        titleRef.current.value = user?.title || "";
-        githubRef.current.value = user?.github_profile_link || "";
-        linkedinRef.current.value = user?.linkedin_profile_link || "";
-        setCountry(user?.country || "");
-        setState(user?.state || "");
-        setTags(user?.skills || []);
-      }
     }
-    if (!userSuccess) {
+    dispatch(getMyProfile(userInfo));
+  }, [userInfo, navigate, dispatch]);
+
+  useEffect(() => {
+    if (user?.username) {
+      navigate("/");
+    }
+    if (!userSuccess && userError) {
       toast.error(userError);
-    } else {
-      toast.success("successfully updated personal information");
-      navigate("/profile/projects-gallery");
     }
-  }, [userInfo, navigate, dispatch, userSuccess, user, userError]);
+    if (userSuccess || userUpdateSuccess) {
+      setUsername(user?.username);
+      setDescription(user?.description);
+      setTitle(user?.title);
+      setGithubUrl(!user?.github_profile_link ? "" : user?.github_profile_link);
+      setLinkedinUrl(
+        !user?.linkedin_profile_link ? "" : user?.linkedin_profile_link
+      );
+      setCountry(user?.country || "");
+      setState(user?.state || "");
+      setTags(user?.skills || []);
+    }
+    if (userUpdateSuccess) {
+      dispatch({ type: USER_DETAILS_RESET });
+      dispatch({ type: USER_DETAILS_UPDATE_RESET });
+      toast.success("successfully updated personal information");
+      navigate("/edit/projects-gallery");
+    }
+
+    if (!userUpdateSuccess && userUpdateError) {
+      toast.error(userUpdateError);
+    }
+  }, [
+    dispatch,
+    userUpdateSuccess,
+    userUpdateError,
+    userSuccess,
+    userError,
+    userSuccess,
+  ]);
 
   const handleChange = (value) => {
     setTags(value);
@@ -87,15 +118,16 @@ const EditDetailsPage = () => {
     e.preventDefault();
     const form = new FormData();
     form.append("profile_image", profile.profileImg);
-    form.append("username", usernameRef.current.value);
-    form.append("title", titleRef.current.value);
+    form.append("username", username);
+    form.append("title", title);
     form.append("state", state);
     form.append("country", country);
-    form.append("description", descriptionRef.current.value);
+    form.append("description", description);
     tags.map((tag) => form.append("skills", tag));
-    form.append("linkedin_profile_link", linkedinRef.current.value);
-    form.append("github_profile_link", githubRef.current.value);
+    form.append("linkedin_profile_link", linkedinUrl);
+    form.append("github_profile_link", githubUrl);
     dispatch(updateSelfProfile(userInfo, form));
+    dispatch({ type: USER_DETAILS_UPDATE_RESET });
   };
 
   return (
@@ -157,7 +189,8 @@ const EditDetailsPage = () => {
                     type="text"
                     size="small"
                     fullWidth
-                    inputRef={usernameRef}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                     required
                   />
@@ -193,7 +226,8 @@ const EditDetailsPage = () => {
                     label="Title"
                     type="text"
                     size="small"
-                    inputRef={titleRef}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                     required
                   ></TextField>
@@ -243,7 +277,8 @@ const EditDetailsPage = () => {
                     label="Github Link"
                     type="text"
                     size="small"
-                    inputRef={githubRef}
+                    value={githubUrl}
+                    onChange={(e) => setGithubUrl(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   ></TextField>
                 </Grid>
@@ -254,7 +289,8 @@ const EditDetailsPage = () => {
                     label="Linkedin Link"
                     size="small"
                     type="text"
-                    inputRef={linkedinRef}
+                    value={linkedinUrl}
+                    onChange={(e) => setLinkedinUrl(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   ></TextField>
                 </Grid>
@@ -263,6 +299,7 @@ const EditDetailsPage = () => {
                     fullWidth
                     size="small"
                     id="tags"
+                    placeHolder="My Skills"
                     maxTags={10}
                     value={tags}
                     onChange={handleChange}
@@ -276,7 +313,8 @@ const EditDetailsPage = () => {
                     type="text"
                     multiline
                     rows={5}
-                    inputRef={descriptionRef}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     InputLabelProps={{ shrink: true }}
                   ></TextField>
                 </Grid>
