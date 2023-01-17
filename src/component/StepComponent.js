@@ -54,7 +54,7 @@ const StepComponent = ({ step1, step2 }) => {
             padding: 0,
           }}
         ></div>
-        <RouterLink to="/profile/projects-gallery">
+        <RouterLink to="/edit/projects-gallery">
           {!step2 ? (
             <Box
               sx={{

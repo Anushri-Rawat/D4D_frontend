@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Button, Typography, Skeleton } from "@mui/material";
 import img from "../images/DrawKit Vector Illustration Project Manager (7).png";
 import { Container } from "@mui/system";
+import { Link as RouterLink } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -35,9 +36,11 @@ const HeroSection = () => {
             The only place to collab with coders,showcase your projects,show off
             your skills,save projects for future references and much more..
           </p>
-          <Button variant="contained" sx={{ marginTop: "20px" }}>
-            Explore work
-          </Button>
+          <RouterLink to="/search/projects">
+            <Button variant="contained" sx={{ marginTop: "20px" }}>
+              Explore work
+            </Button>
+          </RouterLink>
         </Box>
         <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
           {img ? (

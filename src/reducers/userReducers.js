@@ -18,6 +18,10 @@ import {
   USER_DETAILS_RESET,
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
+  SEARCH_PROFILE_REQUEST,
+  SEARCH_PROFILE_SUCCESS,
+  SEARCH_PROFILE_FAIL,
+  SEARCH_PROFILE_RESET,
 } from "./../constants/userConstants";
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
@@ -86,6 +90,21 @@ export const userProfileReducer = (state = {}, action) => {
     case USER_PROFILE_FAIL:
       return { loading: false, error: action.payload, success: false };
     case USER_PROFILE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const searchProfileReducer = (state = { profiles: [] }, action) => {
+  switch (action.type) {
+    case SEARCH_PROFILE_REQUEST:
+      return { loading: true };
+    case SEARCH_PROFILE_SUCCESS:
+      return { loading: false, profiles: action.payload };
+    case SEARCH_PROFILE_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case SEARCH_PROFILE_RESET:
       return {};
     default:
       return state;

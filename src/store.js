@@ -7,11 +7,13 @@ import {
   userProfileReducer,
   userRegisterReducer,
   userUpdateReducer,
+  searchProfileReducer,
 } from "./reducers/userReducers";
 import {
   likedProjectReducer,
   projectDetailsReducer,
   viewedProjectReducer,
+  searchProjectReducer,
 } from "./reducers/projectReducer";
 const reducers = combineReducers({
   userRegister: userRegisterReducer,
@@ -21,6 +23,8 @@ const reducers = combineReducers({
   projectDetails: projectDetailsReducer,
   likedProjects: likedProjectReducer,
   viewedProjects: viewedProjectReducer,
+  searchProjects: searchProjectReducer,
+  searchProfiles: searchProfileReducer,
 });
 
 const userInfoFromStorage =

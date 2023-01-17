@@ -8,6 +8,8 @@ import SigninPage from "./pages/SigninPage";
 import EditDetailsPage from "./pages/EditDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
 import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
+import SearchProjectPage from "./pages/SearchProjectPage";
+import SearchProfilePage from "./pages/SearchProfilePage";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
             element={<EditProjectDetailsPage />}
           />
           <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/search/projects" element={<SearchProjectPage />} />
+          <Route path="/search/profiles" element={<SearchProfilePage />} />
         </Routes>
         <ToastContainer
           position="top-right"

@@ -72,6 +72,9 @@ const validationSchema = yup.object({
     .string("Enter the project description")
     .max(1000, "Maximum allowed characters are 500.")
     .required("Project description is required"),
+  demo_video: yup
+    .string("Enter the demo video link")
+    .matches(urlRegex, "Enter a valid link"),
 });
 
 const EditProjectDetailsPage = () => {
@@ -101,7 +104,7 @@ const EditProjectDetailsPage = () => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
   const [photoURL, setPhotoURL] = useState();
-  const [videoURL, setVideoURL] = useState();
+  //const [videoURL, setVideoURL] = useState();
 
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
@@ -118,17 +121,19 @@ const EditProjectDetailsPage = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const form = new FormData();
-      const video = new FormData();
+      //const video = new FormData();
       form.append("name", values.project_title);
       form.append("project_start_date", startDate);
       form.append("project_end_date", endDate);
       form.append("source_code_link", values.source_code_link);
-      video.append("video_url", values.demo_video);
+      form.append("video_url", values.demo_video);
       form.append("deployed_link", values.deployed_link);
       form.append("description", values.project_description);
+      //form.append("demo_video", values.demo_video);
+
       tags.map((tag) => form.append("required_skills", tag));
       values.image.map((image) => form.append("images_url", image));
-      dispatch(createProject(userInfo, form, video));
+      dispatch(createProject(userInfo, form));
     },
   });
   const [tags, setTags] = useState([]);
@@ -243,7 +248,7 @@ const EditProjectDetailsPage = () => {
                 Choose image*
               </Button>
             </Grid>
-            <Grid
+            {/* <Grid
               item
               xs={12}
               sm={6}
@@ -306,7 +311,7 @@ const EditProjectDetailsPage = () => {
                 />
                 Upload demo video
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
 
           <Grid container sx={{ margin: "20px" }}>
@@ -404,6 +409,24 @@ const EditProjectDetailsPage = () => {
                   )}
                 />
               </LocalizationProvider>
+
+              <TextField
+                fullWidth
+                id="demo_video"
+                name="demo_video"
+                label="Demo Video Link"
+                type="url"
+                sx={{ width: "98%" }}
+                value={formik.values.demo_video}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.demo_video && Boolean(formik.errors.demo_video)
+                }
+                helperText={
+                  formik.touched.demo_video && formik.errors.demo_video
+                }
+                margin="normal"
+              />
             </Grid>
           </Grid>
           <Grid container>

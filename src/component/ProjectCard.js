@@ -70,6 +70,7 @@ const ProjectCard = ({ data }) => {
             return (
               <Chip
                 label={elem}
+                key={elem}
                 sx={{
                   textTransform: "capitalize",
                   margin: "4px",
