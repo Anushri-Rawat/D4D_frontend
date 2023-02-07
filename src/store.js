@@ -7,6 +7,7 @@ import {
   userProfileReducer,
   userRegisterReducer,
   userUpdateReducer,
+  searchProfileReducer,
 } from "./reducers/userReducers";
 import {
   projectDetailsReducer,
@@ -16,6 +17,7 @@ import {
   projectDeleteReducer,
   likedProjectReducer,
   viewedProjectReducer,
+  searchProjectReducer,
 } from "./reducers/projectReducer";
 import {
   commentListReducer,
@@ -51,6 +53,8 @@ const reducers = combineReducers({
   projectDetails: projectDetailsReducer,
   likedProjects: likedProjectReducer,
   viewedProjects: viewedProjectReducer,
+  searchProjects: searchProjectReducer,
+  searchProfiles: searchProfileReducer,
   replyCreate: replyCreateReducer,
   collectionCreate: collectionCreateReducer,
   collectionUpdate: collectionUpdateReducer,

@@ -52,7 +52,7 @@ const EditDetailsPage = () => {
   const [state, setState] = useState(user?.state || "");
   const [profile, setProfile] = useState({
     profileImg: user?.profile_image ? user.profile_image : null,
-    photoUrl: null,
+    photoUrl: user?.profile_image ? user.profile_image : null,
   });
 
   useEffect(() => {
@@ -63,9 +63,6 @@ const EditDetailsPage = () => {
   }, [userInfo, navigate, dispatch]);
 
   useEffect(() => {
-    if (user?.username) {
-      navigate("/");
-    }
     if (!userSuccess && userError) {
       toast.error(userError);
     }

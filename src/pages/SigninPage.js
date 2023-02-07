@@ -37,9 +37,6 @@ const Signup = () => {
     } else {
       toast.error(error);
     }
-    if (user) {
-      navigate("/");
-    }
   }, [user, userInfo, error, navigate, loading]);
 
   const formik = useFormik({

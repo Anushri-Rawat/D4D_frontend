@@ -118,7 +118,24 @@ a {
   border-radius: 50%;
   animation: spinner 1s infinite linear;
   border-bottom: none;
+  margin: 0 auto;
 }
+.navlinks {
+  color: #888;
+  font-size: 17px;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.navlinks:hover {
+  color: #4cacbc;
+  border-bottom: 2px solid #4cacbc;
+}
+/* .MuiFormLabel-root#keyword-select-label,
+.MuiFormLabel-root#tech-select-label {
+  padding-left: 15px;
+}
+.MuiInputBase-root {
+  margin: 0 15px;
 
 /*------------card css-----------------*/
 
@@ -159,8 +176,46 @@ a {
 }
 .project-functionality .btn i {
   font-size: 15px;
+  margin: 0 auto;
+}
+.navlinks {
+  color: #888;
+  font-size: 17px;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.navlinks:hover {
+  color: #4cacbc;
+  border-bottom: 2px solid #4cacbc;
+}
+/* .MuiFormLabel-root#keyword-select-label,
+.MuiFormLabel-root#tech-select-label {
+  padding-left: 15px;
 }
 .project-functionality .btn:hover {
   background-color: #f33c3c !important;
   color: #fff !important;
 } */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #4cacbc;
+  border-radius: 50%;
+  animation: spinner 1s infinite linear;
+  border-bottom: none;
+  margin: 0 auto;
+}
+.navlinks {
+  color: #888;
+  font-size: 17px;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.navlinks:hover {
+  color: #4cacbc;
+  border-bottom: 2px solid #4cacbc;
+}
+
+.searchBtn:hover {
+  background-color: #4cacbc !important;
+}

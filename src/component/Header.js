@@ -47,6 +47,18 @@ const Header = () => {
             style={{ height: "50px", cursor: "pointer" }}
             onClick={() => navigate("/")}
           />
+          <ul style={{ display: "flex" }}>
+            <li style={{ marginRight: "20px" }}>
+              <RouterLink to="search/projects" className="navlinks">
+                Explore Work
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="search/profiles" className="navlinks">
+                Find Developers
+              </RouterLink>
+            </li>
+          </ul>
           <Box>
             {userInfo ? (
               <>
@@ -129,7 +141,7 @@ const Header = () => {
                 </Menu>
               </>
             ) : (
-              <RouterLink to="/signup" style={{ textDecoration: "none" }}>
+              <RouterLink to="/signin" style={{ textDecoration: "none" }}>
                 <Button variant="contained">Signin</Button>
               </RouterLink>
             )}

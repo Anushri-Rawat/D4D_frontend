@@ -12,6 +12,7 @@ const Footer = () => {
           bottom: "0",
           left: "0",
           right: "0",
+          marginBottom: "6px",
         }}
       >
         <p>Created by me &copy; Anushri Rawat and Nikita Bhatnagar</p>

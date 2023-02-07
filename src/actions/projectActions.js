@@ -17,6 +17,9 @@ import {
   PROJECT_UPDATE_FAIL,
   PROJECT_UPDATE_REQUEST,
   PROJECT_UPDATE_SUCCESS,
+  SEARCH_PROJECT_FAIL,
+  SEARCH_PROJECT_REQUEST,
+  SEARCH_PROJECT_SUCCESS,
   VIEWED_PROJECT_FAIL,
   VIEWED_PROJECT_REQUEST,
   VIEWED_PROJECT_SUCCESS,
@@ -24,36 +27,70 @@ import {
 
 import axios from "axios";
 
-export const createProject =
-  (userInfo, data, videoData) => async (dispatch) => {
-    try {
-      dispatch({ type: PROJECT_ADD_REQUEST });
+export const createProject = (userInfo, data) => async (dispatch) => {
+  try {
+    dispatch({ type: PROJECT_ADD_REQUEST });
 
-      const url = `http://127.0.0.1:5000/api/project`;
-      const res = await axios.post(url, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+    const url = `http://127.0.0.1:5000/api/project`;
+    const res = await axios.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        authorization: `Bearer ${userInfo.token}`,
+      },
+    });
 
-      const url2 = `http://127.0.0.1:5000/api/project/${res.data.id}/upload_video`;
-      const res2 = await axios.post(url2, videoData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+    dispatch({ type: PROJECT_ADD_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_ADD_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};
+export const getMostLikedProjects = () => async (dispatch) => {
+  try {
+    dispatch({ type: LIKED_PROJECT_REQUEST });
+    const url = "http://127.0.0.1:5000/api/project/most_liked";
+    const res = await axios.get(url);
+    dispatch({ type: LIKED_PROJECT_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({ type: LIKED_PROJECT_FAIL, payload: err });
+  }
+};
 
-      dispatch({ type: PROJECT_ADD_SUCCESS, payload: res2.data });
-    } catch (err) {
-      dispatch({
-        type: PROJECT_ADD_FAIL,
-        payload: err.response.data.message,
-      });
+export const getMostViewedProjects = () => async (dispatch) => {
+  try {
+    dispatch({ type: VIEWED_PROJECT_REQUEST });
+    const url = "http://127.0.0.1:5000/api/project/most_viewed";
+    const res = await axios.get(url);
+    dispatch({ type: VIEWED_PROJECT_SUCCESS, payload: res.data });
+  } catch (err) {
+    dispatch({ type: VIEWED_PROJECT_FAIL, payload: err });
+  }
+};
+
+export const getProjects = (tech, keyword) => async (dispatch) => {
+  try {
+    dispatch({ type: SEARCH_PROJECT_REQUEST });
+
+    let url = `http://127.0.0.1:5000/api/project/search?`;
+
+    if (tech?.length > 0) {
+      url = `http://127.0.0.1:5000/api/project/search?required_skills=${tech}`;
     }
-  };
+    if (keyword && tech) {
+      url += `&keyword=${keyword}`;
+    } else if (keyword) {
+      url += `keyword=${keyword}`;
+    }
 
+    const res = await axios.get(url);
+
+    dispatch({ type: SEARCH_PROJECT_SUCCESS, payload: res.data.projects });
+  } catch (err) {
+    dispatch({ type: SEARCH_PROJECT_FAIL, payload: err });
+  }
+};
 export const getProjectList = (id, userInfo) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_LIST_REQUEST });
@@ -110,12 +147,12 @@ export const deleteProject = (userInfo, id) => async (dispatch) => {
   }
 };
 
-export const updateProject = (userInfo, id) => async (dispatch) => {
+export const updateProject = (userInfo, data, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_UPDATE_REQUEST });
 
     const url = `http://127.0.0.1:5000/api/project/${id}`;
-    const res = await axios.patch(url, {
+    const res = await axios.patch(url, data, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
       },
@@ -150,27 +187,5 @@ export const updateLikesOfProject = (userInfo, id) => async (dispatch) => {
       type: PROJECT_UPDATE_FAIL,
       payload: err.response.data.message,
     });
-  }
-};
-
-export const getMostLikedProjects = () => async (dispatch) => {
-  try {
-    dispatch({ type: LIKED_PROJECT_REQUEST });
-    const url = "http://127.0.0.1:5000/api/project/most_liked";
-    const res = await axios.get(url);
-    dispatch({ type: LIKED_PROJECT_SUCCESS, payload: res.data });
-  } catch (err) {
-    dispatch({ type: LIKED_PROJECT_FAIL, payload: err });
-  }
-};
-
-export const getMostViewedProjects = () => async (dispatch) => {
-  try {
-    dispatch({ type: VIEWED_PROJECT_REQUEST });
-    const url = "http://127.0.0.1:5000/api/project/most_viewed";
-    const res = await axios.get(url);
-    dispatch({ type: VIEWED_PROJECT_SUCCESS, payload: res.data });
-  } catch (err) {
-    dispatch({ type: VIEWED_PROJECT_FAIL, payload: err });
   }
 };

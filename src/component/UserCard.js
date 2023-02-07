@@ -18,38 +18,81 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-
+import { Link as RouterLink } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 const backgroundStyle = {
   backgroundImage: `url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2264&q=80")`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
+  height: "max-content",
+  flexWrap: "wrap",
+  justifyContent: "center",
 };
 
-const UserCard = () => {
+const UserCard = ({ data }) => {
+  const matches = useMediaQuery("(min-width:1054px)");
   return (
     <Card>
       <CardHeader
         sx={backgroundStyle}
         avatar={
           <Avatar sx={{ bgcolor: "red" }} aria-label="user">
-            R
+            {data.profile_image && data.profile_image !== "null" ? (
+              <img height="40px" width="40px" src={data.profile_image} alt="" />
+            ) : (
+              `${data.first_name.slice(0, 1).toUpperCase()}${data.last_name
+                ?.slice(0, 1)
+                .toUpperCase()}`
+            )}
           </Avatar>
         }
         action={
           <div style={{ display: "flex" }}>
             <IconButton aria-label="github">
-              <GitHub />
+              <a
+                style={{ color: "rgba(0,0,0,0.54)" }}
+                href={data.github_profile_link}
+                target="_blank"
+              >
+                <GitHub />
+              </a>
             </IconButton>
             <IconButton aria-label="LinkedIn">
-              <LinkedIn />
+              <a
+                style={{ color: "rgba(0,0,0,0.54)" }}
+                href={data.linkedin_profile_link}
+                target="_blank"
+              >
+                <LinkedIn />
+              </a>
             </IconButton>
           </div>
         }
-        title="Anushri Rawat"
+        title={data.first_name + " " + data.last_name}
         subheader={
-          <div>
-            <h5>title</h5>
-            <h5>City</h5>
+          <div style={{ minWidth: "148px" }}>
+            <h5
+              style={{
+                textTransform: "capitalize",
+                color: "rgba(0,0,0,0.8)",
+                fontSize: "14px",
+              }}
+            >
+              {data.title}
+            </h5>
+            <h5
+              style={{
+                textTransform: "capitalize",
+                color: "rgba(0,0,0,0.8)",
+                fontSize: "14px",
+              }}
+            >
+              {data.city
+                ? `${data.city} ${data.state ? `, ${data.state}` : ""}`
+                : data.state
+                ? data.state
+                : ""}
+            </h5>
           </div>
         }
       />
@@ -60,11 +103,20 @@ const UserCard = () => {
             gap: "0.5rem",
             alignItems: "center",
             paddingLeft: "16px",
+            height: "65px",
+            overflowY: "scroll",
           }}
         >
-          <strong>Skills:</strong>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-            {["React", "Redux"].map((skill, i) => (
+          <strong style={{ marginTop: matches ? "0" : "35px" }}>Skills:</strong>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "5px",
+              marginTop: matches ? "0" : "35px",
+            }}
+          >
+            {data.skills.map((skill, i) => (
               <span
                 key={i}
                 style={{
@@ -89,8 +141,12 @@ const UserCard = () => {
             padding: "10px 0 0 16px",
           }}
         >
-          <strong>Description:</strong>
-          <Typography variant="body2">I am hard working</Typography>
+          <Typography
+            sx={{ height: "40px", overflowY: "scroll" }}
+            variant="body2"
+          >
+            {data.description}
+          </Typography>
         </div>
       </CardContent>
       <Divider />
@@ -102,7 +158,13 @@ const UserCard = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", gap: "0.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            justifyContent: "space-between",
+          }}
+        >
           <Button
             size="small"
             variant="contained"
@@ -110,9 +172,12 @@ const UserCard = () => {
               borderRadius: "5px",
               background: "rgb(23 124 226/0.5)",
               color: "#000",
+              fontSize: "14px",
+              textTransform: "capitalize",
+              padding: "4px 12px",
             }}
           >
-            <Share />
+            <Share style={{ paddingRight: "4px" }} />
             Share
           </Button>
           <Button
@@ -122,16 +187,33 @@ const UserCard = () => {
               borderRadius: "5px",
               background: "rgb(23 124 226/0.5)",
               color: "#000",
+              fontSize: "14px",
+              textTransform: "capitalize",
+              padding: "4px 12px",
             }}
           >
-            <Save />
+            <Save style={{ paddingRight: "4px" }} />
             Save
           </Button>
         </div>
         <div>
-          <Button variant="contained" sx={{ borderRadius: "5px" }}>
-            <AccountCircle />
-            View Profile
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: "5px",
+              fontSize: "14px",
+              textTransform: "capitalize",
+              padding: "9px 10px",
+              background: "rgb(23 124 226/0.5)",
+              color: "#000",
+            }}
+          >
+            <RouterLink
+              style={{ color: "#000", lineHeight: "14px" }}
+              to={`/profile/${data._id}`}
+            >
+              View Profile
+            </RouterLink>
           </Button>
         </div>
       </CardActions>
