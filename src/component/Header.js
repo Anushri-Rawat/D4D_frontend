@@ -141,7 +141,7 @@ const Header = () => {
                 </Menu>
               </>
             ) : (
-              <RouterLink to="/signup" style={{ textDecoration: "none" }}>
+              <RouterLink to="/signin" style={{ textDecoration: "none" }}>
                 <Button variant="contained">Signin</Button>
               </RouterLink>
             )}

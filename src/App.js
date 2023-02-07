@@ -34,7 +34,7 @@ function App() {
           />
           <Route
             path="/edit/projects-gallery/:id"
-            element={<EditProjectDetailsPage />}
+            element={<EditProjectDetailsPage mode="edit" />}
           />
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/search/projects" element={<SearchProjectPage />} />

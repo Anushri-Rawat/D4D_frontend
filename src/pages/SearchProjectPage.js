@@ -16,6 +16,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import LayersIcon from "@mui/icons-material/Layers";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const SearchProjectPage = (props) => {
   const [tech, setTech] = useState("");
@@ -142,7 +143,8 @@ const SearchProjectPage = (props) => {
     "Travel Destination",
     "Real Estate",
   ];
-
+  const matches = useMediaQuery("(min-width:1200px)");
+  const matchesSm = useMediaQuery("(min-width:600px)");
   const { loading, error, projects } = useSelector(
     (state) => state.searchProjects
   );
@@ -153,7 +155,7 @@ const SearchProjectPage = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(tech);
+
     dispatch(getProjects(tech, keyword));
   };
 
@@ -187,13 +189,18 @@ const SearchProjectPage = (props) => {
       <form
         style={{
           boxShadow: "0px 0px 4px #ddd",
-          padding: "20px 20px 20px 0",
-          marginLeft: "30px",
+          padding: matchesSm ? "20px 20px 20px 0" : "20px",
+          marginLeft: matches ? "30px" : "0",
         }}
         onSubmit={submitHandler}
       >
-        <Grid container>
-          <Grid item xs={12} md={6} sx={{ padding: "0 10px 0 20px" }}>
+        <Grid container sx={{ justifyContent: "center" }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            sx={{ padding: matchesSm ? "0 10px 0 20px" : "0 0 6px 0" }}
+          >
             <Autocomplete
               {...defaultPropsTech}
               id="tech"
@@ -202,39 +209,16 @@ const SearchProjectPage = (props) => {
                 setTech(newValue);
               }}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Technologies"
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">
-                  //       <LayersIcon />
-                  //     </InputAdornment>
-                  //   ),
-                  // }}
-                />
+                <TextField {...params} label="Technologies" />
               )}
             />
-            {/* <FormControl fullWidth sx={{ margin: "0 15px" }}>
-              <InputLabel id="tech-select-label">Technology</InputLabel>
-              <Select
-                labelId="tech-select-label"
-                id="tech-select"
-                value={tech}
-                label="Technology"
-                onChange={(e) => setTech(e.target.value)}
-              >
-                {technologies.map((elem) => {
-                  return (
-                    <MenuItem value={elem} key={elem}>
-                      {elem}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl> */}
           </Grid>
-          <Grid item xs={12} md={6} sx={{ padding: "0 20px 0 10px" }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            sx={{ padding: matchesSm ? "0 10px 0 20px" : "6px 0 0 0" }}
+          >
             <Autocomplete
               {...defaultPropsKeywords}
               id="keywords"
@@ -243,37 +227,9 @@ const SearchProjectPage = (props) => {
                 setKeyword(newValue);
               }}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Keywords"
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">
-                  //       <SearchIcon />
-                  //     </InputAdornment>
-                  //   ),
-                  // }}
-                />
+                <TextField {...params} label="Keywords" />
               )}
             />
-            {/* <FormControl fullWidth sx={{ margin: "0 15px" }}>
-              <InputLabel id="keyword-select-label">Keywords</InputLabel>
-              <Select
-                labelId="keyword-select-label"
-                id="keyword-select"
-                value={keyword}
-                label="Keyword"
-                onChange={(e) => setKeyword(e.target.value)}
-              >
-                {keywords.map((elem) => {
-                  return (
-                    <MenuItem value={elem} key={elem}>
-                      {elem}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl> */}
           </Grid>
         </Grid>
         <Grid container>
@@ -281,11 +237,13 @@ const SearchProjectPage = (props) => {
             type="submit"
             variant="contained"
             color="primary"
+            className="searchBtn"
             sx={{
               width: "370px",
               margin: "20px auto 0 auto",
               padding: "10px 0",
               fontSize: "16px",
+              backgroundColor: "#4bacab",
             }}
           >
             <SearchIcon /> Search
@@ -296,9 +254,10 @@ const SearchProjectPage = (props) => {
         container
         sx={{
           margin: "20px",
-
+          justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
+          minHeight: "40vh",
+          marginLeft: matches ? "20px" : "0px",
         }}
       >
         {loading && <Spinner />}
@@ -319,6 +278,28 @@ const SearchProjectPage = (props) => {
               </Grid>
             );
           })}
+        {!loading && !error && projects.length === 0 && (
+          <Typography
+            p
+            sx={{
+              margin: "initial auto",
+              fontSize: "20px",
+            }}
+          >
+            No projects found!
+          </Typography>
+        )}
+        {!loading && error && (
+          <Typography
+            p
+            sx={{
+              margin: "initial auto",
+              fontSize: "20px",
+            }}
+          >
+            Something went wrong. Try again.
+          </Typography>
+        )}
       </Grid>
     </Container>
   );

@@ -84,13 +84,15 @@ const SigninForm = ({ formik }) => {
             fontWeight: "500",
             padding: "10px 64px",
             margin: "30px auto",
-            display: "block",
+            display: "flex",
             backgroundColor: "#4cacbc",
           }}
         >
           {" "}
-          {loading && <Spinner />}
-          SIGN IN
+          {loading && (
+            <Spinner class="" color="#fff" height="20px" width="20px" />
+          )}
+          <span style={{ paddingLeft: "6px" }}>SIGN IN</span>
         </Button>
       </form>
     </Grid>

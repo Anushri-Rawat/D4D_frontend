@@ -27,12 +27,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { deleteProject, updateLikesOfProject } from "../actions/projectActions";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ProjectCard = ({ data }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const matches = useMediaQuery("(min-width:900px)");
   const handleOpenProjectMenu = (event) => {
     event.preventDefault();
     setAnchorElUser(event.currentTarget);
@@ -57,7 +58,7 @@ const ProjectCard = ({ data }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 300 }}>
+    <Card sx={{ maxWidth: matches ? "300px" : "100%" }}>
       <Link to={`/project/${data.name.split(" ").join("-")}/${data._id}`}>
         <CardHeader
           sx={{ padding: "12px", color: "#000" }}

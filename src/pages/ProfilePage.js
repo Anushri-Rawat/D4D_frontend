@@ -85,7 +85,7 @@ const ProfilePage = () => {
         type: PROJECT_LIST_SUCCESS,
         payload: projects.filter((p) => p._id !== deletedId),
       });
-      toast.success("project delted successfully!");
+      toast.success("project deleted successfully!");
     }
   }, [deleteSuccess, deletedId]);
 
@@ -94,10 +94,9 @@ const ProfilePage = () => {
       toast.error("profile with this id does not exist");
       navigate("/");
     }
-    if (!profileInfo) {
-      dispatch(getProfileById(id));
-    }
-  }, [profileInfo]);
+
+    dispatch(getProfileById(id));
+  }, [id]);
 
   return !loading ? (
     <Container
@@ -385,7 +384,7 @@ const ProfilePage = () => {
                 </Box>
                 <Box sx={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
                   {!projectLoading &&
-                    projects.map((project) => (
+                    projects?.map((project) => (
                       <ProjectCard data={project} key={project._id} />
                     ))}
                 </Box>

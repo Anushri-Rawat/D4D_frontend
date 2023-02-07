@@ -9,13 +9,14 @@ import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfiles } from "../actions/userActions";
-import ProjectCard from "../component/ProjectCard";
+import UserCard from "../component/UserCard";
 import Spinner from "../component/Spinner";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import LayersIcon from "@mui/icons-material/Layers";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const SearchProfilePage = (props) => {
   const [tech, setTech] = useState("");
@@ -103,6 +104,8 @@ const SearchProfilePage = (props) => {
     "Zustand",
   ];
 
+  const matches = useMediaQuery("(min-width:600px)");
+
   const { loading, error, profiles } = useSelector(
     (state) => state.searchProfiles
   );
@@ -113,7 +116,7 @@ const SearchProfilePage = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(tech);
+
     dispatch(getProfiles(tech, title, name));
   };
 
@@ -121,11 +124,6 @@ const SearchProfilePage = (props) => {
     options: technologies,
     getOptionLabel: (option) => option,
   };
-
-  //   const defaultPropsKeywords = {
-  //     options: keywords,
-  //     getOptionLabel: (option) => option,
-  //   };
 
   return (
     <Container sx={{ marginTop: "35px" }}>
@@ -146,13 +144,18 @@ const SearchProfilePage = (props) => {
       <form
         style={{
           boxShadow: "0px 0px 4px #ddd",
-          padding: "20px 20px 20px 0",
-          marginLeft: "30px",
+          padding: "20px 0px 20px 0",
+          //marginLeft: "30px",
         }}
         onSubmit={submitHandler}
       >
         <Grid container>
-          <Grid item xs={12} md={4} sx={{ padding: "0 10px 0 20px" }}>
+          <Grid
+            item
+            xs={12}
+            sm={4}
+            sx={{ padding: matches ? "0 10px 0 20px" : "0 10px 6px 10px" }}
+          >
             <Autocomplete
               {...defaultPropsTech}
               id="tech"
@@ -161,39 +164,16 @@ const SearchProfilePage = (props) => {
                 setTech(newValue);
               }}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Technologies"
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">
-                  //       <LayersIcon />
-                  //     </InputAdornment>
-                  //   ),
-                  // }}
-                />
+                <TextField {...params} label="Technologies" />
               )}
             />
-            {/* <FormControl fullWidth sx={{ margin: "0 15px" }}>
-              <InputLabel id="tech-select-label">Technology</InputLabel>
-              <Select
-                labelId="tech-select-label"
-                id="tech-select"
-                value={tech}
-                label="Technology"
-                onChange={(e) => setTech(e.target.value)}
-              >
-                {technologies.map((elem) => {
-                  return (
-                    <MenuItem value={elem} key={elem}>
-                      {elem}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl> */}
           </Grid>
-          <Grid item xs={12} md={4} sx={{ padding: "0 10px 0 10px" }}>
+          <Grid
+            item
+            xs={12}
+            sm={4}
+            sx={{ padding: matches ? "0 10px 0 10px" : "6px 10px 6px 10px" }}
+          >
             <TextField
               type="text"
               value={title}
@@ -202,7 +182,12 @@ const SearchProfilePage = (props) => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={4} sx={{ padding: "0 20px 0 10px" }}>
+          <Grid
+            item
+            xs={12}
+            sm={4}
+            sx={{ padding: matches ? "0 20px 0 10px" : "6px 10px 0 10px" }}
+          >
             <TextField
               type="text"
               value={name}
@@ -216,12 +201,13 @@ const SearchProfilePage = (props) => {
           <Button
             type="submit"
             variant="contained"
-            color="primary"
+            className="searchBtn"
             sx={{
-              width: "370px",
+              width: "320px",
               margin: "20px auto 0 auto",
-              padding: "10px 0",
+              padding: "10px",
               fontSize: "16px",
+              backgroundColor: "#4bacab",
             }}
           >
             <SearchIcon /> Search
@@ -232,29 +218,52 @@ const SearchProfilePage = (props) => {
         container
         sx={{
           margin: "20px",
-
+          marginLeft: "0",
           alignItems: "center",
-          minHeight: "50vh",
+          minHeight: "40vh",
+          justifyContent: "center",
         }}
       >
-        {/* {loading && <Spinner />}
+        {loading && <Spinner />}
         {!loading &&
           !error &&
-          projects.map((elem) => {
+          profiles.map((elem) => {
             return (
               <Grid
                 item
                 xs={12}
                 sm={6}
                 md={4}
-                lg={3}
+                xl={3}
                 sx={{ padding: "15px" }}
                 key={elem._id}
               >
-                <ProjectCard data={elem} />
+                <UserCard data={elem} />
               </Grid>
             );
-          })} */}
+          })}
+        {!loading && !error && profiles.length === 0 && (
+          <Typography
+            p
+            sx={{
+              margin: "initial auto",
+              fontSize: "20px",
+            }}
+          >
+            No developers found!
+          </Typography>
+        )}
+        {!loading && error && (
+          <Typography
+            p
+            sx={{
+              margin: "initial auto",
+              fontSize: "20px",
+            }}
+          >
+            Something went wrong. Try again.
+          </Typography>
+        )}
       </Grid>
     </Container>
   );
