@@ -63,9 +63,9 @@ const EditDetailsPage = () => {
   }, [userInfo, navigate, dispatch]);
 
   useEffect(() => {
-    if (user?.username) {
-      navigate("/");
-    }
+    // if (user?.username) {
+    //   navigate("/");
+    // }
     if (!userSuccess && userError) {
       toast.error(userError);
     }

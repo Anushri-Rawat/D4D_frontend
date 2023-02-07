@@ -57,6 +57,7 @@ import {
 } from "../actions/collectionAction";
 import CommentBody from "../component/CommentBody";
 import AddToCollectionModal from "../component/AddToCollectionModal";
+import ShareMenu from "../component/ShareMenu";
 
 let poster = [];
 const ProjectDetailsPage = () => {
@@ -70,6 +71,7 @@ const ProjectDetailsPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState("");
   const [added, setAdded] = useState(false);
+  const [openShareModal, setOpenShareModal] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -112,6 +114,11 @@ const ProjectDetailsPage = () => {
   } = useSelector((state) => state.replyCreate);
 
   const { collections } = useSelector((state) => state.collectionList);
+
+  const shareHandler = (e) => {
+    e.preventDefault();
+    setOpenShareModal(!openShareModal);
+  };
 
   useEffect(() => {
     if (!userInfo) {
@@ -350,6 +357,7 @@ const ProjectDetailsPage = () => {
                   gap: "0.6rem",
                   alignItems: "center",
                   justifyContent: "flex-end",
+                  position: "relative",
                 }}
               >
                 <Button
@@ -358,6 +366,7 @@ const ProjectDetailsPage = () => {
                     color: "rgb(69 72 77/1)",
                     borderColor: "rgb(69 72 77/1)",
                   }}
+                  onClick={shareHandler}
                 >
                   <Share />
                   Share
@@ -392,6 +401,9 @@ const ProjectDetailsPage = () => {
                   )}
                   Like({projectInfo?.likesCount})
                 </Button>
+                {openShareModal && (
+                  <ShareMenu shareUrl={projectInfo?.deployed_link} />
+                )}
               </div>
             </Box>
             <Typography

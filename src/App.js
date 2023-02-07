@@ -15,6 +15,7 @@ import CollectionDetailsPage from "./pages/CollectionDetailsPage";
 
 function App() {
   const location = useLocation();
+
   return (
     <div className="App">
       {location.pathname !== "/signup" && location.pathname !== "/signin" && (

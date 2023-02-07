@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, Box } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -29,8 +29,8 @@ const AddToCollectionModal = ({
     }
   }, [error, success]);
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         justifyContent: "space-between",
         padding: "0 10px",
@@ -80,7 +80,7 @@ const AddToCollectionModal = ({
           +
         </Button>
       )}
-    </div>
+    </Box>
   );
 };
 

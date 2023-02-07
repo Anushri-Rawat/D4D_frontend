@@ -110,12 +110,12 @@ export const deleteProject = (userInfo, id) => async (dispatch) => {
   }
 };
 
-export const updateProject = (userInfo, id) => async (dispatch) => {
+export const updateProject = (userInfo, form, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_UPDATE_REQUEST });
 
     const url = `http://127.0.0.1:5000/api/project/${id}`;
-    const res = await axios.patch(url, {
+    const res = await axios.patch(url, form, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
       },

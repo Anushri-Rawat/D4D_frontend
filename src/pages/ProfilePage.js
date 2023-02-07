@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import {
   Stack,
   Paper,
@@ -10,6 +10,7 @@ import {
   IconButton,
   Tab,
   Grid,
+  useMediaQuery,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import bg from "../images/background-wallpaper-with-polygons-in-gradient-colors-vector.jpg";
@@ -33,7 +34,10 @@ import {
   getMostViewedProjects,
   getProjectList,
 } from "../actions/projectActions";
-import { PROJECT_LIST_SUCCESS } from "../constants/projectConstants";
+import {
+  PROJECT_LIST_SUCCESS,
+  PROJECT_DELETE_RESET,
+} from "../constants/projectConstants";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -46,6 +50,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const ProfilePage = () => {
   const [value, setValue] = useState("1");
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down(770));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -72,6 +78,7 @@ const ProfilePage = () => {
   } = useSelector((state) => state.viewedProjects);
 
   useEffect(() => {
+    //document.body.style.overflow = "hidden";
     if (!userInfo) {
       navigate("/signin");
     }
@@ -85,7 +92,8 @@ const ProfilePage = () => {
         type: PROJECT_LIST_SUCCESS,
         payload: projects.filter((p) => p._id !== deletedId),
       });
-      toast.success("project delted successfully!");
+      toast.success("project deleted successfully!");
+      dispatch({ type: PROJECT_DELETE_RESET });
     }
   }, [deleteSuccess, deletedId]);
 
@@ -103,13 +111,15 @@ const ProfilePage = () => {
     <Container
       sx={{
         padding: { xs: "0", sm: "40px" },
+        height: "100%",
+        overflow: "hidden!important",
       }}
     >
       <Stack
         direction="row"
         sx={{
-          flexDirection: { xs: "column", sm: "row" },
-          gap: { xs: 0, sm: "1.5rem" },
+          flexDirection: matches ? "column" : "row",
+          gap: matches ? 0 : "1.5rem",
         }}
       >
         <Item
@@ -117,10 +127,12 @@ const ProfilePage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: { xs: "100%", sm: "32%" },
+            width: matches ? "100%" : "32%",
             textAlign: "left",
             color: "#000",
             padding: 0,
+            minHeight: matches ? "50vh" : "85vh",
+            height: "max-content",
           }}
         >
           <Box as="div" sx={{ position: "relative" }}>
@@ -212,7 +224,7 @@ const ProfilePage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: { xs: "100%", sm: "68%" },
+            width: matches ? "100%" : "68%",
             textAlign: "left",
             color: "#000",
             padding: 0,
@@ -248,7 +260,9 @@ const ProfilePage = () => {
                 padding: "24px 0",
               }}
             >
-              <Box sx={{ padding: "5px" }}>
+              <Box
+                sx={{ padding: "5px", maxHeight: "100vh", overflowY: "scroll" }}
+              >
                 <Paper
                   elevation={0}
                   sx={{
@@ -290,36 +304,21 @@ const ProfilePage = () => {
                     border: "1px solid rgb(226 232 239)",
                   }}
                 >
-                  <Stack
-                    direction="row"
+                  <Typography
+                    variant="p"
                     sx={{
-                      justifyContent: "space-between",
-                      marginBottom: "8px",
+                      fontSize: "1.25rem",
+                      fontWeight: 600,
                     }}
                   >
-                    <Typography
-                      variant="p"
-                      sx={{ fontSize: "1.25rem", fontWeight: 600 }}
-                    >
-                      Top Projects
-                    </Typography>
-                    {userInfo._id === profileInfo?._id && (
-                      <div style={{ display: "flex", gap: "8px" }}>
-                        <Add />
-                        <IconButton
-                          sx={{ padding: 0, color: "#000" }}
-                          onClick={() => navigate("/edit/basic-details")}
-                        >
-                          <Edit />
-                        </IconButton>
-                      </div>
-                    )}
-                  </Stack>
+                    Top Projects
+                  </Typography>
                   <Grid
                     container
                     spacing={3}
                     sx={{
                       minHeight: "250px",
+                      marginTop: "6px",
                     }}
                   >
                     {viewedProjectsLoading && <Spinner />}
@@ -351,15 +350,14 @@ const ProfilePage = () => {
                 </Paper>
               </Box>
             </TabPanel>
-            <TabPanel
-              value="2"
-              sx={{ padding: "24px 0", background: "rgb(250 251 255/1)" }}
-            >
+            <TabPanel value="2" sx={{ padding: "24px 0" }}>
               <Paper
                 elevation={0}
                 sx={{
                   padding: "15px",
                   border: "1px solid rgb(226 232 239)",
+                  maxHeight: "100vh",
+                  overflowY: "scroll",
                 }}
               >
                 <Box
@@ -383,12 +381,14 @@ const ProfilePage = () => {
                     </IconButton>
                   )}
                 </Box>
-                <Box sx={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+                <Grid container spacing={2}>
                   {!projectLoading &&
                     projects.map((project) => (
-                      <ProjectCard data={project} key={project._id} />
+                      <Grid item xs={12} sm={6} md={6} lg={4} key={project._id}>
+                        <ProjectCard data={project} />
+                      </Grid>
                     ))}
-                </Box>
+                </Grid>
               </Paper>
             </TabPanel>
           </TabContext>

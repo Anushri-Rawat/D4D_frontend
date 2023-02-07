@@ -9,12 +9,14 @@ import {
   TextField,
   Button,
   Link,
+  useMediaQuery,
 } from "@mui/material";
 import { MoreVert, Edit, Delete, Send } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { createReply, deleteComment } from "../actions/commentAction";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { useTheme } from "@mui/material/styles";
 
 const CommentBody = ({
   comment,
@@ -23,6 +25,8 @@ const CommentBody = ({
   setEditComment,
   setCommentId,
 }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const [replyModal, setReplyModal] = useState(false);
   const [viewReply, setViewReply] = useState(false);
   const [reply, setReply] = useState("");
@@ -63,7 +67,7 @@ const CommentBody = ({
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: matches ? "flex-start" : "center",
           }}
         >
           <div
@@ -77,7 +81,7 @@ const CommentBody = ({
             <div
               style={{
                 display: "flex",
-                gap: "0.7rem",
+                gap: matches ? "0.3rem" : "0.7rem",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -87,16 +91,15 @@ const CommentBody = ({
                 sx={{
                   textTransform: "capitalize",
                   fontWeight: "600",
-                  lineHeight: "1.4",
+                  lineHeight: matches ? "1" : "1.4",
+                  fontSize: matches ? "18px" : "1.25rem",
                 }}
               >
                 {comment?.user_id?.first_name +
                   " " +
                   comment?.user_id?.last_name}
               </Typography>
-              <span style={{ paddingLeft: "5px" }}>
-                {moment(comment.createdAt).fromNow()}
-              </span>
+              <span>{moment(comment.createdAt).fromNow()}</span>
             </div>
             <Typography variant="p" sx={{ color: "rgb(115 121 128/1)" }}>
               {comment?.user_id?.title}
@@ -115,11 +118,16 @@ const CommentBody = ({
               onClick={() => {
                 setReplyModal(!replyModal);
               }}
+              style={{ padding: matches ? "0" : "6px 8px" }}
             >
               Reply
             </Button>
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton aria-label="settings" onClick={handleOpenProjectMenu}>
+              <IconButton
+                aria-label="settings"
+                onClick={handleOpenProjectMenu}
+                style={{ padding: matches ? "0" : "8px" }}
+              >
                 <MoreVert />
               </IconButton>
               <Menu

@@ -62,7 +62,7 @@ const HomePage = () => {
               likedProjectsSuccess &&
               likedProjects.map((elem, i) => {
                 return (
-                  <Grid item xs={12} sm={6} lg={3} key={elem._id}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
                     <ProjectCard data={elem} />
                   </Grid>
                 );
@@ -99,7 +99,7 @@ const HomePage = () => {
               viewedProjectsSuccess &&
               viewedProjects.map((elem) => {
                 return (
-                  <Grid item xs={12} sm={6} lg={3} key={elem._id}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
                     <ProjectCard data={elem} />
                   </Grid>
                 );

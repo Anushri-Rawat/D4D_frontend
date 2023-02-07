@@ -12,7 +12,11 @@ import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { createProject, getProjectDetails } from "../actions/projectActions";
+import {
+  createProject,
+  getProjectDetails,
+  updateProject,
+} from "../actions/projectActions";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -22,44 +26,13 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   PROJECT_ADD_RESET,
   PROJECT_DETAILS_RESET,
+  PROJECT_UPDATE_RESET,
 } from "../constants/projectConstants";
 const urlRegex =
   /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
 
 const validationSchema = yup.object({
   image: yup.mixed().required("Project image is required"),
-  // .test("fileSize", "The file is too large", (value) => {
-  //   return value && value.size <= 10 * 1024 * 1024;
-  // })
-  // .test(
-  //   "type",
-  //   "Only the following formats are accepted: .jpeg, .jpg, .png",
-  //   (value) => {
-  //     return (
-  //       value &&
-  //       (value.type === "image/jpeg" ||
-  //         value.type === "image/jpg" ||
-  //         value.type === "image/png")
-  //     );
-  //   }
-  // ),
-  // demo_video: yup
-  //   .mixed()
-  //   .test("fileSize", "The file is too large", (value) => {
-  //     return value && value.size <= 30 * 1024 * 1024;
-  //   })
-  //   .test(
-  //     "type",
-  //     "Only the following formats are accepted: video/mp4, video/x-m4v, video/*",
-  //     (value) => {
-  //       return (
-  //         value &&
-  //         (value.type === "video/mp4" ||
-  //           value.type === "video/x-m4v" ||
-  //           value.type === "video/*")
-  //       );
-  //     }
-  //   ),
   project_title: yup
     .string("Enter the project title")
     .required("Project title is required"),
@@ -79,7 +52,6 @@ const validationSchema = yup.object({
 
 const EditProjectDetailsPage = () => {
   const { id } = useParams();
-  console.log(id);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userLogin);
@@ -87,6 +59,9 @@ const EditProjectDetailsPage = () => {
     (state) => state.projectCreate
   );
   const { projectInfo } = useSelector((state) => state.projectDetails);
+  const { success: updateSuccess, error: updateError } = useSelector(
+    (state) => state.projectUpdate
+  );
 
   const [photoURL, setPhotoURL] = useState();
   const [videoURL, setVideoURL] = useState();
@@ -96,34 +71,57 @@ const EditProjectDetailsPage = () => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
+    if (id) {
+      dispatch(getProjectDetails(id));
+    }
+  }, [id]);
+
+  useEffect(() => {
     if (!userInfo) {
       navigate("/signin");
     }
+
+    formik.values.project_title = projectInfo?.name || "";
+    formik.values.source_code_link = projectInfo?.source_code_link?.[0] || "";
+    formik.values.deployed_link = projectInfo?.deployed_link || "";
+    formik.values.project_description = projectInfo?.description || "";
+    setTags(projectInfo?.required_skills || []);
+    setStartDate(projectInfo?.project_start_date || dayjs());
+    setEndDate(projectInfo?.project_end_date || dayjs());
+    setPhotoURL(projectInfo?.images_url?.[0] || "");
+    formik.values.image = projectInfo?.images_url || [];
+
     if (!loading && error) {
       toast.error(error);
       dispatch({ type: PROJECT_ADD_RESET });
-    } else if (!loading && success) {
+    }
+    if (!loading && success) {
       toast.success("project successfully added");
       dispatch({ type: PROJECT_ADD_RESET });
       navigate(`/profile/${userInfo._id}`);
-    }
-    if (id && !projectInfo?.name) {
-      dispatch(getProjectDetails(id));
-    }
-    if (!id && projectInfo?.name) {
+    } else if (!id && projectInfo?.name) {
       dispatch({ type: PROJECT_DETAILS_RESET });
     }
-    if (projectInfo?.name) {
-      formik.values.project_title = projectInfo?.name;
-      formik.values.source_code_link = projectInfo?.source_code_link;
-      formik.values.deployed_link = projectInfo?.deployed_link;
-      formik.values.project_description = projectInfo?.description;
-      setTags(projectInfo?.required_skills);
-      setStartDate(projectInfo?.project_start_date);
-      setEndDate(projectInfo?.project_end_date);
-      formik.values.image = projectInfo?.images_url;
+    if (updateSuccess) {
+      toast.success("Project Successfully updated");
+      dispatch({ type: PROJECT_UPDATE_RESET });
+      dispatch(getProjectDetails(id));
     }
-  }, [userInfo, navigate, error, success, loading, dispatch, id, projectInfo]);
+    if (!updateSuccess && updateError) {
+      toast.error(updateError);
+      dispatch({ type: PROJECT_UPDATE_RESET });
+    }
+  }, [
+    userInfo,
+    navigate,
+    error,
+    success,
+    loading,
+    dispatch,
+    projectInfo,
+    updateSuccess,
+    updateError,
+  ]);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -149,8 +147,12 @@ const EditProjectDetailsPage = () => {
       form.append("deployed_link", values.deployed_link);
       form.append("description", values.project_description);
       tags.map((tag) => form.append("required_skills", tag));
-      values.image.map((image) => form.append("images_url", image));
-      dispatch(createProject(userInfo, form, video));
+      formik.values.image?.map((image) => form.append("images_url", image));
+      if (!id) {
+        dispatch(createProject(userInfo, form, video));
+      } else {
+        dispatch(updateProject(userInfo, form, id));
+      }
     },
   });
 
