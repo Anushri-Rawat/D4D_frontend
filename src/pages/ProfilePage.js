@@ -34,6 +34,11 @@ import {
   getProjectList,
 } from "../actions/projectActions";
 import { PROJECT_LIST_SUCCESS } from "../constants/projectConstants";
+import {
+  createConversation,
+  getAllConversations,
+} from "../actions/chatActions";
+import { CONVERSATION_CREATE_RESET } from "../constants/chatConstants";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -97,6 +102,29 @@ const ProfilePage = () => {
 
     dispatch(getProfileById(id));
   }, [id]);
+
+  useEffect(() => {
+    dispatch({ type: CONVERSATION_CREATE_RESET });
+  }, []);
+  const {
+    loading: convLoading,
+    error: convError,
+    conversations,
+  } = useSelector((state) => state.conversationList);
+
+  const {
+    loading: curConvLoading,
+    error: curConvError,
+    curConversation,
+  } = useSelector((state) => state.conversationCreate);
+  const reqChatHandler = (e) => {
+    dispatch(createConversation(profileInfo._id, userInfo));
+    dispatch(getAllConversations(userInfo));
+  };
+
+  useEffect(() => {
+    if (curConversation) navigate(`/chat/${curConversation._id}`);
+  }, [curConversation]);
 
   return !loading ? (
     <Container
@@ -189,6 +217,7 @@ const ProfilePage = () => {
                 variant="outlined"
                 startIcon={<Chat />}
                 sx={{ margin: "20px 0 10px" }}
+                onClick={reqChatHandler}
               >
                 Request Chat
               </Button>
