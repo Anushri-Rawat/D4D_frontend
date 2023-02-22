@@ -14,9 +14,20 @@ import SearchProfilePage from "./pages/SearchProfilePage";
 import { ToastContainer } from "react-toastify";
 import CollectionsPage from "./pages/CollectionsPage";
 import CollectionDetailsPage from "./pages/CollectionDetailsPage";
-
+import ChatPage from "./pages/ChatPage";
+import Chats from "./component/Chats";
+import Grid from "@mui/material/Grid";
+import { useState } from "react";
+import { useMediaQuery } from "@mui/material";
 function App() {
   const location = useLocation();
+  const [socket, setSocket] = useState();
+
+  const socketHandler = (socket) => {
+    setSocket(socket);
+  };
+  console.log(location);
+  const matchesMd = useMediaQuery("(max-width:900px)");
   return (
     <div className="App">
       {location.pathname !== "/signup" && location.pathname !== "/signin" && (
@@ -45,6 +56,37 @@ function App() {
           />
           <Route path="/collections" element={<CollectionsPage />} />
           <Route path="/collections/:id" element={<CollectionDetailsPage />} />
+          <Route
+            path="/chat"
+            element={
+              <Grid
+                container
+                sx={{
+                  backgroundColor: "#4cacbc22",
+                  height: "calc(100vh - 58px)",
+                  overflowY: "hidden",
+                }}
+              >
+                <ChatPage isConvOpen="false" socketHandler={socketHandler} />
+              </Grid>
+            }
+          />
+          <Route
+            path="/chat/:id"
+            element={
+              <Grid
+                container
+                sx={{
+                  backgroundColor: "#4cacbc22",
+                  height: "calc(100vh - 58px)",
+                  overflowY: "hidden",
+                }}
+              >
+                <ChatPage isConvOpen="true" socketHandler={socketHandler} />
+                <Chats socket={socket} />
+              </Grid>
+            }
+          />
         </Routes>
         <ToastContainer
           position="top-right"
@@ -59,9 +101,9 @@ function App() {
           theme="light"
         />
       </main>
-      {location.pathname !== "/signup" && location.pathname !== "/signin" && (
-        <Footer />
-      )}
+      {location.pathname !== "/signup" &&
+        location.pathname !== "/signin" &&
+        !location.pathname.startsWith("/chat") && <Footer />}
     </div>
   );
 }

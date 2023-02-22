@@ -219,3 +219,19 @@ a {
 .searchBtn:hover {
   background-color: #4cacbc !important;
 }
+
+/*-----------------------Chat page------------------------------*/
+/* .searchInput {
+  border: none;
+  outline: none;
+  padding: 12px;
+  border-radius: 20px;
+  margin: 20px;
+  width: 300px;
+  font-size: 15px;
+  font-weight: 600;
+} */
+.searchInput fieldset,
+.chatInput fieldset {
+  border: none;
+}

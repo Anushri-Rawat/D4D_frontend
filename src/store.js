@@ -34,7 +34,12 @@ import {
   collectionUpdateReducer,
   saveProjectReducer,
 } from "./reducers/CollectionReducer";
-
+import {
+  conversationListReducer,
+  messageListReducer,
+  messageCreateReducer,
+  conversationCreateReducer,
+} from "./reducers/chatReducer";
 const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -62,6 +67,10 @@ const reducers = combineReducers({
   collectionList: collectionListReducer,
   collectionDetails: collectionDetailsReducer,
   saveProject: saveProjectReducer,
+  conversationList: conversationListReducer,
+  messageList: messageListReducer,
+  messageCreate: messageCreateReducer,
+  conversationCreate: conversationCreateReducer,
 });
 
 const userInfoFromStorage =
