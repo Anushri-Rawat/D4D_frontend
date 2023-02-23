@@ -56,7 +56,7 @@ const HomePage = () => {
               justifyContent: "center",
             }}
           >
-            {likedProjectsLoading && <Spinner />}
+            {likedProjectsLoading && <Spinner class={"loading-container"} />}
 
             {!likedProjectsLoading &&
               likedProjectsSuccess &&
@@ -94,7 +94,7 @@ const HomePage = () => {
               justifyContent: "center",
             }}
           >
-            {viewedProjectsLoading && <Spinner />}
+            {viewedProjectsLoading && <Spinner class={"loading-container"} />}
             {!viewedProjectsLoading &&
               viewedProjectsSuccess &&
               viewedProjects.map((elem) => {

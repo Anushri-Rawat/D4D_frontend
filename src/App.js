@@ -9,6 +9,8 @@ import EditDetailsPage from "./pages/EditDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
+import SearchProjectPage from "./pages/SearchProjectPage";
+import SearchProfilePage from "./pages/SearchProfilePage";
 import { ToastContainer } from "react-toastify";
 import CollectionsPage from "./pages/CollectionsPage";
 import CollectionDetailsPage from "./pages/CollectionDetailsPage";
@@ -28,14 +30,20 @@ function App() {
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/edit/basic-details" element={<EditDetailsPage />} />
           <Route
+            path="/edit/basic-details/:id"
+            element={<EditDetailsPage mode="edit" />}
+          />
+          <Route
             path="/edit/projects-gallery"
             element={<EditProjectDetailsPage />}
           />
           <Route
             path="/edit/projects-gallery/:id"
-            element={<EditProjectDetailsPage />}
+            element={<EditProjectDetailsPage mode="edit" />}
           />
           <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/search/projects" element={<SearchProjectPage />} />
+          <Route path="/search/profiles" element={<SearchProfilePage />} />
           <Route
             path="/project/:project_name/:id"
             element={<ProjectDetailsPage />}

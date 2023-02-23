@@ -32,7 +32,44 @@ const urlRegex =
   /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
 
 const validationSchema = yup.object({
-  image: yup.mixed().required("Project image is required"),
+  image0: yup.mixed().required("Project image is required"),
+  image1: yup.mixed(),
+  image2: yup.mixed(),
+  image3: yup.mixed(),
+  image4: yup.mixed(),
+
+  // .test("fileSize", "The file is too large", (value) => {
+  //   return value && value.size <= 10 * 1024 * 1024;
+  // })
+  // .test(
+  //   "type",
+  //   "Only the following formats are accepted: .jpeg, .jpg, .png",
+  //   (value) => {
+  //     return (
+  //       value &&
+  //       (value.type === "image/jpeg" ||
+  //         value.type === "image/jpg" ||
+  //         value.type === "image/png")
+  //     );
+  //   }
+  // ),
+  // demo_video: yup
+  //   .mixed()
+  //   .test("fileSize", "The file is too large", (value) => {
+  //     return value && value.size <= 30 * 1024 * 1024;
+  //   })
+  //   .test(
+  //     "type",
+  //     "Only the following formats are accepted: video/mp4, video/x-m4v, video/*",
+  //     (value) => {
+  //       return (
+  //         value &&
+  //         (value.type === "video/mp4" ||
+  //           value.type === "video/x-m4v" ||
+  //           value.type === "video/*")
+  //       );
+  //     }
+  //   ),
   project_title: yup
     .string("Enter the project title")
     .required("Project title is required"),
@@ -48,9 +85,12 @@ const validationSchema = yup.object({
     .string("Enter the project description")
     .max(1000, "Maximum allowed characters are 500.")
     .required("Project description is required"),
+  demo_video: yup
+    .string("Enter the demo video link")
+    .matches(urlRegex, "Enter a valid link"),
 });
 
-const EditProjectDetailsPage = () => {
+const EditProjectDetailsPage = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -63,8 +103,9 @@ const EditProjectDetailsPage = () => {
     (state) => state.projectUpdate
   );
 
-  const [photoURL, setPhotoURL] = useState();
+  const [photoURL, setPhotoURL] = useState([]);
   const [videoURL, setVideoURL] = useState();
+  const [Images, setImages] = useState([]);
 
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
@@ -89,7 +130,7 @@ const EditProjectDetailsPage = () => {
     setStartDate(projectInfo?.project_start_date || dayjs());
     setEndDate(projectInfo?.project_end_date || dayjs());
     setPhotoURL(projectInfo?.images_url?.[0] || "");
-    formik.values.image = projectInfo?.images_url || [];
+    formik.values.image0 = projectInfo?.images_url?.[0] || [];
 
     if (!loading && error) {
       toast.error(error);
@@ -111,17 +152,27 @@ const EditProjectDetailsPage = () => {
       toast.error(updateError);
       dispatch({ type: PROJECT_UPDATE_RESET });
     }
-  }, [
-    userInfo,
-    navigate,
-    error,
-    success,
-    loading,
-    dispatch,
-    projectInfo,
-    updateSuccess,
-    updateError,
-  ]);
+    if (projectInfo?.name) {
+      formik.values.project_title = projectInfo?.name;
+      formik.values.source_code_link = projectInfo?.source_code_link;
+      formik.values.deployed_link = projectInfo?.deployed_link;
+      formik.values.project_description = projectInfo?.description;
+      setTags(projectInfo?.required_skills);
+      setStartDate(projectInfo?.project_start_date);
+      setEndDate(projectInfo?.project_end_date);
+      setImages(projectInfo?.images_url);
+      formik.values.image0 = projectInfo?.images_url[0];
+
+      formik.values.image1 =
+        projectInfo?.images_url.length > 1 ? [projectInfo.images_url[1]] : [];
+      formik.values.image2 =
+        projectInfo?.images_url.length > 2 ? [projectInfo.images_url[2]] : [];
+      formik.values.image3 =
+        projectInfo?.images_url.length > 3 ? [projectInfo.images_url[3]] : [];
+      formik.values.image4 =
+        projectInfo?.images_url.length > 4 ? [projectInfo.images_url[4]] : [];
+    }
+  }, [userInfo, navigate, error, success, loading, dispatch, id, projectInfo]);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -133,29 +184,41 @@ const EditProjectDetailsPage = () => {
       deployed_link: "",
       demo_video: "",
       project_description: "",
-      image: [],
+      image0: [],
+      image1: [],
+      image2: [],
+      image3: [],
+      image4: [],
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const form = new FormData();
-      const video = new FormData();
+
       form.append("name", values.project_title);
       form.append("project_start_date", startDate);
       form.append("project_end_date", endDate);
       form.append("source_code_link", values.source_code_link);
-      video.append("video_url", values.demo_video);
+      form.append("video_url", values.demo_video);
       form.append("deployed_link", values.deployed_link);
       form.append("description", values.project_description);
+
+      if (values.image0.length > 0) form.append("images_url", values.image0[0]);
+      if (values.image1.length > 0) form.append("images_url", values.image1[0]);
+      if (values.image2.length > 0) form.append("images_url", values.image2[0]);
+      if (values.image3.length > 0) form.append("images_url", values.image3[0]);
+      if (values.image4.length > 0) form.append("images_url", values.image4[0]);
+
       tags.map((tag) => form.append("required_skills", tag));
-      formik.values.image?.map((image) => form.append("images_url", image));
-      if (!id) {
-        dispatch(createProject(userInfo, form, video));
-      } else {
+
+      if (props.mode === "edit") {
         dispatch(updateProject(userInfo, form, id));
+      } else {
+        dispatch(createProject(userInfo, form));
       }
     },
   });
-
+  const lst = [1, 2, 3, 4];
+  let imagesArr = [];
   return (
     <Container>
       <Box sx={{ textAlign: "center", margin: "30px 0 0" }}>
@@ -163,15 +226,17 @@ const EditProjectDetailsPage = () => {
           variant="h4"
           sx={{ fontWeight: "600", fontSize: "2.25rem" }}
         >
-          Add Projects
+          {props.mode === "edit" ? "Edit Project" : "Add Project"}
         </Typography>
-        <Typography variant="p" style={{ opacity: "0.8", margin: "10px 0" }}>
-          You are allowed to add as many projects as you want, Be very clear
+        <Typography variant="p" style={{ opacity: "0.8", margin: "15px 0" }}>
+          {props.mode === "edit"
+            ? "Edit your project details."
+            : `You are allowed to add as many projects as you want, Be very clear
           about what you are adding with in-detailed explanation to impress
-          people who are having a look.
+          people who are having a look.`}
         </Typography>
       </Box>
-      <StepComponent step1 />
+      {!id && <StepComponent step1 />}
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <span
           style={{
@@ -204,69 +269,114 @@ const EditProjectDetailsPage = () => {
             alignItems: "center",
           }}
         >
-          <Grid container style={{ justifyContent: "center" }}>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {!photoURL && (
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Grid item>
+              {Images.length === 0 && (
                 <div
                   style={{
                     height: "220px",
-                    width: matches ? "250px" : "350px",
+                    width: "350px",
                     backgroundColor: "#bbb",
                     borderRadius: "4px",
                     margin: "20px auto",
                   }}
                 ></div>
               )}
-              {photoURL && (
+              {Images.length > 0 && (
                 <img
                   style={{
                     height: "220px",
-                    width: matches ? "250px" : "350px",
+                    width: "350px",
                     borderRadius: "4px",
                     margin: "20px auto",
                   }}
-                  src={photoURL}
+                  src={Images[0]}
                   alt=""
                 />
               )}
-              <Button
-                variant="contained"
-                component="label"
-                sx={{
-                  borderRadius: "4px",
-                  fontWeight: "600",
-                  backgroundColor: "#4cacbc",
-                  marginLeft: "20px",
-                }}
-              >
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  onChange={(event) => {
-                    formik.setFieldValue(
-                      "image",
-                      formik.values.image.concat(event.currentTarget.files[0])
-                    );
-                    setPhotoURL(URL.createObjectURL(event.target.files[0]));
-                  }}
-                  helperText={formik.touched.image && formik.errors.image}
-                  hidden
-                />
-                Choose image*
-              </Button>
             </Grid>
             <Grid
+              container
+              item
+              sx={{
+                justifyContent: "center",
+              }}
+            >
+              {lst.map((i) => {
+                return (
+                  <Grid item key={i}>
+                    {Images.length <= i && (
+                      <div
+                        style={{
+                          height: "70px",
+                          width: "100px",
+                          backgroundColor: "#bbb",
+                          borderRadius: "4px",
+                          margin: "10px",
+                        }}
+                      ></div>
+                    )}
+
+                    {Images.length > i && (
+                      <img
+                        style={{
+                          height: "70px",
+                          width: "100px",
+                          borderRadius: "4px",
+                          margin: "10px",
+                        }}
+                        src={Images[i]}
+                        alt=""
+                      />
+                    )}
+                  </Grid>
+                );
+              })}
+            </Grid>
+            <p style={{ marginTop: "20px" }}>(Select all images together.)</p>
+            <Button
+              variant="contained"
+              component="label"
+              sx={{
+                borderRadius: "4px",
+                fontWeight: "600",
+                backgroundColor: "#4cacbc",
+                margin: "6px 20px",
+              }}
+            >
+              <input
+                id="image"
+                name="image"
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={(event) => {
+                  for (let i = 0; i < event.target.files.length; i++) {
+                    formik.setFieldValue(
+                      `image${i}`,
+                      formik.values[`image${i}`].concat(
+                        event.currentTarget.files[i]
+                      )
+                    );
+                    imagesArr.push(URL.createObjectURL(event.target.files[i]));
+                  }
+                  setImages(imagesArr);
+                }}
+                helperText={formik.touched.image && formik.errors.image}
+                hidden
+              />
+              Choose image*
+            </Button>
+            {/* </Grid> */}
+            {/* <Grid
               item
               xs={12}
               sm={6}
@@ -329,7 +439,7 @@ const EditProjectDetailsPage = () => {
                 />
                 Upload demo video
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
 
           <Grid container sx={{ margin: "20px" }}>
@@ -427,6 +537,24 @@ const EditProjectDetailsPage = () => {
                   )}
                 />
               </LocalizationProvider>
+
+              <TextField
+                fullWidth
+                id="demo_video"
+                name="demo_video"
+                label="Demo Video Link"
+                type="url"
+                sx={{ width: "98%" }}
+                value={formik.values.demo_video}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.demo_video && Boolean(formik.errors.demo_video)
+                }
+                helperText={
+                  formik.touched.demo_video && formik.errors.demo_video
+                }
+                margin="normal"
+              />
             </Grid>
           </Grid>
           <Grid container>

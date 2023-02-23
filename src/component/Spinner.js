@@ -1,7 +1,16 @@
-const Spinner = () => {
+const Spinner = (props) => {
   return (
-    <div className="loading-container">
-      <div className="spinner"></div>
+    <div
+      className={props.class === "loading-container" ? "loading-container" : ""}
+    >
+      <div
+        className="spinner"
+        style={{
+          borderColor: props.color,
+          height: props.height,
+          width: props.width,
+        }}
+      ></div>
     </div>
   );
 };

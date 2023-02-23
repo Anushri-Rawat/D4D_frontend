@@ -35,7 +35,7 @@ const Signup = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!loading && !error && userInfo) {
-      toast.success("User successfully logged in");
+      toast.success("User successfully registered");
       navigate("/edit/basic-details");
     }
     if (error && !userInfo) {

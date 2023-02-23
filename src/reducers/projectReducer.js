@@ -6,6 +6,9 @@ import {
   PROJECT_ADD_REQUEST,
   PROJECT_ADD_RESET,
   PROJECT_ADD_SUCCESS,
+  SEARCH_PROJECT_FAIL,
+  SEARCH_PROJECT_REQUEST,
+  SEARCH_PROJECT_SUCCESS,
   PROJECT_LIST_FAIL,
   PROJECT_LIST_REQUEST,
   PROJECT_LIST_SUCCESS,
@@ -128,6 +131,19 @@ export const viewedProjectReducer = (state = { projects: [] }, action) => {
     case VIEWED_PROJECT_SUCCESS:
       return { loading: false, success: true, projects: action.payload };
     case VIEWED_PROJECT_FAIL:
+      return { loading: false, success: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const searchProjectReducer = (state = { projects: [] }, action) => {
+  switch (action.type) {
+    case SEARCH_PROJECT_REQUEST:
+      return { loading: true, success: false };
+    case SEARCH_PROJECT_SUCCESS:
+      return { loading: false, success: true, projects: action.payload };
+    case SEARCH_PROJECT_FAIL:
       return { loading: false, success: false, error: action.payload };
     default:
       return state;

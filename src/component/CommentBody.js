@@ -17,6 +17,7 @@ import { createReply, deleteComment } from "../actions/commentAction";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 const CommentBody = ({
   comment,
@@ -32,6 +33,7 @@ const CommentBody = ({
   const [reply, setReply] = useState("");
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.userLogin);
   const { user } = useSelector((state) => state.userDetails);
 
@@ -116,7 +118,11 @@ const CommentBody = ({
           >
             <Button
               onClick={() => {
-                setReplyModal(!replyModal);
+                if (!userInfo) {
+                  navigate("/signin");
+                } else {
+                  setReplyModal(!replyModal);
+                }
               }}
               style={{ padding: matches ? "0" : "6px 8px" }}
             >

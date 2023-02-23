@@ -1,11 +1,22 @@
 import React from "react";
-import { Box, Button, Typography, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  Skeleton,
+  useMediaQuery,
+} from "@mui/material";
 import img from "../images/DrawKit Vector Illustration Project Manager (7).png";
 import { Container } from "@mui/system";
+import { Link as RouterLink } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 const HeroSection = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", padding: matches ? "20px 16px" : "auto" }}>
       <div className="circles">
         <div></div>
         <div></div>
@@ -35,9 +46,18 @@ const HeroSection = () => {
             The only place to collab with coders,showcase your projects,show off
             your skills,save projects for future references and much more..
           </p>
-          <Button variant="contained" sx={{ marginTop: "20px" }}>
-            Explore work
-          </Button>
+          <Box style={{ display: "flex", gap: "1rem" }}>
+            <RouterLink to="/search/projects">
+              <Button variant="contained" sx={{ marginTop: "20px" }}>
+                Explore work
+              </Button>
+            </RouterLink>
+            <RouterLink to="/search/profiles">
+              <Button variant="contained" sx={{ marginTop: "20px" }}>
+                Find developers
+              </Button>
+            </RouterLink>
+          </Box>
         </Box>
         <Box sx={{ width: { xs: "100%", sm: "100%", md: "50%" } }}>
           {img ? (

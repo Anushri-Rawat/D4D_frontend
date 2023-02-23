@@ -37,9 +37,6 @@ const Signup = () => {
     } else {
       toast.error(error);
     }
-    if (user) {
-      navigate("/");
-    }
   }, [user, userInfo, error, navigate, loading]);
 
   const formik = useFormik({
@@ -137,6 +134,16 @@ const Signup = () => {
               style={{ color: "#4cacbc", fontWeight: "600" }}
             >
               Create account
+            </RouterLink>
+          </Typography>
+          <Typography
+            paragraph
+            align="center"
+            sx={{ fontSize: "15px", fontWeight: "500" }}
+          >
+            Return to{" "}
+            <RouterLink to="/" style={{ color: "#4cacbc", fontWeight: "600" }}>
+              HomePage
             </RouterLink>
           </Typography>
           <div

@@ -22,6 +22,10 @@ import {
   SAVE_PROJECT_REQUEST,
   SAVE_PROJECT_SUCCESS,
   SAVE_PROJECT_RESET,
+  SAVE_USER_FAIL,
+  SAVE_USER_REQUEST,
+  SAVE_USER_SUCCESS,
+  SAVE_USER_RESET,
 } from "./../constants/collectionConstants";
 
 export const collectionCreateReducer = (
@@ -42,7 +46,10 @@ export const collectionCreateReducer = (
   }
 };
 
-export const collectionListReducer = (state = { collections: [] }, action) => {
+export const collectionListReducer = (
+  state = { loading: false, collections: [] },
+  action
+) => {
   switch (action.type) {
     case COLLECTION_LIST_REQUEST:
       return { loading: true, collections: [] };
@@ -121,6 +128,24 @@ export const saveProjectReducer = (
     case SAVE_PROJECT_FAIL:
       return { loading: false, succes: false, error: action.payload };
     case SAVE_PROJECT_RESET:
+      return { loading: false, success: false, collection: {} };
+    default:
+      return state;
+  }
+};
+
+export const saveUserReducer = (
+  state = { loading: false, success: false, collection: {} },
+  action
+) => {
+  switch (action.type) {
+    case SAVE_USER_REQUEST:
+      return { loading: true, collection: {} };
+    case SAVE_USER_SUCCESS:
+      return { loading: false, success: true, collection: action.payload };
+    case SAVE_USER_FAIL:
+      return { loading: false, succes: false, error: action.payload };
+    case SAVE_USER_RESET:
       return { loading: false, success: false, collection: {} };
     default:
       return state;

@@ -27,6 +27,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { deleteProject, updateLikesOfProject } from "../actions/projectActions";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import ShareMenu from "./ShareMenu";
 
 const ProjectCard = ({ data }) => {
@@ -34,7 +35,7 @@ const ProjectCard = ({ data }) => {
   const [openShareModal, setOpenShareModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const matches = useMediaQuery("(min-width:900px)");
   const handleOpenProjectMenu = (event) => {
     event.preventDefault();
     setAnchorElUser(event.currentTarget);
@@ -53,9 +54,13 @@ const ProjectCard = ({ data }) => {
 
   const likeHandler = (e) => {
     e.preventDefault();
-    setLikeVal(!likeVal);
-    !likeVal ? setCount(count + 1) : setCount(count - 1);
-    dispatch(updateLikesOfProject(userInfo, data?._id));
+    if (!userInfo) {
+      navigate("/signin");
+    } else {
+      setLikeVal(!likeVal);
+      !likeVal ? setCount(count + 1) : setCount(count - 1);
+      dispatch(updateLikesOfProject(userInfo, data?._id));
+    }
   };
 
   const shareHandler = (e) => {
@@ -64,15 +69,26 @@ const ProjectCard = ({ data }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 300, margin: "0 auto" }}>
+    <Card sx={{ maxWidth: matches ? "300px" : "100%" }}>
       <Link to={`/project/${data.name.split(" ").join("-")}/${data._id}`}>
         <CardHeader
           sx={{ padding: "12px", color: "#000" }}
           avatar={
-            <Avatar aria-label="profile-image" src={user.profile_image} />
+            <Avatar aria-label="profile-image" sx={{ bgcolor: "red" }}>
+              {user?.profile_image && user?.profile_image !== "null" ? (
+                <img
+                  height="100%"
+                  width="100%"
+                  src={user?.profile_image}
+                  alt=""
+                />
+              ) : (
+                `${user?.first_name?.[0].toUpperCase()}${user?.last_name?.[0].toUpperCase()}`
+              )}
+            </Avatar>
           }
           action={
-            userInfo?._id && data.user_id._id === userInfo._id ? (
+            userInfo?._id && data.user_id._id === userInfo?._id ? (
               <Box sx={{ flexGrow: 0 }}>
                 <IconButton
                   aria-label="settings"

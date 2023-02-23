@@ -56,7 +56,7 @@ const CollectionCard = ({ data }) => {
             <img
               src={collection.image}
               alt="collection-name"
-              style={{ width: "100%", objectFit: "cover", maxHeight: "200px" }}
+              style={{ width: "100%", objectFit: "cover", height: "200px" }}
             />
           </CardMedia>
           <CardContent
@@ -70,7 +70,12 @@ const CollectionCard = ({ data }) => {
           >
             <div>
               <h3>{collection?.name}</h3>
-              <p>{collection?.project_id?.length} Items</p>
+              <p>
+                {collection?.type === "project"
+                  ? collection?.project_id?.length
+                  : collection?.developer_id?.length}{" "}
+                Items
+              </p>
             </div>
             <div style={{ display: "flex", gap: "0.4rem" }}>
               <Button

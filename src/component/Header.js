@@ -10,15 +10,20 @@ import {
   Typography,
   Tooltip,
   Avatar,
+  useMediaQuery,
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
 import { AccountCircle, Logout, Edit, Bookmarks } from "@mui/icons-material";
 import logo from "../images/logo1.png";
+import { useTheme } from "@mui/material/styles";
 
 const Header = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -47,12 +52,37 @@ const Header = () => {
             style={{ height: "50px", cursor: "pointer" }}
             onClick={() => navigate("/")}
           />
+          <ul style={{ display: matches ? "none" : "flex" }}>
+            <li style={{ marginRight: "20px" }}>
+              <RouterLink to="search/projects" className="navlinks">
+                Explore Work
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="search/profiles" className="navlinks">
+                Find Developers
+              </RouterLink>
+            </li>
+          </ul>
           <Box>
             {userInfo ? (
               <>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu}>
-                    <Avatar src={user?.profile_image} alt="profile photo" />
+                    <Avatar src={user?.profile_image} />
+                    {/* <Avatar sx={{ bg: "red" }} alt="profile photo">
+                      {user?.profile_image && user.profile_image !== "null" ? (
+                        <img
+                          height="100%"
+                          width="100%"
+                          style={{ objectFit: "cover" }}
+                          src={user?.profile_image}
+                          alt=""
+                        />
+                      ) : (
+                        `${user?.first_name?.[0].toUpperCase()}${user?.last_name?.[0].toUpperCase()}`
+                      )}
+                    </Avatar> */}
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -96,7 +126,7 @@ const Header = () => {
                   <MenuItem
                     onClick={() => {
                       handleCloseUserMenu();
-                      navigate("/edit/basic-details");
+                      navigate(`/edit/basic-details/${user._id}`);
                     }}
                   >
                     <Edit />
@@ -118,6 +148,7 @@ const Header = () => {
                   <MenuItem
                     onClick={() => {
                       handleCloseUserMenu();
+                      navigate("/");
                       dispatch(logout());
                     }}
                   >
@@ -129,7 +160,7 @@ const Header = () => {
                 </Menu>
               </>
             ) : (
-              <RouterLink to="/signup" style={{ textDecoration: "none" }}>
+              <RouterLink to="/signin" style={{ textDecoration: "none" }}>
                 <Button variant="contained">Signin</Button>
               </RouterLink>
             )}

@@ -9,11 +9,6 @@ import {
   Container,
   IconButton,
   TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Card,
 } from "@mui/material";
 import {
   FavoriteBorder,
@@ -51,10 +46,6 @@ import {
   PROJECT_DETAILS_SUCCESS,
   PROJECT_UPDATE_RESET,
 } from "../constants/projectConstants";
-import {
-  getAllCollections,
-  saveProjectById,
-} from "../actions/collectionAction";
 import CommentBody from "../component/CommentBody";
 import AddToCollectionModal from "../component/AddToCollectionModal";
 import ShareMenu from "../component/ShareMenu";
@@ -69,13 +60,7 @@ const ProjectDetailsPage = () => {
   const [commentId, setCommentId] = useState(null);
   const [commentStatement, setCommentStatement] = useState("");
   const [open, setOpen] = useState(false);
-  const [selectedCollection, setSelectedCollection] = useState("");
-  const [added, setAdded] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const { loading, projectInfo } = useSelector((state) => state.projectDetails);
 
@@ -113,25 +98,19 @@ const ProjectDetailsPage = () => {
     reply: replyCreatedObj,
   } = useSelector((state) => state.replyCreate);
 
-  const { collections } = useSelector((state) => state.collectionList);
-
   const shareHandler = (e) => {
     e.preventDefault();
     setOpenShareModal(!openShareModal);
   };
 
   useEffect(() => {
-    if (!userInfo) {
-      navigate("/signin");
-    }
+    // if (!userInfo) {
+    //   navigate("/signin");
+    // }
 
     dispatch(getProjectDetails(id));
-    dispatch(getAllComments(userInfo, id));
-    dispatch(getAllCollections());
+    dispatch(getAllComments(id));
     dispatch({ type: PROJECT_DETAILS_RESET });
-
-    setAdded(false);
-    setSelectedCollection("");
   }, [dispatch, id, userInfo]);
 
   useEffect(() => {
@@ -253,7 +232,7 @@ const ProjectDetailsPage = () => {
   return (
     <Container sx={{ paddingTop: "32px" }}>
       {loading || !projectInfo?._id ? (
-        <Spinner />
+        <Spinner class={"loading-container"} />
       ) : (
         <Grid container spacing={5}>
           <Grid item xs={12} sm={12} md={4} lg={5}>
@@ -320,9 +299,21 @@ const ProjectDetailsPage = () => {
                 }}
               >
                 <Avatar
-                  sx={{ height: "62px", width: "62px" }}
-                  src={projectInfo?.user_id?.profile_image}
-                />
+                  sx={{ bgcolor: "red", height: "62px", width: "62px" }}
+                  aria-label="user"
+                >
+                  {projectInfo?.user_id?.profile_image &&
+                  projectInfo?.user_id?.profile_image !== "null" ? (
+                    <img
+                      height="40px"
+                      width="40px"
+                      src={projectInfo?.user_id?.profile_image}
+                      alt="user profile img"
+                    />
+                  ) : (
+                    `${projectInfo?.user_id?.first_name?.[0].toUpperCase()}${projectInfo?.user_id?.last_name?.[0].toUpperCase()}`
+                  )}
+                </Avatar>
                 <div
                   style={{
                     display: "flex",
@@ -391,10 +382,16 @@ const ProjectDetailsPage = () => {
                     borderColor: "rgb(69 72 77/1)",
                   }}
                   onClick={() => {
-                    dispatch(updateLikesOfProject(userInfo, projectInfo?._id));
+                    if (!userInfo) {
+                      navigate("/signin");
+                    } else {
+                      dispatch(
+                        updateLikesOfProject(userInfo, projectInfo?._id)
+                      );
+                    }
                   }}
                 >
-                  {projectInfo?.likes?.find((key) => key === userInfo._id) ? (
+                  {projectInfo?.likes?.find((key) => key === userInfo?._id) ? (
                     <Favorite sx={{ color: "red" }} />
                   ) : (
                     <FavoriteBorder sx={{ color: "red" }} />
@@ -473,7 +470,13 @@ const ProjectDetailsPage = () => {
                 <Button
                   variant="contained"
                   sx={{ borderRadius: "4px", backgroundColor: "#4cacbc" }}
-                  onClick={() => setOpenModal(true)}
+                  onClick={() => {
+                    if (!userInfo) {
+                      navigate("/signin");
+                    } else {
+                      setOpenModal(true);
+                    }
+                  }}
                 >
                   Post comment
                 </Button>
@@ -577,88 +580,12 @@ const ProjectDetailsPage = () => {
           </Grid>
         </Grid>
       )}
-      <Dialog
+      <AddToCollectionModal
         open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Add to Collection"}</DialogTitle>
-        <DialogContent
-          sx={{
-            display: "flex",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <img
-              src={projectInfo?.images_url?.[0]}
-              alt="project image"
-              style={{ width: "100%", height: "150px", objectFit: "cover" }}
-            />
-            <div style={{ display: "flex", padding: "10px 0", gap: "0.5rem" }}>
-              <Avatar
-                src={projectInfo?.user_id?.profile_image}
-                alt="userProfile"
-              />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography variant="subtitile1" sx={{ fontWeight: "600" }}>
-                  {projectInfo?.name}
-                </Typography>
-                <span>@{projectInfo?.user_id?.username}</span>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            {collections?.map((coll) => (
-              <AddToCollectionModal
-                coll={coll}
-                selectedCollection={selectedCollection}
-                setSelectedCollection={setSelectedCollection}
-                added={added}
-                setAdded={setAdded}
-                currentCard={coll._id}
-                key={coll._id}
-              />
-            ))}
-            <DialogActions>
-              <Button onClick={handleClose} sx={{ color: "red" }}>
-                Close
-              </Button>
-              <Button
-                disabled={!added ? true : false}
-                onClick={() => {
-                  dispatch(
-                    saveProjectById(projectInfo?._id, selectedCollection)
-                  );
-                  setOpen(false);
-                }}
-                variant="contained"
-                sx={{ borderRadius: "5px" }}
-              >
-                Save
-              </Button>
-            </DialogActions>
-          </div>
-        </DialogContent>
-      </Dialog>
+        setOpen={setOpen}
+        data={projectInfo}
+        type={"project"}
+      />
     </Container>
   );
 };

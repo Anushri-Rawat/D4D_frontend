@@ -17,6 +17,9 @@ import {
   SAVE_PROJECT_FAIL,
   SAVE_PROJECT_REQUEST,
   SAVE_PROJECT_SUCCESS,
+  SAVE_USER_FAIL,
+  SAVE_USER_REQUEST,
+  SAVE_USER_SUCCESS,
 } from "../constants/collectionConstants";
 import axios from "axios";
 
@@ -143,8 +146,6 @@ export const saveProjectById =
         userLogin: { userInfo },
       } = getState();
 
-      console.log(projectId, collectionId);
-
       const url = `http://127.0.0.1:5000/api/collections/${projectId}/${collectionId}`;
       const res = await axios.post(
         url,
@@ -156,10 +157,38 @@ export const saveProjectById =
         }
       );
 
-      dispatch({ type: SAVE_PROJECT_SUCCESS });
+      dispatch({ type: SAVE_PROJECT_SUCCESS, payload: res.data });
     } catch (err) {
       dispatch({
         type: SAVE_PROJECT_FAIL,
+        payload: err.response.data.message,
+      });
+    }
+  };
+
+export const saveUserById =
+  (userId, collectionId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: SAVE_USER_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const url = `http://127.0.0.1:5000/api/collections/user/${userId}/${collectionId}`;
+      const res = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      dispatch({ type: SAVE_USER_SUCCESS, payload: res.data });
+    } catch (err) {
+      dispatch({
+        type: SAVE_USER_FAIL,
         payload: err.response.data.message,
       });
     }

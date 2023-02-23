@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { TagsInput } from "react-tag-input-component";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyProfile, updateSelfProfile } from "../actions/userActions";
 import { toast } from "react-toastify";
@@ -24,9 +24,10 @@ import {
 } from "../constants/userConstants";
 import stateCountry from "state-country";
 
-const EditDetailsPage = () => {
+const EditDetailsPage = ({ mode }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
@@ -52,7 +53,7 @@ const EditDetailsPage = () => {
   const [state, setState] = useState(user?.state || "");
   const [profile, setProfile] = useState({
     profileImg: user?.profile_image ? user.profile_image : null,
-    photoUrl: null,
+    photoUrl: user?.profile_image ? user.profile_image : null,
   });
 
   useEffect(() => {
@@ -63,9 +64,6 @@ const EditDetailsPage = () => {
   }, [userInfo, navigate, dispatch]);
 
   useEffect(() => {
-    // if (user?.username) {
-    //   navigate("/");
-    // }
     if (!userSuccess && userError) {
       toast.error(userError);
     }
@@ -85,7 +83,11 @@ const EditDetailsPage = () => {
       dispatch({ type: USER_DETAILS_RESET });
       dispatch({ type: USER_DETAILS_UPDATE_RESET });
       toast.success("successfully updated personal information");
-      navigate("/edit/projects-gallery");
+      if (!id) {
+        navigate("/edit/projects-gallery");
+      } else {
+        navigate(`/profile/${user._id}`);
+      }
     }
 
     if (!userUpdateSuccess && userUpdateError) {
@@ -146,8 +148,8 @@ const EditDetailsPage = () => {
             numbers makes you unapproachable.
           </Typography>
         </Box>
-        <StepComponent />
-        <Box sx={{ padding: "1.5rem 0" }}>
+        {!id && mode !== "edit" && <StepComponent />}
+        <Box sx={{ margin: "2rem 0" }}>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Grid container spacing={2}>
               <Grid
