@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-import HeroSection from "../component/HeroSection";
-import ProjectCard from "../component/ProjectCard";
-import Spinner from "./../component/Spinner";
+import { HeroSection, ProjectCard, Spinner } from "./../component";
 import { Grid, Box, Container } from "@mui/material";
 import img1 from "../images/DrawKit Vector Illustration Project Manager (6).png";
 import img2 from "../images/DrawKit Vector Illustration Project Manager (1).png";

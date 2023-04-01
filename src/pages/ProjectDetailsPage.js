@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Avatar,
@@ -18,7 +18,6 @@ import {
   Public,
   Send,
   Favorite,
-  Delete,
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,11 +43,9 @@ import {
 import {
   PROJECT_DETAILS_RESET,
   PROJECT_DETAILS_SUCCESS,
-  PROJECT_UPDATE_RESET,
 } from "../constants/projectConstants";
-import CommentBody from "../component/CommentBody";
-import AddToCollectionModal from "../component/AddToCollectionModal";
-import ShareMenu from "../component/ShareMenu";
+import { CommentBody, AddToCollectionModal, ShareMenu } from "../component";
+import ReactPlayer from "react-player/youtube";
 
 let poster = [];
 const ProjectDetailsPage = () => {
@@ -62,7 +59,9 @@ const ProjectDetailsPage = () => {
   const [open, setOpen] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
 
-  const { loading, projectInfo } = useSelector((state) => state.projectDetails);
+  const { loading, projectInfo, error } = useSelector(
+    (state) => state.projectDetails
+  );
 
   const { user } = useSelector((state) => state.userDetails);
   const { userInfo } = useSelector((state) => state.userLogin);
@@ -210,10 +209,12 @@ const ProjectDetailsPage = () => {
   }
   if (projectInfo?.video_url) {
     poster.unshift({
-      thumbnail: projectInfo?.images_url[0],
+      thumbnail: "https://i.vimeocdn.com/portrait/8423318_640x640",
       thumbnailLoading: "lazy",
       renderItem() {
-        return (
+        return projectInfo?.video_url.includes("youtube") ? (
+          <ReactPlayer url={projectInfo?.video_url} />
+        ) : (
           <video
             controls
             style={{
@@ -233,7 +234,7 @@ const ProjectDetailsPage = () => {
     <Container sx={{ paddingTop: "32px" }}>
       {loading || !projectInfo?._id ? (
         <Spinner class={"loading-container"} />
-      ) : (
+      ) : !error ? (
         <Grid container spacing={5}>
           <Grid item xs={12} sm={12} md={4} lg={5}>
             <ImageGallery
@@ -296,6 +297,10 @@ const ProjectDetailsPage = () => {
                   gap: ".5rem",
                   justifyContent: "flex-start",
                   alignItems: "flex-start",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate(`/profile/${projectInfo?.user_id?._id}`);
                 }}
               >
                 <Avatar
@@ -305,8 +310,8 @@ const ProjectDetailsPage = () => {
                   {projectInfo?.user_id?.profile_image &&
                   projectInfo?.user_id?.profile_image !== "null" ? (
                     <img
-                      height="40px"
-                      width="40px"
+                      height="100%"
+                      width="100%"
                       src={projectInfo?.user_id?.profile_image}
                       alt="user profile img"
                     />
@@ -579,6 +584,8 @@ const ProjectDetailsPage = () => {
             )}
           </Grid>
         </Grid>
+      ) : (
+        <p>{error}</p>
       )}
       <AddToCollectionModal
         open={open}

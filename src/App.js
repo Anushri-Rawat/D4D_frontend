@@ -1,22 +1,31 @@
-import React from "react";
-import Footer from "./component/Footer";
-import Header from "./component/Header";
-import HomePage from "./pages/HomePage";
+import React, { useState } from "react";
+import { Header, Chats, Footer } from "./component";
 import { Route, Routes, useLocation } from "react-router-dom";
-import SignupPage from "./pages/SignupPage";
-import SigninPage from "./pages/SigninPage";
-import EditDetailsPage from "./pages/EditDetailsPage";
-import ProfilePage from "./pages/ProfilePage";
-import ProjectDetailsPage from "./pages/ProjectDetailsPage";
-import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
-import SearchProjectPage from "./pages/SearchProjectPage";
-import SearchProfilePage from "./pages/SearchProfilePage";
 import { ToastContainer } from "react-toastify";
-import CollectionsPage from "./pages/CollectionsPage";
-import CollectionDetailsPage from "./pages/CollectionDetailsPage";
+import {
+  HomePage,
+  SignupPage,
+  SigninPage,
+  EditDetailsPage,
+  ProfilePage,
+  ProjectDetailsPage,
+  EditProjectDetailsPage,
+  SearchProjectPage,
+  SearchProfilePage,
+  CollectionsPage,
+  CollectionDetailsPage,
+  ChatPage,
+} from "./pages";
+import Grid from "@mui/material/Grid";
 
 function App() {
   const location = useLocation();
+
+  const [socket, setSocket] = useState();
+
+  const socketHandler = (socket) => {
+    setSocket(socket);
+  };
 
   return (
     <div className="App">
@@ -50,6 +59,37 @@ function App() {
           />
           <Route path="/collections" element={<CollectionsPage />} />
           <Route path="/collections/:id" element={<CollectionDetailsPage />} />
+          <Route
+            path="/chat"
+            element={
+              <Grid
+                container
+                sx={{
+                  backgroundColor: "#4cacbc22",
+                  height: "calc(100vh - 58px)",
+                  overflowY: "hidden",
+                }}
+              >
+                <ChatPage isConvOpen="false" socketHandler={socketHandler} />
+              </Grid>
+            }
+          />
+          <Route
+            path="/chat/:id"
+            element={
+              <Grid
+                container
+                sx={{
+                  backgroundColor: "#4cacbc22",
+                  height: "calc(100vh - 58px)",
+                  overflowY: "hidden",
+                }}
+              >
+                <ChatPage isConvOpen="true" socketHandler={socketHandler} />
+                <Chats socket={socket} />
+              </Grid>
+            }
+          />
         </Routes>
         <ToastContainer
           position="top-right"
@@ -64,9 +104,9 @@ function App() {
           theme="light"
         />
       </main>
-      {location.pathname !== "/signup" && location.pathname !== "/signin" && (
-        <Footer />
-      )}
+      {location.pathname !== "/signup" &&
+        location.pathname !== "/signin" &&
+        !location.pathname.startsWith("/chat") && <Footer />}
     </div>
   );
 }

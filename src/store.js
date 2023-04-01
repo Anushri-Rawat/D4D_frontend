@@ -35,6 +35,12 @@ import {
   saveProjectReducer,
   saveUserReducer,
 } from "./reducers/CollectionReducer";
+import {
+  conversationListReducer,
+  messageListReducer,
+  messageCreateReducer,
+  conversationCreateReducer,
+} from "./reducers/chatReducer";
 
 const reducers = combineReducers({
   userRegister: userRegisterReducer,
@@ -51,7 +57,6 @@ const reducers = combineReducers({
   commentList: commentListReducer,
   commentDelete: commentDeleteReducer,
   commentUpdate: commentUpdateReducer,
-  projectDetails: projectDetailsReducer,
   likedProjects: likedProjectReducer,
   viewedProjects: viewedProjectReducer,
   searchProjects: searchProjectReducer,
@@ -64,6 +69,10 @@ const reducers = combineReducers({
   collectionDetails: collectionDetailsReducer,
   saveProject: saveProjectReducer,
   saveUser: saveUserReducer,
+  conversationList: conversationListReducer,
+  messageList: messageListReducer,
+  messageCreate: messageCreateReducer,
+  conversationCreate: conversationCreateReducer,
 });
 
 const userInfoFromStorage =

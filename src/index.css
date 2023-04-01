@@ -228,3 +228,33 @@ body::-webkit-scrollbar-thumb {
     padding-left: 0;
   }
 }
+
+/*-----------------------Chat page------------------------------*/
+/* .searchInput {
+  border: none;
+  outline: none;
+  padding: 12px;
+  border-radius: 20px;
+  margin: 20px;
+  width: 300px;
+  font-size: 15px;
+  font-weight: 600;
+} */
+.searchInput fieldset,
+.chatInput fieldset {
+  border: none;
+}
+
+/*----image gallery css----------*/
+.image-gallery-image {
+  max-height: 250px !important;
+}
+/*---------Project Card--------*/
+.css-11c9abr-MuiCardMedia-root div {
+  height: 134px !important;
+}
+/*----------------Thumnail Picture-----------*/
+.image-gallery-thumbnail .image-gallery-thumbnail-image {
+  height: 60px !important;
+  object-fit: fill;
+}

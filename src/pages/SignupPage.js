@@ -44,7 +44,7 @@ const Signup = () => {
     if (user?.username) {
       navigate("/");
     }
-  }, [userInfo, loading, error, navigate]);
+  }, [userInfo, loading, error, navigate, dispatch]);
 
   const formik = useFormik({
     initialValues: {

@@ -112,11 +112,11 @@ export const projectDeleteReducer = (
 export const projectUpdateReducer = (state = { project: {} }, action) => {
   switch (action.type) {
     case PROJECT_UPDATE_REQUEST:
-      return { loading: true };
+      return { loading: true, success: false };
     case PROJECT_UPDATE_SUCCESS:
       return { loading: false, success: true, project: action.payload };
     case PROJECT_UPDATE_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, success: false, error: action.payload };
     case PROJECT_UPDATE_RESET:
       return { loading: false, success: false, project: {} };
     default:

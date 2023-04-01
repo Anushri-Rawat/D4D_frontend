@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import StepComponent from "../component/StepComponent";
+import { StepComponent } from "../component";
 import {
   Button,
   TextField,
@@ -52,8 +52,14 @@ const EditDetailsPage = ({ mode }) => {
   const [country, setCountry] = useState(user?.country || "");
   const [state, setState] = useState(user?.state || "");
   const [profile, setProfile] = useState({
-    profileImg: user?.profile_image ? user.profile_image : null,
-    photoUrl: user?.profile_image ? user.profile_image : null,
+    profileImg:
+      user?.profile_image && user?.profile !== "null"
+        ? user.profile_image
+        : null,
+    photoUrl:
+      user?.profile_image && user?.profile !== "null"
+        ? user.profile_image
+        : null,
   });
 
   useEffect(() => {

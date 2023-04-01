@@ -52,18 +52,18 @@ export const userLoginReducer = (state = {}, action) => {
 };
 
 export const userDetailsReducer = (
-  state = { loading: true, success: false, user: {} },
+  state = { loading: true, success: false, user: null },
   action
 ) => {
   switch (action.type) {
     case USER_DETAILS_REQUEST:
-      return { loading: true, success: false };
+      return { loading: true, success: false, user: null };
     case USER_DETAILS_SUCCESS:
       return { loading: false, user: action.payload, success: true };
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case USER_DETAILS_RESET:
-      return { loading: true, success: false, user: {} };
+      return { loading: true, success: false, user: null };
     default:
       return state;
   }

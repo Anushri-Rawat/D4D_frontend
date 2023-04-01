@@ -54,7 +54,7 @@ const UserCard = ({ data, selectedUser, setSelectedUser }) => {
 
   return (
     <>
-      <Card sx={{ overflow: "visible!important" }}>
+      <Card sx={{ overflow: "visible!important", height: "100%" }}>
         <CardHeader
           sx={backgroundStyle}
           avatar={

@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getCollection } from "../actions/collectionAction";
-import ProjectCard from "../component/ProjectCard";
-import UserCard from "../component/UserCard";
-import Spinner from "../component/Spinner";
+import { ProjectCard, UserCard, Spinner } from "../component";
 import { COLLECTION_DETAILS_RESET } from "../constants/collectionConstants";
 
 const CollectionDetailsPage = () => {

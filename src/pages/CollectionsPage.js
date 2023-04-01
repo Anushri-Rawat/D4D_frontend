@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCollections } from "../actions/collectionAction";
-import CollectionCard from "../component/CollectionCard";
+import { CollectionCard, Spinner } from "../component";
 import { Grid, Container, Typography, Box, Tab } from "@mui/material";
 import { toast } from "react-toastify";
 import {
   COLLECTION_DELETE_RESET,
   COLLECTION_LIST_SUCCESS,
 } from "../constants/collectionConstants";
-import Spinner from "../component/Spinner.js";
 import { useNavigate } from "react-router-dom";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Science, Person } from "@mui/icons-material";

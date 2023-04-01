@@ -29,6 +29,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { deleteProject, updateLikesOfProject } from "../actions/projectActions";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ShareMenu from "./ShareMenu";
+import ReactPlayer from "react-player/youtube";
 
 const ProjectCard = ({ data }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -69,7 +70,7 @@ const ProjectCard = ({ data }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: matches ? "300px" : "100%" }}>
+    <Card sx={{ maxWidth: matches ? "300px" : "100%", height: "100%" }}>
       <Link to={`/project/${data.name.split(" ").join("-")}/${data._id}`}>
         <CardHeader
           sx={{ padding: "12px", color: "#000" }}
@@ -142,16 +143,24 @@ const ProjectCard = ({ data }) => {
           subheader={"@" + user.username}
         />
         <CardMedia sx={{ height: "134px" }}>
-          {data.video_url && (
-            <video
-              width="100%"
-              height="134"
-              controls
-              style={{ objectFit: "cover" }}
-            >
-              <source src={data.video_url} type="video/mp4" />
-            </video>
-          )}
+          {data.video_url &&
+            (data.video_url.includes("youtube") ? (
+              <ReactPlayer
+                url={data.video_url}
+                width="100%"
+                height="114"
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <video
+                controls
+                width="100%"
+                height="134"
+                style={{ objectFit: "cover" }}
+              >
+                <source src={data.video_url} type="video/mp4" />
+              </video>
+            ))}
           {!data.video_url && (
             <img
               src={data.images_url[0]}

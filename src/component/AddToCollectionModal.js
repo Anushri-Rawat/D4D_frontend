@@ -34,6 +34,7 @@ const RightSection = ({
   setSelectedCollection,
   added,
   setAdded,
+  data,
 }) => {
   return (
     <Box
@@ -45,9 +46,17 @@ const RightSection = ({
         alignItems: "center",
       }}
     >
-      <Avatar src={coll?.image} alt="img" variant="square" />
+      <Avatar
+        src={
+          coll._id === selectedCollection && added
+            ? data?.images_url?.[0]
+            : coll?.image
+        }
+        alt="img"
+        variant="square"
+      />
       <span style={{ fontWeight: "600" }}>{coll.name}</span>
-      {coll._id === selectedCollection || selectedCollection == "" ? (
+      {coll._id === selectedCollection || selectedCollection === "" ? (
         !added ? (
           <Button
             variant="contained"
@@ -149,7 +158,7 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
       dispatch(getAllCollections());
       dispatch({ type: COLLECTION_CREATE_RESET });
     }
-  }, [saveProjectError, saveProjectSuccess, collectionCreateSuccess]);
+  }, [saveProjectError, saveProjectSuccess, collectionCreateSuccess, dispatch]);
 
   useEffect(() => {
     if (saveUserSuccess && !saveUserError) {
@@ -294,6 +303,7 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
                         added={added}
                         setAdded={setAdded}
                         key={coll._id}
+                        data={data}
                       />
                     );
                   }
@@ -313,15 +323,17 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
                     Save
                   </Button>
                 )}
-                <Button
-                  variant="contained"
-                  sx={{ borderRadius: "5px" }}
-                  onClick={() => {
-                    setCreateAction(true);
-                  }}
-                >
-                  Create
-                </Button>
+                {!createAction && (
+                  <Button
+                    variant="contained"
+                    sx={{ borderRadius: "5px" }}
+                    onClick={() => {
+                      setCreateAction(true);
+                    }}
+                  >
+                    Create
+                  </Button>
+                )}
               </DialogActions>
             </div>
           </DialogContent>

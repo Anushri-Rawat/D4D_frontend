@@ -28,10 +28,9 @@ import {
 } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
 import { Container } from "@mui/system";
-import ProjectCard from "../component/ProjectCard";
+import { ProjectCard, Spinner } from "../component";
 import { getProfileById } from "../actions/userActions";
 import { useNavigate, useParams } from "react-router-dom";
-import Spinner from "../component/Spinner";
 import { toast } from "react-toastify";
 import { getProjectList } from "../actions/projectActions";
 import {
@@ -39,6 +38,11 @@ import {
   PROJECT_DELETE_RESET,
 } from "../constants/projectConstants";
 import ShareMenu from "../component/ShareMenu";
+import {
+  createConversation,
+  getAllConversations,
+} from "../actions/chatActions";
+import { CONVERSATION_CREATE_RESET } from "../constants/chatConstants";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -91,7 +95,6 @@ const ProfilePage = () => {
     };
   let mostLikedProjects =
     projects?.sort(nestedSort("likesCount", null, "desc")) || [];
-  console.log(mostLikedProjects);
 
   useEffect(() => {
     if (!userInfo) {
@@ -116,10 +119,42 @@ const ProfilePage = () => {
     }
   }, [deleteSuccess, deletedId]);
 
+  useEffect(() => {
+    if (profileInfo && !profileInfo.username) {
+      toast.error("profile with this id does not exist");
+      navigate("/");
+    }
+
+    dispatch(getProfileById(id));
+  }, [id]);
+
+  useEffect(() => {
+    dispatch({ type: CONVERSATION_CREATE_RESET });
+  }, []);
+  const {
+    loading: convLoading,
+    error: convError,
+    conversations,
+  } = useSelector((state) => state.conversationList);
+
+  const {
+    loading: curConvLoading,
+    error: curConvError,
+    curConversation,
+  } = useSelector((state) => state.conversationCreate);
+  const reqChatHandler = (e) => {
+    dispatch(createConversation(profileInfo._id, userInfo));
+    dispatch(getAllConversations(userInfo));
+  };
+
+  useEffect(() => {
+    if (curConversation) navigate(`/chat/${curConversation._id}`);
+  }, [curConversation]);
+
   return (
     <Container
       sx={{
-        padding: { xs: "0", sm: "40px" },
+        padding: { xs: "0", sm: "30px" },
         height: "100%",
         overflow: "hidden!important",
       }}
@@ -261,6 +296,7 @@ const ProfilePage = () => {
                   variant="outlined"
                   startIcon={<Chat />}
                   sx={{ margin: "20px 0 10px" }}
+                  onClick={reqChatHandler}
                 >
                   Request Chat
                 </Button>
