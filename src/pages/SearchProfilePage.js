@@ -9,6 +9,8 @@ import { UserCard, Spinner } from "../component";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import SearchIcon from "@mui/icons-material/Search";
+import InputAdornment from "@mui/material/InputAdornment";
+import Pagination from "@mui/material/Pagination";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const SearchProfilePage = (props) => {
@@ -99,19 +101,33 @@ const SearchProfilePage = (props) => {
   ];
 
   const matches = useMediaQuery("(min-width:600px)");
-
+  const [page, setPage] = useState(1);
   const { loading, error, profiles } = useSelector(
     (state) => state.searchProfiles
   );
+
+  const [profileList, setProfileList] = useState([]);
+  const [total, setTotal] = useState(0);
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProfiles(tech, title, name));
-  }, []);
+    dispatch(getProfiles(tech, title, name, page));
+  }, [page]);
+
+  useEffect(() => {
+    if (!loading && !error && profiles && Object.keys(profiles).length > 0) {
+      setProfileList(profiles.profiles);
+      setTotal(profiles.total);
+    }
+  }, [profiles]);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
-    dispatch(getProfiles(tech, title, name));
+    dispatch(getProfiles(tech, title, name, 1));
+    setPage(1);
   };
 
   const defaultPropsTech = {
@@ -221,7 +237,7 @@ const SearchProfilePage = (props) => {
         {loading && <Spinner class={"loading-container"} />}
         {!loading &&
           !error &&
-          profiles.map((elem) => {
+          profileList.map((elem) => {
             return (
               <Grid
                 item
@@ -240,7 +256,7 @@ const SearchProfilePage = (props) => {
               </Grid>
             );
           })}
-        {!loading && !error && profiles.length === 0 && (
+        {!loading && !error && profileList.length === 0 && (
           <Typography
             p
             sx={{
@@ -261,6 +277,16 @@ const SearchProfilePage = (props) => {
           >
             Something went wrong. Try again.
           </Typography>
+        )}
+      </Grid>
+      <Grid container sx={{ justifyContent: "center", alignItems: "center" }}>
+        {total > 0 && (
+          <Pagination
+            sx={{ margin: "20px" }}
+            onChange={handlePageChange}
+            page={page}
+            count={Math.ceil(total / 12)}
+          />
         )}
       </Grid>
     </Container>
