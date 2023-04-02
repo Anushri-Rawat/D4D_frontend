@@ -117,28 +117,20 @@ export const getProfileById = (id) => async (dispatch, getState) => {
   }
 };
 
-export const getProfiles = (tech, title, name) => async (dispatch) => {
-  try {
-    dispatch({ type: SEARCH_PROFILE_REQUEST });
-    let skills = tech ? tech : "";
-    title = title ? title : "";
-    let full_name = name ? name : "";
-    let url = `http://127.0.0.1:5000/api/users/search?skills=${skills}&full_name=${full_name}&title=${title}`;
-    // if (tech) {
-    //   url = `http://127.0.0.1:5000/api/PROFILE/search?skills=${tech}`;
-    // }
-    // if (keyword && tech) {
-    //   url += `&keyword=${keyword}`;
-    //   console.log("in if 2");
-    // } else if (keyword) {
-    //   url += `keyword=${keyword}`;
-    //   console.log("in else if");
-    // }
-    console.log(url);
-    const res = await axios.get(url);
-    console.log(res);
-    dispatch({ type: SEARCH_PROFILE_SUCCESS, payload: res.data.profiles });
-  } catch (err) {
-    dispatch({ type: SEARCH_PROFILE_FAIL, payload: err });
-  }
-};
+export const getProfiles =
+  (tech, title, name, page_number = 1) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: SEARCH_PROFILE_REQUEST });
+      let skills = tech ? tech : "";
+      title = title ? title : "";
+      let full_name = name ? name : "";
+      let url = `http://127.0.0.1:5000/api/users/search?page_number=${page_number}&skills=${skills}&full_name=${full_name}&title=${title}`;
+
+      const res = await axios.get(url);
+
+      dispatch({ type: SEARCH_PROFILE_SUCCESS, payload: res.data });
+    } catch (err) {
+      dispatch({ type: SEARCH_PROFILE_FAIL, payload: err });
+    }
+  };

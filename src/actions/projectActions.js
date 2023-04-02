@@ -69,28 +69,28 @@ export const getMostViewedProjects = () => async (dispatch) => {
   }
 };
 
-export const getProjects = (tech, keyword) => async (dispatch) => {
-  try {
-    dispatch({ type: SEARCH_PROJECT_REQUEST });
+export const getProjects =
+  (tech, keyword, pageNumber = 1) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: SEARCH_PROJECT_REQUEST });
 
-    let url = `http://127.0.0.1:5000/api/project/search?`;
+      let url = `http://127.0.0.1:5000/api/project/search?page_number=${pageNumber}`;
 
-    if (tech?.length > 0) {
-      url = `http://127.0.0.1:5000/api/project/search?required_skills=${tech}`;
+      if (tech?.trim().length > 0) {
+        url += `&tech=$;{tech}`;
+      }
+      if (keyword?.trim().length > 0) {
+        url += `&keyword=${keyword}`;
+      }
+
+      const res = await axios.get(url);
+
+      dispatch({ type: SEARCH_PROJECT_SUCCESS, payload: res.data });
+    } catch (err) {
+      dispatch({ type: SEARCH_PROJECT_FAIL, payload: err });
     }
-    if (keyword && tech) {
-      url += `&keyword=${keyword}`;
-    } else if (keyword) {
-      url += `keyword=${keyword}`;
-    }
-
-    const res = await axios.get(url);
-
-    dispatch({ type: SEARCH_PROJECT_SUCCESS, payload: res.data.projects });
-  } catch (err) {
-    dispatch({ type: SEARCH_PROJECT_FAIL, payload: err });
-  }
-};
+  };
 export const getProjectList = (id, userInfo) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_LIST_REQUEST });
