@@ -1,33 +1,32 @@
-import React from "react";
-import Footer from "./component/Footer";
-import Header from "./component/Header";
-import HomePage from "./pages/HomePage";
+import React, { useState } from "react";
+import { Header, Chats, Footer } from "./component";
 import { Route, Routes, useLocation } from "react-router-dom";
-import SignupPage from "./pages/SignupPage";
-import SigninPage from "./pages/SigninPage";
-import EditDetailsPage from "./pages/EditDetailsPage";
-import ProfilePage from "./pages/ProfilePage";
-import ProjectDetailsPage from "./pages/ProjectDetailsPage";
-import EditProjectDetailsPage from "./pages/EditProjectDetailsPage";
-import SearchProjectPage from "./pages/SearchProjectPage";
-import SearchProfilePage from "./pages/SearchProfilePage";
 import { ToastContainer } from "react-toastify";
-import CollectionsPage from "./pages/CollectionsPage";
-import CollectionDetailsPage from "./pages/CollectionDetailsPage";
-import ChatPage from "./pages/ChatPage";
-import Chats from "./component/Chats";
+import {
+  HomePage,
+  SignupPage,
+  SigninPage,
+  EditDetailsPage,
+  ProfilePage,
+  ProjectDetailsPage,
+  EditProjectDetailsPage,
+  SearchProjectPage,
+  SearchProfilePage,
+  CollectionsPage,
+  CollectionDetailsPage,
+  ChatPage,
+} from "./pages";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
-import { useMediaQuery } from "@mui/material";
+
 function App() {
   const location = useLocation();
+
   const [socket, setSocket] = useState();
 
   const socketHandler = (socket) => {
     setSocket(socket);
   };
-  console.log(location);
-  const matchesMd = useMediaQuery("(max-width:900px)");
+
   return (
     <div className="App">
       {location.pathname !== "/signup" && location.pathname !== "/signin" && (
@@ -39,6 +38,10 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/edit/basic-details" element={<EditDetailsPage />} />
+          <Route
+            path="/edit/basic-details/:id"
+            element={<EditDetailsPage mode="edit" />}
+          />
           <Route
             path="/edit/projects-gallery"
             element={<EditProjectDetailsPage />}

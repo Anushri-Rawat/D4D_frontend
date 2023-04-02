@@ -38,16 +38,12 @@ export const createComment =
     }
   };
 
-export const getAllComments = (userInfo, projectId) => async (dispatch) => {
+export const getAllComments = (projectId) => async (dispatch) => {
   try {
     dispatch({ type: COMMENT_LIST_REQUEST });
 
     const url = `http://127.0.0.1:5000/api/comment/${projectId}`;
-    const res = await axios.get(url, {
-      headers: {
-        authorization: `Bearer ${userInfo.token}`,
-      },
-    });
+    const res = await axios.get(url);
 
     dispatch({ type: COMMENT_LIST_SUCCESS, payload: res.data.comments });
   } catch (err) {

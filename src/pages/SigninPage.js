@@ -4,7 +4,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import SigninForm from "../component/SigninForm";
-import { login } from "../actions/userActions";
+import { getMyProfile, login } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import { useEffect } from "react";
@@ -29,15 +29,22 @@ const Signup = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
+    console.log(user);
     if (!loading && !error && userInfo) {
-      if (!user?.username) {
-        toast.success("User successfully logged in");
+      if (!user) {
+        dispatch(getMyProfile(userInfo));
       }
-      navigate("/edit/basic-details");
+      if (user && !user?.username) {
+        toast.success("User successfully logged in");
+        navigate("/edit/basic-details");
+      }
+      if (user?.username) {
+        navigate("/");
+      }
     } else {
       toast.error(error);
     }
-  }, [user, userInfo, error, navigate, loading]);
+  }, [user, userInfo, error, navigate, loading, dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -134,6 +141,16 @@ const Signup = () => {
               style={{ color: "#4cacbc", fontWeight: "600" }}
             >
               Create account
+            </RouterLink>
+          </Typography>
+          <Typography
+            paragraph
+            align="center"
+            sx={{ fontSize: "15px", fontWeight: "500" }}
+          >
+            Return to{" "}
+            <RouterLink to="/" style={{ color: "#4cacbc", fontWeight: "600" }}>
+              HomePage
             </RouterLink>
           </Typography>
           <div

@@ -10,10 +10,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { createMessage, getAllMessages } from "../actions/chatActions";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
 import { MESSAGE_CREATE_RESET } from "../constants/chatConstants";
 import ScrollableFeed from "react-scrollable-feed";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 const Chats = (props) => {
   // to get the conversation id
   const { id } = useParams();

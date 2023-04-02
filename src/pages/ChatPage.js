@@ -6,12 +6,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
-import ChatContact from "./../component/ChatContact";
+import { ChatContact, Spinner } from "./../component";
 import Divider from "@mui/material/Divider";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllConversations, getAllMessages } from "../actions/chatActions";
 import React, { useEffect, useRef } from "react";
-import Spinner from "../component/Spinner";
 import { Link as RouterLink, useLocation, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useMediaQuery } from "@mui/material";
@@ -74,7 +73,6 @@ const ChatPage = (props) => {
         md={5}
         lg={4}
         xl={3}
-        spacing={2}
         sx={{
           height: "100%",
           display:
@@ -99,7 +97,6 @@ const ChatPage = (props) => {
             )}
             <OutlinedInput
               id="outlined-adornment"
-              sx={{}}
               type="search"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
@@ -154,7 +151,7 @@ const ChatPage = (props) => {
         </Grid>
       </Grid>
       {props.isConvOpen === "false" && (
-        <Grid sm={8} md={7} lg={8} xl={9} sx={{ height: "100%" }}>
+        <Grid item sm={8} md={7} lg={8} xl={9} sx={{ height: "100%" }}>
           <div
             style={{
               backgroundColor: "#fff",

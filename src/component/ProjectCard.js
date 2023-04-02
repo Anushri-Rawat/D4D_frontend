@@ -28,9 +28,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { deleteProject, updateLikesOfProject } from "../actions/projectActions";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import ShareMenu from "./ShareMenu";
+import ReactPlayer from "react-player/youtube";
 
 const ProjectCard = ({ data }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [openShareModal, setOpenShareModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const matches = useMediaQuery("(min-width:900px)");
@@ -52,21 +55,41 @@ const ProjectCard = ({ data }) => {
 
   const likeHandler = (e) => {
     e.preventDefault();
-    setLikeVal(!likeVal);
-    !likeVal ? setCount(count + 1) : setCount(count - 1);
-    dispatch(updateLikesOfProject(userInfo, data?._id));
+    if (!userInfo) {
+      navigate("/signin");
+    } else {
+      setLikeVal(!likeVal);
+      !likeVal ? setCount(count + 1) : setCount(count - 1);
+      dispatch(updateLikesOfProject(userInfo, data?._id));
+    }
+  };
+
+  const shareHandler = (e) => {
+    e.preventDefault();
+    setOpenShareModal(!openShareModal);
   };
 
   return (
-    <Card sx={{ maxWidth: matches ? "300px" : "100%" }}>
+    <Card sx={{ maxWidth: matches ? "300px" : "100%", height: "100%" }}>
       <Link to={`/project/${data.name.split(" ").join("-")}/${data._id}`}>
         <CardHeader
           sx={{ padding: "12px", color: "#000" }}
           avatar={
-            <Avatar aria-label="profile-image" src={user.profile_image} />
+            <Avatar aria-label="profile-image" sx={{ bgcolor: "red" }}>
+              {user?.profile_image && user?.profile_image !== "null" ? (
+                <img
+                  height="100%"
+                  width="100%"
+                  src={user?.profile_image}
+                  alt=""
+                />
+              ) : (
+                `${user?.first_name?.[0].toUpperCase()}${user?.last_name?.[0].toUpperCase()}`
+              )}
+            </Avatar>
           }
           action={
-            userInfo?._id && data.user_id._id === userInfo._id ? (
+            userInfo?._id && data.user_id._id === userInfo?._id ? (
               <Box sx={{ flexGrow: 0 }}>
                 <IconButton
                   aria-label="settings"
@@ -91,7 +114,8 @@ const ProjectCard = ({ data }) => {
                   onClose={handleCloseProjectMenu}
                 >
                   <MenuItem
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       handleCloseProjectMenu();
                       navigate(`/edit/projects-gallery/${data._id}`);
                     }}
@@ -100,7 +124,8 @@ const ProjectCard = ({ data }) => {
                     <Typography textAlign="center">Edit</Typography>
                   </MenuItem>
                   <MenuItem
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       handleCloseProjectMenu();
                       dispatch(deleteProject(userInfo, data._id));
                     }}
@@ -118,16 +143,24 @@ const ProjectCard = ({ data }) => {
           subheader={"@" + user.username}
         />
         <CardMedia sx={{ height: "134px" }}>
-          {data.video_url && (
-            <video
-              width="100%"
-              height="134"
-              controls
-              style={{ objectFit: "cover" }}
-            >
-              <source src={data.video_url} type="video/mp4" />
-            </video>
-          )}
+          {data.video_url &&
+            (data.video_url.includes("youtube") ? (
+              <ReactPlayer
+                url={data.video_url}
+                width="100%"
+                height="114"
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <video
+                controls
+                width="100%"
+                height="134"
+                style={{ objectFit: "cover" }}
+              >
+                <source src={data.video_url} type="video/mp4" />
+              </video>
+            ))}
           {!data.video_url && (
             <img
               src={data.images_url[0]}
@@ -143,6 +176,7 @@ const ProjectCard = ({ data }) => {
             justifyContent: "space-between",
             alignItems: "center",
             padding: "0 3px",
+            position: "relative",
           }}
         >
           <div>
@@ -172,10 +206,15 @@ const ProjectCard = ({ data }) => {
             </IconButton>
           </div>
           <div>
-            <IconButton aria-label="share" sx={{ fontSize: "18px" }}>
+            <IconButton
+              aria-label="share"
+              sx={{ fontSize: "18px" }}
+              onClick={shareHandler}
+            >
               <Share sx={{ fontSize: "18px" }} />
             </IconButton>
           </div>
+          {openShareModal && <ShareMenu shareUrl={data.deployed_link} />}
         </CardActions>
         <Divider />
         <CardContent
@@ -187,21 +226,42 @@ const ProjectCard = ({ data }) => {
             padding: "0 10px",
           }}
         >
-          {data.required_skills.map((skill, i) => (
-            <span
-              key={i}
-              style={{
-                padding: "3px 6px",
-                borderRadius: "5px",
-                background: "#fff",
-                border: "1.5px solid #777",
-                color: "#777",
-                fontWeight: 600,
-              }}
-            >
-              {skill}
-            </span>
-          ))}
+          {data.required_skills.map((skill, i) => {
+            if (i < 3) {
+              return (
+                <span
+                  key={i}
+                  style={{
+                    padding: "3px 6px",
+                    borderRadius: "5px",
+                    background: "#fff",
+                    border: "1.5px solid #777",
+                    color: "#777",
+                    fontWeight: 600,
+                  }}
+                >
+                  {skill}
+                </span>
+              );
+            }
+            if (i == 3) {
+              return (
+                <span
+                  key={i}
+                  style={{
+                    padding: "3px 6px",
+                    borderRadius: "5px",
+                    background: "#fff",
+                    border: "1.5px solid #777",
+                    color: "#777",
+                    fontWeight: 600,
+                  }}
+                >
+                  +{data.required_skills.length - 3}
+                </span>
+              );
+            }
+          })}
         </CardContent>
       </Link>
     </Card>

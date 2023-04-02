@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-import HeroSection from "../component/HeroSection";
-import ProjectCard from "../component/ProjectCard";
-import Spinner from "./../component/Spinner";
+import { HeroSection, ProjectCard, Spinner } from "./../component";
 import { Grid, Box, Container } from "@mui/material";
 import img1 from "../images/DrawKit Vector Illustration Project Manager (6).png";
 import img2 from "../images/DrawKit Vector Illustration Project Manager (1).png";
@@ -56,13 +54,13 @@ const HomePage = () => {
               justifyContent: "center",
             }}
           >
-            {likedProjectsLoading && <Spinner />}
+            {likedProjectsLoading && <Spinner class={"loading-container"} />}
 
             {!likedProjectsLoading &&
               likedProjectsSuccess &&
               likedProjects.map((elem, i) => {
                 return (
-                  <Grid item xs={12} sm={6} lg={3} key={elem._id}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
                     <ProjectCard data={elem} />
                   </Grid>
                 );
@@ -94,12 +92,12 @@ const HomePage = () => {
               justifyContent: "center",
             }}
           >
-            {viewedProjectsLoading && <Spinner />}
+            {viewedProjectsLoading && <Spinner class={"loading-container"} />}
             {!viewedProjectsLoading &&
               viewedProjectsSuccess &&
               viewedProjects.map((elem) => {
                 return (
-                  <Grid item xs={12} sm={6} lg={3} key={elem._id}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
                     <ProjectCard data={elem} />
                   </Grid>
                 );

@@ -8,11 +8,10 @@
 }
 body {
   font-family: "Poppins", sans-serif;
-  /* background: #d4f1ff; */
 }
 main {
   height: 100%;
-  min-height: 85vh;
+  min-height: 75vh;
 }
 a {
   text-decoration: none !important;
@@ -74,11 +73,11 @@ a {
   width: 100px;
   height: 100px;
 }
-::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: #babac0;
-  border-radius: 16px;
-  border: 4px solid #fff;
-  min-height: 25px;
+  border-radius: 12px;
+  border: 6px solid #fff;
+  min-height: 15px;
 }
 ::-webkit-scrollbar,
 ::-webkit-scrollbar-track {
@@ -97,7 +96,7 @@ a {
 }
 /*-------loader-----*/
 .loading-container {
-  height: 80vh;
+  height: 75vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -219,6 +218,16 @@ a {
 .searchBtn:hover {
   background-color: #4cacbc !important;
 }
+/*------------Grid----------*/
+.css-skq1si-MuiGrid-root {
+  width: 100% !important;
+  margin-left: 0px !important;
+}
+@media (min-width: 420px) {
+  .css-skq1si-MuiGrid-root > .MuiGrid-item {
+    padding-left: 0;
+  }
+}
 
 /*-----------------------Chat page------------------------------*/
 /* .searchInput {
@@ -234,4 +243,18 @@ a {
 .searchInput fieldset,
 .chatInput fieldset {
   border: none;
+}
+
+/*----image gallery css----------*/
+.image-gallery-image {
+  max-height: 250px !important;
+}
+/*---------Project Card--------*/
+.css-11c9abr-MuiCardMedia-root div {
+  height: 134px !important;
+}
+/*----------------Thumnail Picture-----------*/
+.image-gallery-thumbnail .image-gallery-thumbnail-image {
+  height: 60px !important;
+  object-fit: fill;
 }

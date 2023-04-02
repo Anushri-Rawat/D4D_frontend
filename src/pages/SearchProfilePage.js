@@ -1,19 +1,13 @@
 import { Typography } from "@mui/material";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfiles } from "../actions/userActions";
-import UserCard from "../component/UserCard";
-import Spinner from "../component/Spinner";
+import { UserCard, Spinner } from "../component";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import LayersIcon from "@mui/icons-material/Layers";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import Pagination from "@mui/material/Pagination";
@@ -23,11 +17,12 @@ const SearchProfilePage = (props) => {
   const [tech, setTech] = useState("");
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
   const technologies = [
     "HTML",
     "CSS",
     "Javascript",
-    "React.js",
+    "React",
     "Angular.js",
     "Vue.js",
     "Express.js",
@@ -239,7 +234,7 @@ const SearchProfilePage = (props) => {
           justifyContent: "center",
         }}
       >
-        {loading && <Spinner />}
+        {loading && <Spinner class={"loading-container"} />}
         {!loading &&
           !error &&
           profileList.map((elem) => {
@@ -253,7 +248,11 @@ const SearchProfilePage = (props) => {
                 sx={{ padding: "15px" }}
                 key={elem._id}
               >
-                <UserCard data={elem} />
+                <UserCard
+                  data={elem}
+                  selectedUser={selectedUser}
+                  setSelectedUser={setSelectedUser}
+                />
               </Grid>
             );
           })}

@@ -5,12 +5,15 @@ import App from "./App";
 import store from "./store";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { ScrollToTop } from "./component";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <ScrollToTop>
+        <App />
+      </ScrollToTop>
     </Provider>
   </BrowserRouter>
 );
