@@ -10,6 +10,7 @@ import {
   Typography,
   TextField,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import { Delete, Login } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +28,7 @@ import {
 } from "../actions/collectionAction";
 import Spinner from "./Spinner";
 import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 const RightSection = ({
   coll,
@@ -35,6 +37,7 @@ const RightSection = ({
   added,
   setAdded,
   data,
+  type,
 }) => {
   return (
     <Box
@@ -49,7 +52,9 @@ const RightSection = ({
       <Avatar
         src={
           coll._id === selectedCollection && added
-            ? data?.images_url?.[0]
+            ? type == "project"
+              ? data?.images_url?.[0]
+              : data?.profile_image
             : coll?.image
         }
         alt="img"
@@ -116,6 +121,8 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
   const [collectionName, setCollectionName] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
   const [added, setAdded] = useState(false);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClose = () => {
     setOpen(false);
@@ -216,6 +223,7 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
             sx={{
               display: "flex",
               gap: "0.5rem",
+              flexDirection: matches ? "column" : "row",
             }}
           >
             <div
@@ -304,6 +312,7 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
                         setAdded={setAdded}
                         key={coll._id}
                         data={data}
+                        type={type}
                       />
                     );
                   }
