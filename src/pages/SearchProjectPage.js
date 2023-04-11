@@ -10,8 +10,14 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import SearchIcon from "@mui/icons-material/Search";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Pagination from "@mui/material/Pagination";
+import { Pages } from "@mui/icons-material";
 
 const SearchProjectPage = (props) => {
+  const [page, setPage] = useState(1);
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   const [tech, setTech] = useState("");
   const [keyword, setKeyword] = useState("");
   const technologies = [
@@ -141,15 +147,25 @@ const SearchProjectPage = (props) => {
   const { loading, error, projects } = useSelector(
     (state) => state.searchProjects
   );
+  const [projectList, setProjectList] = useState([]);
+  const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProjects(tech, keyword));
-  }, []);
+    dispatch(getProjects(tech, keyword, page));
+  }, [page]);
+
+  useEffect(() => {
+    if (!loading && !error && projects && Object.keys(projects).length > 0) {
+      setProjectList(projects.projects);
+      setTotal(projects.total);
+    }
+  }, [projects]);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
-    dispatch(getProjects(tech, keyword));
+    dispatch(getProjects(tech, keyword, 1));
+    setPage(1);
   };
 
   const defaultPropsTech = {
@@ -256,7 +272,7 @@ const SearchProjectPage = (props) => {
         {loading && <Spinner class={"loading-container"} />}
         {!loading &&
           !error &&
-          projects.map((elem) => {
+          projectList.map((elem) => {
             return (
               <Grid
                 item
@@ -271,7 +287,7 @@ const SearchProjectPage = (props) => {
               </Grid>
             );
           })}
-        {!loading && !error && projects.length === 0 && (
+        {!loading && !error && projectList.length === 0 && (
           <Typography
             p
             sx={{
@@ -292,6 +308,16 @@ const SearchProjectPage = (props) => {
           >
             Something went wrong. Try again.
           </Typography>
+        )}
+      </Grid>
+      <Grid container sx={{ justifyContent: "center", alignItems: "center" }}>
+        {total > 0 && (
+          <Pagination
+            sx={{ margin: "20px" }}
+            onChange={handlePageChange}
+            page={page}
+            count={Math.ceil(total / 12)}
+          />
         )}
       </Grid>
     </Container>
