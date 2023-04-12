@@ -8,8 +8,6 @@ User can chat with other developers.Save and share their profiles
 
 Live link: <a href="https://d4d-developers-hub.netlify.app/" target="_blank"> Click here</a>
 
-<img src="img/home.png">
-
 ---
 
 <img src="public/img/HomePage.png">
