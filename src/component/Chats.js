@@ -190,7 +190,7 @@ const Chats = (props) => {
           }}
         >
           <ScrollableFeed>
-            {loading && <Spinner />}
+            {loading && <Spinner class={"loading-container"} />}
             {!loading &&
               !error &&
               curMessages &&
@@ -228,7 +228,6 @@ const Chats = (props) => {
             <OutlinedInput
               id="outlined-adornment"
               // label={value ? " " : "my label"}
-              InputLabelProps={{ shrink: false }}
               sx={{}}
               type="text"
               value={text}

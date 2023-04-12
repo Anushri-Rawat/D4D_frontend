@@ -23,7 +23,7 @@ const ChatPage = (props) => {
   const { userInfo } = useSelector((state) => state.userLogin);
   const socket = useRef();
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
+    socket.current = io("https://socketserver-io.onrender.com");
     props.socketHandler(socket.current);
   }, []);
 
@@ -126,7 +126,7 @@ const ChatPage = (props) => {
             width: matches ? "calc(100% - 70px)" : "100%",
           }}
         >
-          {loading && <Spinner />}
+          {loading && <Spinner class={"loading-container"} />}
           {!loading &&
             !error &&
             !(location.pathname !== "/chat" && matchesMd) &&

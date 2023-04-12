@@ -16,7 +16,7 @@ import axios from "axios";
 export const getAllConversations = (userInfo) => async (dispatch) => {
   try {
     dispatch({ type: CONVERSATION_LIST_REQUEST });
-    const url = `http://127.0.0.1:5000/api/conversation/`;
+    const url = `/api/conversation/`;
 
     const response = await axios.get(url, {
       headers: {
@@ -33,7 +33,7 @@ export const getAllConversations = (userInfo) => async (dispatch) => {
 export const getAllMessages = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: MESSAGE_LIST_REQUEST });
-    const url = `http://127.0.0.1:5000/api/message/${id}`;
+    const url = `/api/message/${id}`;
 
     const response = await axios.get(url, {
       headers: {
@@ -50,7 +50,7 @@ export const getAllMessages = (userInfo, id) => async (dispatch) => {
 export const createMessage = (data, userInfo) => async (dispatch) => {
   try {
     dispatch({ type: MESSAGE_CREATE_REQUEST });
-    const url = `http://127.0.0.1:5000/api/message/`;
+    const url = `/api/message/`;
 
     const response = await axios.post(url, data, {
       headers: {
@@ -68,7 +68,7 @@ export const createConversation =
   (member2_id, userInfo) => async (dispatch) => {
     try {
       dispatch({ type: CONVERSATION_CREATE_REQUEST });
-      const url = `http://127.0.0.1:5000/api/conversation/`;
+      const url = `/api/conversation/`;
 
       const response = await axios.post(
         url,

@@ -31,7 +31,7 @@ export const createProject = (userInfo, data) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_ADD_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/project`;
+    const url = `/api/project`;
     const res = await axios.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -50,7 +50,7 @@ export const createProject = (userInfo, data) => async (dispatch) => {
 export const getMostLikedProjects = () => async (dispatch) => {
   try {
     dispatch({ type: LIKED_PROJECT_REQUEST });
-    const url = "http://127.0.0.1:5000/api/project/most_liked";
+    const url = "/api/project/most_liked";
     const res = await axios.get(url);
     dispatch({ type: LIKED_PROJECT_SUCCESS, payload: res.data });
   } catch (err) {
@@ -61,7 +61,7 @@ export const getMostLikedProjects = () => async (dispatch) => {
 export const getMostViewedProjects = () => async (dispatch) => {
   try {
     dispatch({ type: VIEWED_PROJECT_REQUEST });
-    const url = "http://127.0.0.1:5000/api/project/most_viewed";
+    const url = "/api/project/most_viewed";
     const res = await axios.get(url);
     dispatch({ type: VIEWED_PROJECT_SUCCESS, payload: res.data });
   } catch (err) {
@@ -75,7 +75,7 @@ export const getProjects =
     try {
       dispatch({ type: SEARCH_PROJECT_REQUEST });
 
-      let url = `http://127.0.0.1:5000/api/project/search?page_number=${pageNumber}`;
+      let url = `/api/project/search?page_number=${pageNumber}`;
 
       if (tech?.trim().length > 0) {
         url += `&tech=$;{tech}`;
@@ -95,7 +95,7 @@ export const getProjectList = (id, userInfo) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_LIST_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/project/all/${id}`;
+    const url = `/api/project/all/${id}`;
     const res = await axios.get(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -115,9 +115,9 @@ export const getProjectDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_DETAILS_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/project/${id}`;
+    const url = `/api/project/${id}`;
     const res = await axios.get(url);
-    const url2 = `http://127.0.0.1:5000/api/comment/${id}`;
+    const url2 = `/api/comment/${id}`;
     const res2 = await axios.get(url2);
     const output = { ...res.data, ...res2.data };
     dispatch({ type: PROJECT_DETAILS_SUCCESS, payload: output });
@@ -132,7 +132,7 @@ export const getProjectDetails = (id) => async (dispatch) => {
 export const deleteProject = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_DELETE_REQUEST });
-    const url = `http://127.0.0.1:5000/api/project/${id}`;
+    const url = `/api/project/${id}`;
     const res = await axios.delete(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -151,7 +151,7 @@ export const updateProject = (userInfo, form, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_UPDATE_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/project/${id}`;
+    const url = `/api/project/${id}`;
     const res = await axios.patch(url, form, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -171,7 +171,7 @@ export const updateLikesOfProject = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_UPDATE_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/project/like/${id}`;
+    const url = `/api/project/like/${id}`;
     const res = await axios.post(
       url,
       {},

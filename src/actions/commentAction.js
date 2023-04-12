@@ -22,7 +22,7 @@ export const createComment =
     try {
       dispatch({ type: COMMENT_CREATE_REQUEST });
 
-      const url = `http://127.0.0.1:5000/api/comment/${project_id}`;
+      const url = `/api/comment/${project_id}`;
       const res = await axios.post(url, data, {
         headers: {
           authorization: `Bearer ${userInfo.token}`,
@@ -42,7 +42,7 @@ export const getAllComments = (projectId) => async (dispatch) => {
   try {
     dispatch({ type: COMMENT_LIST_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/comment/${projectId}`;
+    const url = `/api/comment/${projectId}`;
     const res = await axios.get(url);
 
     dispatch({ type: COMMENT_LIST_SUCCESS, payload: res.data.comments });
@@ -58,7 +58,7 @@ export const deleteComment = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: COMMENT_DELETE_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/comment/${id}`;
+    const url = `/api/comment/${id}`;
     const res = await axios.delete(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -78,7 +78,7 @@ export const updateComment = (userInfo, data, id) => async (dispatch) => {
   try {
     dispatch({ type: COMMENT_UPDATE_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/comment/${id}`;
+    const url = `/api/comment/${id}`;
     const res = await axios.patch(url, data, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -98,7 +98,7 @@ export const createReply = (userInfo, data, comment_id) => async (dispatch) => {
   try {
     dispatch({ type: REPLY_CREATE_REQUEST });
 
-    const url = `http://127.0.0.1:5000/api/comment/reply/${comment_id}`;
+    const url = `/api/comment/reply/${comment_id}`;
     const res = await axios.post(url, data, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
