@@ -482,6 +482,7 @@ const ProjectDetailsPage = () => {
                       setOpenModal(true);
                     }
                   }}
+                  className="btn"
                 >
                   Post comment
                 </Button>

@@ -87,6 +87,7 @@ const SigninForm = ({ formik }) => {
             display: "flex",
             backgroundColor: "#4cacbc",
           }}
+          className="btn"
         >
           {" "}
           {loading && (

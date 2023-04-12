@@ -29,7 +29,6 @@ const Signup = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(user);
     if (!loading && !error && userInfo) {
       if (!user) {
         dispatch(getMyProfile(userInfo));

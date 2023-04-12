@@ -126,6 +126,7 @@ const SignupForm = ({ formik }) => {
             display: "block",
             backgroundColor: "#4cacbc",
           }}
+          className="btn"
         >
           {loading && <Spinner />}
           SIGN UP

@@ -125,7 +125,6 @@ const EditProjectDetailsPage = (props) => {
       setStartDate(dayjs());
       setEndDate(dayjs());
       setImages([]);
-      console.log(formik.values.image0);
     }
   }, [id]);
 
@@ -157,7 +156,6 @@ const EditProjectDetailsPage = (props) => {
     }
 
     if (id && projectInfo?.name) {
-      console.log("problem");
       formik.values.project_title = projectInfo?.name;
       formik.values.source_code_link = projectInfo?.source_code_link;
       formik.values.deployed_link = projectInfo?.deployed_link;

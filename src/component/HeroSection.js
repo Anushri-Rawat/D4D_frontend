@@ -11,6 +11,15 @@ import { Container } from "@mui/system";
 import { Link as RouterLink } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
+const buttonStyles = {
+  backgroundColor: "#4cacbc",
+  borderRadius: "50px",
+  fontSize: "12px",
+  boxShadow: "none",
+  padding: "6px 20px",
+  fontWeight: "600",
+};
+
 const HeroSection = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -48,12 +57,20 @@ const HeroSection = () => {
           </p>
           <Box style={{ display: "flex", gap: "1rem" }}>
             <RouterLink to="/search/projects">
-              <Button variant="contained" sx={{ marginTop: "20px" }}>
+              <Button
+                variant="contained"
+                sx={{ marginTop: "20px", ...buttonStyles }}
+                className="btn"
+              >
                 Explore work
               </Button>
             </RouterLink>
             <RouterLink to="/search/profiles">
-              <Button variant="contained" sx={{ marginTop: "20px" }}>
+              <Button
+                variant="contained"
+                sx={{ marginTop: "20px", ...buttonStyles }}
+                className="btn"
+              >
                 Find developers
               </Button>
             </RouterLink>

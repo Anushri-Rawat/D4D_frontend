@@ -25,6 +25,15 @@ import {
 import logo from "../images/logo1.png";
 import { useTheme } from "@mui/material/styles";
 
+const buttonStyles = {
+  backgroundColor: "#4cacbc",
+  borderRadius: "50px",
+  fontSize: "12px",
+  boxShadow: "none",
+  padding: "6px 20px",
+  fontWeight: "600",
+};
+
 const Header = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -178,7 +187,13 @@ const Header = () => {
               </>
             ) : (
               <RouterLink to="/signin" style={{ textDecoration: "none" }}>
-                <Button variant="contained">Signin</Button>
+                <Button
+                  variant="contained"
+                  sx={{ ...buttonStyles }}
+                  className="btn"
+                >
+                  Signin
+                </Button>
               </RouterLink>
             )}
           </Box>
