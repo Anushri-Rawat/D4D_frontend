@@ -22,7 +22,7 @@ import {
   SAVE_USER_SUCCESS,
 } from "../constants/collectionConstants";
 import axios from "axios";
-
+import { BASE_URL } from "../config";
 export const createCollection = (data) => async (dispatch, getState) => {
   try {
     dispatch({ type: COLLECTION_CREATE_REQUEST });
@@ -30,7 +30,7 @@ export const createCollection = (data) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = `/api/collections`;
+    const url = `${BASE_URL}/api/collections`;
     const res = await axios.post(url, data, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -53,7 +53,7 @@ export const getAllCollections = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = `/api/collections`;
+    const url = `${BASE_URL}/api/collections`;
     const res = await axios.get(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -75,7 +75,7 @@ export const getCollection = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = `/api/collections/${id}`;
+    const url = `${BASE_URL}/api/collections/${id}`;
     const res = await axios.get(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -99,7 +99,7 @@ export const deleteCollection =
         userLogin: { userInfo },
       } = getState();
 
-      const url = `/api/collections/${collectionId}`;
+      const url = `${BASE_URL}/api/collections/${collectionId}`;
       const res = await axios.delete(url, {
         headers: {
           authorization: `Bearer ${userInfo.token}`,
@@ -122,7 +122,7 @@ export const updateCollection = (data, id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = `/api/collections/${id}`;
+    const url = `${BASE_URL}/api/collections/${id}`;
     const res = await axios.patch(url, data, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -146,7 +146,7 @@ export const saveProjectById =
         userLogin: { userInfo },
       } = getState();
 
-      const url = `/api/collections/${projectId}/${collectionId}`;
+      const url = `${BASE_URL}/api/collections/${projectId}/${collectionId}`;
       const res = await axios.post(
         url,
         {},
@@ -174,7 +174,7 @@ export const saveUserById =
         userLogin: { userInfo },
       } = getState();
 
-      const url = `/api/collections/user/${userId}/${collectionId}`;
+      const url = `${BASE_URL}/api/collections/user/${userId}/${collectionId}`;
       const res = await axios.post(
         url,
         {},

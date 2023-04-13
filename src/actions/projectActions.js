@@ -26,12 +26,13 @@ import {
 } from "../constants/projectConstants";
 
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 export const createProject = (userInfo, data) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_ADD_REQUEST });
 
-    const url = `/api/project`;
+    const url = `${BASE_URL}/api/project`;
     const res = await axios.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -50,7 +51,7 @@ export const createProject = (userInfo, data) => async (dispatch) => {
 export const getMostLikedProjects = () => async (dispatch) => {
   try {
     dispatch({ type: LIKED_PROJECT_REQUEST });
-    const url = "/api/project/most_liked";
+    const url = `${BASE_URL}/api/project/most_liked`;
     const res = await axios.get(url);
     dispatch({ type: LIKED_PROJECT_SUCCESS, payload: res.data });
   } catch (err) {
@@ -61,7 +62,7 @@ export const getMostLikedProjects = () => async (dispatch) => {
 export const getMostViewedProjects = () => async (dispatch) => {
   try {
     dispatch({ type: VIEWED_PROJECT_REQUEST });
-    const url = "/api/project/most_viewed";
+    const url = `${BASE_URL}/api/project/most_viewed`;
     const res = await axios.get(url);
     dispatch({ type: VIEWED_PROJECT_SUCCESS, payload: res.data });
   } catch (err) {
@@ -75,10 +76,10 @@ export const getProjects =
     try {
       dispatch({ type: SEARCH_PROJECT_REQUEST });
 
-      let url = `/api/project/search?page_number=${pageNumber}`;
+      let url = `${BASE_URL}/api/project/search?page_number=${pageNumber}`;
 
       if (tech?.trim().length > 0) {
-        url += `&tech=$;{tech}`;
+        url += `&tech=${tech}`;
       }
       if (keyword?.trim().length > 0) {
         url += `&keyword=${keyword}`;
@@ -95,7 +96,7 @@ export const getProjectList = (id, userInfo) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_LIST_REQUEST });
 
-    const url = `/api/project/all/${id}`;
+    const url = `${BASE_URL}/api/project/all/${id}`;
     const res = await axios.get(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -115,9 +116,9 @@ export const getProjectDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_DETAILS_REQUEST });
 
-    const url = `/api/project/${id}`;
+    const url = `${BASE_URL}/api/project/${id}`;
     const res = await axios.get(url);
-    const url2 = `/api/comment/${id}`;
+    const url2 = `${BASE_URL}/api/comment/${id}`;
     const res2 = await axios.get(url2);
     const output = { ...res.data, ...res2.data };
     dispatch({ type: PROJECT_DETAILS_SUCCESS, payload: output });
@@ -132,7 +133,7 @@ export const getProjectDetails = (id) => async (dispatch) => {
 export const deleteProject = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_DELETE_REQUEST });
-    const url = `/api/project/${id}`;
+    const url = `${BASE_URL}/api/project/${id}`;
     const res = await axios.delete(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -151,7 +152,7 @@ export const updateProject = (userInfo, form, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_UPDATE_REQUEST });
 
-    const url = `/api/project/${id}`;
+    const url = `${BASE_URL}/api/project/${id}`;
     const res = await axios.patch(url, form, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -171,7 +172,7 @@ export const updateLikesOfProject = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: PROJECT_UPDATE_REQUEST });
 
-    const url = `/api/project/like/${id}`;
+    const url = `${BASE_URL}/api/project/like/${id}`;
     const res = await axios.post(
       url,
       {},
