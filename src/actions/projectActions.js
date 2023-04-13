@@ -79,7 +79,7 @@ export const getProjects =
       let url = `${BASE_URL}/api/project/search?page_number=${pageNumber}`;
 
       if (tech?.trim().length > 0) {
-        url += `&tech=${tech}`;
+        url += `&required_skills=${tech}`;
       }
       if (keyword?.trim().length > 0) {
         url += `&keyword=${keyword}`;

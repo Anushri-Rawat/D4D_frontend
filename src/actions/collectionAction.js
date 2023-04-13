@@ -63,7 +63,7 @@ export const getAllCollections = () => async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: COLLECTION_LIST_FAIL,
-      payload: err.response.data.message,
+      payload: err.response?.data?.message,
     });
   }
 };
