@@ -13,10 +13,11 @@ import {
   MESSAGE_LIST_SUCCESS,
 } from "../constants/chatConstants";
 import axios from "axios";
+import { BASE_URL } from "../config";
 export const getAllConversations = (userInfo) => async (dispatch) => {
   try {
     dispatch({ type: CONVERSATION_LIST_REQUEST });
-    const url = `/api/conversation/`;
+    const url = `${BASE_URL}/api/conversation/`;
 
     const response = await axios.get(url, {
       headers: {
@@ -33,7 +34,7 @@ export const getAllConversations = (userInfo) => async (dispatch) => {
 export const getAllMessages = (userInfo, id) => async (dispatch) => {
   try {
     dispatch({ type: MESSAGE_LIST_REQUEST });
-    const url = `/api/message/${id}`;
+    const url = `${BASE_URL}/api/message/${id}`;
 
     const response = await axios.get(url, {
       headers: {
@@ -50,7 +51,7 @@ export const getAllMessages = (userInfo, id) => async (dispatch) => {
 export const createMessage = (data, userInfo) => async (dispatch) => {
   try {
     dispatch({ type: MESSAGE_CREATE_REQUEST });
-    const url = `/api/message/`;
+    const url = `${BASE_URL}/api/message/`;
 
     const response = await axios.post(url, data, {
       headers: {
@@ -68,7 +69,7 @@ export const createConversation =
   (member2_id, userInfo) => async (dispatch) => {
     try {
       dispatch({ type: CONVERSATION_CREATE_REQUEST });
-      const url = `/api/conversation/`;
+      const url = `${BASE_URL}/api/conversation/`;
 
       const response = await axios.post(
         url,
