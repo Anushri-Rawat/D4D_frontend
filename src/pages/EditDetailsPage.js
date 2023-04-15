@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StepComponent } from "../component";
+import { StepComponent, Spinner } from "../component";
 import {
   Button,
   TextField,
@@ -9,6 +9,8 @@ import {
   Avatar,
   Typography,
   MenuItem,
+  Chip,
+  Autocomplete,
 } from "@mui/material";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { TagsInput } from "react-tag-input-component";
@@ -29,10 +31,93 @@ const EditDetailsPage = ({ mode }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
+  const technologies = [
+    "HTML",
+    "CSS",
+    "Javascript",
+    "React.js",
+    "Angular.js",
+    "Vue.js",
+    "Express.js",
+    "Node.js",
+    "Next.js",
+    "Nest.js",
+    "Bootstrap",
+    "Material UI",
+    "Mongo DB",
+    "Ansible",
+    "Android",
+    ".NET CORE",
+    "Alpine.js",
+    "Apache Hadoop",
+    "Apex",
+    "AWS",
+    "ASP.NET",
+    "Bulma",
+    "BackboneJS",
+    "C",
+    "C++",
+    "C#",
+    "Java",
+    "Python",
+    "Cassandra",
+    "Django",
+    "Docker",
+    "CodeIgniter",
+    "Cycle.js",
+    "Electron",
+    "Ember.js",
+    "Elixir",
+    "Flask",
+    "Firebase",
+    "Ember",
+    "DynamoDB",
+    "Flutter",
+    "Gatsby Js",
+    "GIT",
+    "Github",
+    "Golang",
+    "GraphQL",
+    "Hibernate",
+    "ionic",
+    "Jenkins",
+    "jQuery",
+    "Kotlin",
+    "Kubernetes",
+    "Laravel",
+    "Machine Learning",
+    "MariaDB",
+    "Material",
+    "Materialize",
+    "MySQL",
+    "Perl",
+    "PHP",
+    "PostgreSQL",
+    "R",
+    "React Native",
+    "Redux",
+    "Ruby",
+    "Ruby on Rails",
+    "Rust",
+    "Salesforce Developer",
+    "Scala",
+    "SQL",
+    "Spring",
+    "Svelte",
+    "Swift",
+    "Tailwind CSS",
+    "Typescript",
+    "Unity",
+    "Unreal",
+    "Web3",
+    "Zustand",
+  ];
+
   const { userInfo } = useSelector((state) => state.userLogin);
 
   const {
     user,
+    loading,
     success: userSuccess,
     error: userError,
   } = useSelector((state) => state.userDetails);
@@ -108,8 +193,10 @@ const EditDetailsPage = ({ mode }) => {
     userSuccess,
   ]);
 
-  const handleChange = (value) => {
-    setTags(value);
+  const handleChange = (e) => {
+    console.log(e.target.textContent);
+    console.log(tags);
+    setTags(e.target.textContent);
   };
 
   const uploadImageHandler = (e) => {
@@ -155,195 +242,224 @@ const EditDetailsPage = ({ mode }) => {
           </Typography>
         </Box>
         {!id && mode !== "edit" && <StepComponent />}
-        <Box sx={{ margin: "2rem 0" }}>
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Grid container spacing={2}>
-              <Grid
-                item
-                xs={12}
-                sm={4}
-                md={3}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <label htmlFor="profilePhoto">
-                  <Avatar
-                    src={
-                      profile.photoUrl ? profile.photoUrl : user?.profile_image
-                    }
-                    sx={{
-                      width: "180px",
-                      height: "180px",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <input
-                    accept="image/*"
-                    id="profilePhoto"
-                    type="file"
-                    name="image"
-                    onChange={uploadImageHandler}
-                  />
-                </label>
-              </Grid>
-              <Grid item container spacing={3} xs={12} sm={8} md={9}>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    id="username"
-                    label="Username"
-                    type="text"
-                    size="small"
-                    fullWidth
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                    required
-                  />
+        {id && loading ? (
+          <Spinner class={"loading-container"} />
+        ) : (
+          <Box sx={{ margin: "2rem 0" }}>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <Grid container spacing={2}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={4}
+                  md={3}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <label htmlFor="profilePhoto">
+                    <Avatar
+                      src={
+                        profile.photoUrl
+                          ? profile.photoUrl
+                          : user?.profile_image
+                      }
+                      sx={{
+                        width: "180px",
+                        height: "180px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <input
+                      accept="image/*"
+                      id="profilePhoto"
+                      type="file"
+                      name="image"
+                      onChange={uploadImageHandler}
+                    />
+                  </label>
                 </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="fullname"
-                    label="Full Name"
-                    type="text"
-                    size="small"
-                    required
-                    defaultValue={userInfo?.full_name}
-                    disabled
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    type="email"
-                    size="small"
-                    defaultValue={userInfo?.email}
-                    required
-                    disabled
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="title"
-                    label="Title"
-                    type="text"
-                    size="small"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                    required
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    id="country"
-                    select
-                    label="Country"
-                    value={country}
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    onChange={(e) => setCountry(e.target.value)}
-                    fullWidth
-                  >
-                    {stateCountry.getAllCountries().map((option) => (
-                      <MenuItem key={option.id} value={option.name}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    id="state"
-                    select
-                    label="State"
-                    value={state}
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    onChange={(e) => setState(e.target.value)}
-                    fullWidth
-                  >
-                    {stateCountry
-                      .getAllStatesInCountry(country)
-                      .map((option) => (
+                <Grid item container spacing={3} xs={12} sm={8} md={9}>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      id="username"
+                      label="Username"
+                      type="text"
+                      size="small"
+                      fullWidth
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      fullWidth
+                      id="fullname"
+                      label="Full Name"
+                      type="text"
+                      size="small"
+                      required
+                      defaultValue={userInfo?.full_name}
+                      disabled
+                    ></TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      fullWidth
+                      id="email"
+                      label="Email"
+                      type="email"
+                      size="small"
+                      defaultValue={userInfo?.email}
+                      required
+                      disabled
+                    ></TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      fullWidth
+                      id="title"
+                      label="Title"
+                      type="text"
+                      size="small"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                      required
+                    ></TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      id="country"
+                      select
+                      label="Country"
+                      value={country}
+                      size="small"
+                      InputLabelProps={{ shrink: true }}
+                      onChange={(e) => setCountry(e.target.value)}
+                      fullWidth
+                    >
+                      {stateCountry.getAllCountries().map((option) => (
                         <MenuItem key={option.id} value={option.name}>
                           {option.name}
                         </MenuItem>
                       ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="githubLink"
-                    label="Github Link"
-                    type="text"
-                    size="small"
-                    value={githubUrl}
-                    onChange={(e) => setGithubUrl(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                  ></TextField>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <TextField
-                    fullWidth
-                    id="linkedinLink"
-                    label="Linkedin Link"
-                    size="small"
-                    type="text"
-                    value={linkedinUrl}
-                    onChange={(e) => setLinkedinUrl(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                  ></TextField>
-                </Grid>
-                <Grid item sm={12}>
-                  <TagsInput
-                    fullWidth
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      id="state"
+                      select
+                      label="State"
+                      value={state}
+                      size="small"
+                      InputLabelProps={{ shrink: true }}
+                      onChange={(e) => setState(e.target.value)}
+                      fullWidth
+                    >
+                      {stateCountry
+                        .getAllStatesInCountry(country)
+                        .map((option) => (
+                          <MenuItem key={option.id} value={option.name}>
+                            {option.name}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      fullWidth
+                      id="githubLink"
+                      label="Github Link"
+                      type="text"
+                      size="small"
+                      value={githubUrl}
+                      onChange={(e) => setGithubUrl(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                    ></TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField
+                      fullWidth
+                      id="linkedinLink"
+                      label="Linkedin Link"
+                      size="small"
+                      type="text"
+                      value={linkedinUrl}
+                      onChange={(e) => setLinkedinUrl(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                    ></TextField>
+                  </Grid>
+                  <Grid item sm={12}>
+                    {/* <TagsInput
+                    multiple
+                    maxWidth
+                    options={technologies}
                     size="small"
                     id="tags"
                     placeHolder="My Skills"
                     maxTags={10}
                     value={tags}
                     onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="description"
-                    label="About Yourself(Max 300 words)"
-                    type="text"
-                    multiline
-                    rows={5}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                  ></TextField>
-                </Grid>
-                <Grid item sx={{ paddingTop: "15px" }}>
-                  <Button
-                    type="submit"
-                    sx={{
-                      borderRadius: "4px",
-                      fontWeight: "600",
-                      backgroundColor: "#4cacbc",
-                    }}
-                    variant="contained"
-                    startIcon={<SaveAltIcon />}
-                  >
-                    Save
-                  </Button>
+                  /> */}
+                    <Autocomplete
+                      multiple
+                      id="tags"
+                      value={tags}
+                      disableCloseOnSelect
+                      onChange={(event: any, value: string[] | null) =>
+                        setTags(value)
+                      }
+                      limitTags={10}
+                      options={technologies}
+                      getOptionLabel={(option) => option}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          label="Skills"
+                          placeholder="Enter skills"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="description"
+                      label="About Yourself(Max 300 words)"
+                      type="text"
+                      multiline
+                      rows={5}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                    ></TextField>
+                  </Grid>
+                  <Grid item sx={{ paddingTop: "15px" }}>
+                    <Button
+                      type="submit"
+                      sx={{
+                        borderRadius: "4px",
+                        fontWeight: "600",
+                        backgroundColor: "#4cacbc",
+                      }}
+                      variant="contained"
+                      startIcon={<SaveAltIcon />}
+                      className="btn"
+                    >
+                      Save
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </form>
-        </Box>
+            </form>
+          </Box>
+        )}
       </Container>
     </>
   );

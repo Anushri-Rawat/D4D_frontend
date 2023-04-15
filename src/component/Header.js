@@ -48,8 +48,8 @@ const Header = () => {
   };
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.userLogin);
-  const { user } = useSelector((state) => state.userDetails);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const user = JSON.parse(localStorage.getItem("userDetails"));
 
   return (
     <header>
