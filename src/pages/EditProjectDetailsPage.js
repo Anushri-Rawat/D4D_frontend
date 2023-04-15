@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography, Container, Autocomplete } from "@mui/material";
 import { Spinner, StepComponent } from "../component";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { TagsInput } from "react-tag-input-component";
+//import { TagsInput } from "react-tag-input-component";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import TextField from "@mui/material/TextField";
@@ -28,6 +28,8 @@ import {
   PROJECT_DETAILS_RESET,
   PROJECT_UPDATE_RESET,
 } from "../constants/projectConstants";
+import { technologies } from "../utils/data";
+
 const urlRegex =
   /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
 
@@ -157,7 +159,7 @@ const EditProjectDetailsPage = (props) => {
 
     if (id && projectInfo?.name) {
       formik.values.project_title = projectInfo?.name;
-      formik.values.source_code_link = projectInfo?.source_code_link;
+      formik.values.source_code_link = projectInfo?.source_code_link?.[0];
       formik.values.deployed_link = projectInfo?.deployed_link;
       formik.values.project_description = projectInfo?.description;
       formik.values.demo_video = projectInfo?.video_url;
@@ -234,6 +236,8 @@ const EditProjectDetailsPage = (props) => {
 
   const lst = [1, 2, 3, 4];
   let imagesArr = [];
+
+  console.log(formik.values.source_code_link);
 
   return (
     <Container>
@@ -581,7 +585,7 @@ const EditProjectDetailsPage = (props) => {
             </Grid>
             <Grid container>
               <Grid item xs={12}>
-                <TagsInput
+                {/* <TagsInput
                   size="small"
                   id="required_skills"
                   placeHolder="Project Tags"
@@ -589,6 +593,26 @@ const EditProjectDetailsPage = (props) => {
                   maxTags={10}
                   value={tags}
                   onChange={(val) => setTags(val)}
+                /> */}
+                <Autocomplete
+                  multiple
+                  id="tags"
+                  value={tags}
+                  disableCloseOnSelect
+                  onChange={(event: any, value: string[] | null) =>
+                    setTags(value)
+                  }
+                  limitTags={10}
+                  options={technologies}
+                  getOptionLabel={(option) => option}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Skills"
+                      placeholder="Enter skills"
+                    />
+                  )}
                 />
                 <TextField
                   fullWidth
@@ -623,6 +647,7 @@ const EditProjectDetailsPage = (props) => {
                     }}
                     variant="contained"
                     startIcon={<SaveAltIcon />}
+                    className="btn"
                   >
                     Save
                   </Button>
