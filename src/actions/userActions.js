@@ -22,11 +22,12 @@ import {
   SEARCH_PROFILE_FAIL,
   USER_PROFILE_RESET,
 } from "../constants/userConstants";
+import { BASE_URL } from "../config";
 
 export const register = (data) => async (dispatch) => {
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
-    const url = `/api/users`;
+    const url = `${BASE_URL}/api/users`;
     const response = await axios.post(url, data);
     dispatch({ type: USER_REGISTER_SUCCESS, payload: response.data });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: response.data });
@@ -39,7 +40,7 @@ export const register = (data) => async (dispatch) => {
 export const login = (data) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
-    const url = `/api/users/login`;
+    const url = `${BASE_URL}/api/users/login`;
     const response = await axios.post(url, data);
     dispatch({ type: USER_LOGIN_SUCCESS, payload: response.data });
     localStorage.setItem("userInfo", JSON.stringify(response.data));
@@ -59,7 +60,7 @@ export const logout = () => async (dispatch) => {
 export const updateSelfProfile = (userInfo, data) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_UPDATE_REQUEST });
-    const url = `/api/users`;
+    const url = `${BASE_URL}/api/users`;
     const res = await axios.patch(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -79,7 +80,7 @@ export const updateSelfProfile = (userInfo, data) => async (dispatch) => {
 export const getMyProfile = (userInfo) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
-    const url = `/api/users`;
+    const url = `${BASE_URL}/api/users`;
     const res = await axios.get(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -102,7 +103,7 @@ export const getProfileById = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = `/api/users/${id}`;
+    const url = `${BASE_URL}/api/users/${id}`;
     const res = await axios.get(url, {
       headers: {
         authorization: `Bearer ${userInfo.token}`,
@@ -125,7 +126,7 @@ export const getProfiles =
       let skills = tech ? tech : "";
       title = title ? title : "";
       let full_name = name ? name : "";
-      let url = `/api/users/search?page_number=${page_number}&skills=${skills}&full_name=${full_name}&title=${title}`;
+      let url = `${BASE_URL}/api/users/search?page_number=${page_number}&skills=${skills}&full_name=${full_name}&title=${title}`;
 
       const res = await axios.get(url);
 
