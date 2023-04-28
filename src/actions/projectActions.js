@@ -118,10 +118,11 @@ export const getProjectDetails = (id) => async (dispatch) => {
 
     const url = `${BASE_URL}/api/project/${id}`;
     const res = await axios.get(url);
-    const url2 = `${BASE_URL}/api/comment/${id}`;
-    const res2 = await axios.get(url2);
-    const output = { ...res.data, ...res2.data };
-    dispatch({ type: PROJECT_DETAILS_SUCCESS, payload: output });
+    // const url2 = `${BASE_URL}/api/comment/${id}`;
+    // const res2 = await axios.get(url2);
+    // const output = { ...res.data, ...res2.data };
+    // console.log(output);
+    dispatch({ type: PROJECT_DETAILS_SUCCESS, payload: res.data });
   } catch (err) {
     dispatch({
       type: PROJECT_DETAILS_FAIL,

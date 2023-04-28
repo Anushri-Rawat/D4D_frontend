@@ -32,7 +32,7 @@ function App() {
       {location.pathname !== "/signup" && location.pathname !== "/signin" && (
         <Header />
       )}
-      <main>
+      <main style={{ paddingBottom: `${location.pathname !== "/" && "50px"}` }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -104,9 +104,7 @@ function App() {
           theme="light"
         />
       </main>
-      {location.pathname !== "/signup" &&
-        location.pathname !== "/signin" &&
-        !location.pathname.startsWith("/chat") && <Footer />}
+      {location.pathname == "/" && <Footer />}
     </div>
   );
 }

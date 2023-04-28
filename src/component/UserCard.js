@@ -18,11 +18,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ShareMenu from "./ShareMenu";
 import AddToCollectionModal from "./AddToCollectionModal";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../config";
 
 const backgroundStyle = {
   backgroundImage: `url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2264&q=80")`,
@@ -233,9 +234,7 @@ const UserCard = ({ data, selectedUser, setSelectedUser }) => {
               Share
             </Button>
             {openShareModal && (
-              <ShareMenu
-                shareUrl={`http://localhost:3000/profile/${data._id}`}
-              />
+              <ShareMenu shareUrl={`${BASE_URL}/profile/${data._id}`} />
             )}
             <Button
               size="small"

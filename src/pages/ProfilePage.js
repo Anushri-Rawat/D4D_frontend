@@ -43,6 +43,7 @@ import {
   getAllConversations,
 } from "../actions/chatActions";
 import { CONVERSATION_CREATE_RESET } from "../constants/chatConstants";
+import { BASE_URL } from "../config";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -315,7 +316,7 @@ const ProfilePage = () => {
                 Share
                 {openShareModal && (
                   <ShareMenu
-                    shareUrl={`http://localhost:3000/profile/${profileInfo._id}`}
+                    shareUrl={`${BASE_URL}/profile/${profileInfo._id}`}
                   />
                 )}
               </Button>

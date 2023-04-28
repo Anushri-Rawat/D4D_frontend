@@ -102,15 +102,34 @@ const ProjectDetailsPage = () => {
     setOpenShareModal(!openShareModal);
   };
 
+  const [likeVal, setLikeVal] = useState(
+    projectInfo?.likes?.find((key) => key === userInfo?._id)
+  );
+  const [count, setCount] = useState(projectInfo?.likes?.length);
+  const likeHandler = (e) => {
+    e.preventDefault();
+    if (!userInfo) {
+      navigate("/signin");
+    } else {
+      setLikeVal(!likeVal);
+      !likeVal ? setCount(count + 1) : setCount(count - 1);
+      dispatch(updateLikesOfProject(userInfo, projectInfo?._id));
+    }
+  };
+
   useEffect(() => {
     // if (!userInfo) {
     //   navigate("/signin");
     // }
-
+    dispatch({ type: PROJECT_DETAILS_RESET });
     dispatch(getProjectDetails(id));
     dispatch(getAllComments(id));
-    dispatch({ type: PROJECT_DETAILS_RESET });
   }, [dispatch, id, userInfo]);
+
+  useEffect(() => {
+    setCount(projectInfo?.likes?.length);
+    setLikeVal(projectInfo?.likes?.find((key) => key === userInfo?._id));
+  }, [projectInfo, userInfo]);
 
   useEffect(() => {
     if (projectUpdateSuccess) {
@@ -386,22 +405,19 @@ const ProjectDetailsPage = () => {
                     color: "rgb(69 72 77/1)",
                     borderColor: "rgb(69 72 77/1)",
                   }}
-                  onClick={() => {
-                    if (!userInfo) {
-                      navigate("/signin");
-                    } else {
-                      dispatch(
-                        updateLikesOfProject(userInfo, projectInfo?._id)
-                      );
-                    }
-                  }}
+                  onClick={likeHandler}
                 >
-                  {projectInfo?.likes?.find((key) => key === userInfo?._id) ? (
+                  {likeVal ? (
+                    <Favorite sx={{ color: "red", fontSize: "18px" }} />
+                  ) : (
+                    <FavoriteBorder sx={{ color: "red", fontSize: "18px" }} />
+                  )}
+                  {/* {projectInfo?.likes?.find((key) => key === userInfo?._id) ? (
                     <Favorite sx={{ color: "red" }} />
                   ) : (
                     <FavoriteBorder sx={{ color: "red" }} />
-                  )}
-                  Like({projectInfo?.likesCount})
+                  )} */}
+                  Like({count})
                 </Button>
                 {openShareModal && (
                   <ShareMenu shareUrl={projectInfo?.deployed_link} />
