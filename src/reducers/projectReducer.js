@@ -81,7 +81,7 @@ export const projectDetailsReducer = (
     case PROJECT_DETAILS_REQUEST:
       return { loading: true, ...state };
     case PROJECT_DETAILS_SUCCESS:
-      return { loading: false, projectInfo: action.payload };
+      return { loading: false, projectInfo: action.payload, success: true };
     case PROJECT_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case PROJECT_DETAILS_RESET:

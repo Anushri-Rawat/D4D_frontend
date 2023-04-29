@@ -9,6 +9,7 @@ import {
   Container,
   IconButton,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import {
   FavoriteBorder,
@@ -46,8 +47,51 @@ import {
 } from "../constants/projectConstants";
 import { CommentBody, AddToCollectionModal, ShareMenu } from "../component";
 import ReactPlayer from "react-player/youtube";
+import { useTheme } from "@mui/material/styles";
 
 let poster = [];
+
+const LikeButton = ({ data, userInfo }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [likeVal, setLikeVal] = useState(
+    data?.likes?.find((key) => key === userInfo?._id)
+  );
+  const [count, setCount] = useState(data?.likes?.length);
+  console.log(count);
+  const likeHandler = (e) => {
+    e.preventDefault();
+    if (!userInfo) {
+      navigate("/signin");
+    } else {
+      setLikeVal(!likeVal);
+      !likeVal ? setCount(count + 1) : setCount(count - 1);
+      dispatch(updateLikesOfProject(userInfo, data?._id));
+    }
+  };
+  return (
+    <Button
+      variant="outlined"
+      sx={{
+        color: "rgb(69 72 77/1)",
+        borderColor: "rgb(69 72 77/1)",
+      }}
+      onClick={likeHandler}
+    >
+      {likeVal ? (
+        <Favorite sx={{ color: "red", fontSize: "18px" }} />
+      ) : (
+        <FavoriteBorder sx={{ color: "red", fontSize: "18px" }} />
+      )}
+      {/* {projectInfo?.likes?.find((key) => key === userInfo?._id) ? (
+    <Favorite sx={{ color: "red" }} />
+  ) : (
+    <FavoriteBorder sx={{ color: "red" }} />
+  )} */}
+      Like({count})
+    </Button>
+  );
+};
 const ProjectDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -58,6 +102,8 @@ const ProjectDetailsPage = () => {
   const [commentStatement, setCommentStatement] = useState("");
   const [open, setOpen] = useState(false);
   const [openShareModal, setOpenShareModal] = useState(false);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   const { loading, projectInfo, error } = useSelector(
     (state) => state.projectDetails
@@ -102,21 +148,6 @@ const ProjectDetailsPage = () => {
     setOpenShareModal(!openShareModal);
   };
 
-  const [likeVal, setLikeVal] = useState(
-    projectInfo?.likes?.find((key) => key === userInfo?._id)
-  );
-  const [count, setCount] = useState(projectInfo?.likes?.length);
-  const likeHandler = (e) => {
-    e.preventDefault();
-    if (!userInfo) {
-      navigate("/signin");
-    } else {
-      setLikeVal(!likeVal);
-      !likeVal ? setCount(count + 1) : setCount(count - 1);
-      dispatch(updateLikesOfProject(userInfo, projectInfo?._id));
-    }
-  };
-
   useEffect(() => {
     // if (!userInfo) {
     //   navigate("/signin");
@@ -125,11 +156,6 @@ const ProjectDetailsPage = () => {
     dispatch(getProjectDetails(id));
     dispatch(getAllComments(id));
   }, [dispatch, id, userInfo]);
-
-  useEffect(() => {
-    setCount(projectInfo?.likes?.length);
-    setLikeVal(projectInfo?.likes?.find((key) => key === userInfo?._id));
-  }, [projectInfo, userInfo]);
 
   useEffect(() => {
     if (projectUpdateSuccess) {
@@ -306,7 +332,7 @@ const ProjectDetailsPage = () => {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                flexDirection: { xs: "column", sm: "row" },
+                flexDirection: matches ? "row" : "column",
                 gap: "0.75rem",
               }}
             >
@@ -371,7 +397,7 @@ const ProjectDetailsPage = () => {
                   display: "flex",
                   gap: "0.6rem",
                   alignItems: "center",
-                  justifyContent: "flex-end",
+                  justifyContent: matches ? "flex-end" : "flex-start",
                   position: "relative",
                 }}
               >
@@ -399,26 +425,7 @@ const ProjectDetailsPage = () => {
                   <SaveAlt />
                   Save
                 </Button>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    color: "rgb(69 72 77/1)",
-                    borderColor: "rgb(69 72 77/1)",
-                  }}
-                  onClick={likeHandler}
-                >
-                  {likeVal ? (
-                    <Favorite sx={{ color: "red", fontSize: "18px" }} />
-                  ) : (
-                    <FavoriteBorder sx={{ color: "red", fontSize: "18px" }} />
-                  )}
-                  {/* {projectInfo?.likes?.find((key) => key === userInfo?._id) ? (
-                    <Favorite sx={{ color: "red" }} />
-                  ) : (
-                    <FavoriteBorder sx={{ color: "red" }} />
-                  )} */}
-                  Like({count})
-                </Button>
+                <LikeButton data={projectInfo} userInfo={userInfo} />
                 {openShareModal && (
                   <ShareMenu shareUrl={projectInfo?.deployed_link} />
                 )}
