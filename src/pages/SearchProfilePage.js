@@ -33,7 +33,9 @@ const SearchProfilePage = (props) => {
   };
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProfiles(tech, title, name, page));
+    console.log("Page reload");
+    if (!profiles.profiles || page !== 1)
+      dispatch(getProfiles(tech, title, name, page));
   }, [page]);
 
   useEffect(() => {

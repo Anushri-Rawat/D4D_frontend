@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { HeroSection, ProjectCard, Spinner } from "./../component";
 import { Grid, Box, Container } from "@mui/material";
 import img1 from "../images/DrawKit Vector Illustration Project Manager (6).png";
@@ -10,7 +10,12 @@ import {
   getMostViewedProjects,
 } from "../actions/projectActions";
 
-const HomePage = () => {
+// const LikedProjectComponent = useMemo(() => {
+//   return;
+// });
+
+const HomePage = memo(() => {
+  console.log("hello");
   const {
     success: likedProjectsSuccess,
     error: likedProjectsError,
@@ -25,12 +30,6 @@ const HomePage = () => {
     loading: viewedProjectsLoading,
   } = useSelector((state) => state.viewedProjects);
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getMostLikedProjects());
-    dispatch(getMostViewedProjects());
-  }, [dispatch]);
   return (
     <>
       <HeroSection />
@@ -217,6 +216,6 @@ const HomePage = () => {
       </Container>
     </>
   );
-};
+});
 
 export default HomePage;

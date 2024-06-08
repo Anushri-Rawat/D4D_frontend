@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Header, Chats, Footer } from "./component";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -17,6 +17,11 @@ import {
   ChatPage,
 } from "./pages";
 import Grid from "@mui/material/Grid";
+import { useDispatch } from "react-redux";
+import {
+  getMostLikedProjects,
+  getMostViewedProjects,
+} from "./actions/projectActions";
 
 function App() {
   const location = useLocation();
@@ -26,6 +31,13 @@ function App() {
   const socketHandler = (socket) => {
     setSocket(socket);
   };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMostLikedProjects());
+    dispatch(getMostViewedProjects());
+  }, []);
 
   return (
     <div className="App">

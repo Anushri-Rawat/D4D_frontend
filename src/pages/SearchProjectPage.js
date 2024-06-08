@@ -31,7 +31,8 @@ const SearchProjectPage = (props) => {
   const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProjects(tech, keyword, page));
+    if (!projects.projects || page !== 1)
+      dispatch(getProjects(tech, keyword, page));
   }, [page]);
 
   useEffect(() => {
