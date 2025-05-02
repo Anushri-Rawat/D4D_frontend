@@ -11,7 +11,7 @@ const ChatContact = ({ data }) => {
         {details.profile_image && (
           <img
             src={details.profile_image}
-            alt=""
+            alt={`${details.first_name} image`}
             style={{ borderRadius: "50%", height: "50px", width: "50px" }}
           />
         )}

@@ -160,7 +160,7 @@ const ProfilePage = () => {
         overflow: "hidden!important",
       }}
     >
-      {loading && <Spinner class={"loading-container"} />}
+      {loading && <Spinner customClass={"loading-container"} />}
       {!loading && !profileInfoError && (
         <Stack
           direction="row"
@@ -203,7 +203,7 @@ const ProfilePage = () => {
                     height="100%"
                     width="100%"
                     src={profileInfo?.profile_image}
-                    alt=""
+                    alt="user profile image"
                     style={{ objectFit: "cover" }}
                   />
                 ) : (
@@ -431,7 +431,7 @@ const ProfilePage = () => {
                       }}
                     >
                       {projectLoading && (
-                        <Spinner class={"loading-container"} />
+                        <Spinner customClass={"loading-container"} />
                       )}
 
                       {!projectLoading &&

@@ -81,7 +81,7 @@ const ProjectCard = ({ data }) => {
                   height="100%"
                   width="100%"
                   src={user?.profile_image}
-                  alt=""
+                  alt={`${user?.first_name + " " + user?.last_name} image`}
                 />
               ) : (
                 `${user?.first_name?.[0].toUpperCase()}${user?.last_name?.[0].toUpperCase()}`
@@ -157,6 +157,7 @@ const ProjectCard = ({ data }) => {
                 width="100%"
                 height="134"
                 style={{ objectFit: "cover" }}
+                preload="metadata"
               >
                 <source src={data.video_url} type="video/mp4" />
               </video>
@@ -165,7 +166,7 @@ const ProjectCard = ({ data }) => {
             <img
               src={data.images_url[0]}
               style={{ height: "134px", width: "100%", objectFit: "cover" }}
-              alt=""
+              alt={`${data.name} project image`}
             />
           )}
         </CardMedia>

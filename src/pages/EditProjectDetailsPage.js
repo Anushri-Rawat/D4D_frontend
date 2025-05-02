@@ -237,8 +237,6 @@ const EditProjectDetailsPage = (props) => {
   const lst = [1, 2, 3, 4];
   let imagesArr = [];
 
-  console.log(formik.values.source_code_link);
-
   return (
     <Container>
       <Box sx={{ textAlign: "center", margin: "30px 0 0" }}>
@@ -322,7 +320,7 @@ const EditProjectDetailsPage = (props) => {
                       margin: "20px auto",
                     }}
                     src={Images[0]}
-                    alt=""
+                    alt="project image"
                   />
                 )}
               </Grid>
@@ -357,7 +355,7 @@ const EditProjectDetailsPage = (props) => {
                             margin: "10px",
                           }}
                           src={Images[i]}
-                          alt=""
+                          alt={`project ${i+1} image`}
                         />
                       )}
                     </Grid>

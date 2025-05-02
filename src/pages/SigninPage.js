@@ -102,7 +102,7 @@ const Signup = () => {
             </>
           )}
 
-          {matches && <img src={img} alt="" style={{ width: "100%" }} />}
+          {matches && <img src={img} alt="user profile image" style={{ width: "100%" }} />}
         </Grid>
         <Grid item xs={12} md={6}>
           <div

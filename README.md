@@ -10,31 +10,31 @@ Live link: <a href="https://d4d-developers-hub.netlify.app/" target="_blank"> Cl
 
 ---
 
-<img src="public/img/HomePage.png">
+<img src="public/img/HomePage.png" alt="Home Page">
 
 ---
 
-<img src="public/img/EntireHome.png">
+<img src="public/img/EntireHome.png" alt="Entire Home">
 
 ---
 
-<img src="public/img/Profile.png">
+<img src="public/img/Profile.png" alt="Profile page">
 
 ---
 
-<img src="public/img/ProjectDetails.png">
+<img src="public/img/ProjectDetails.png" alt="Project Details">
 
 ---
 
-<img src="public/img/ChatPage.png">
+<img src="public/img/ChatPage.png" alt="Chat Page">
 
 ---
 
-<img src="public/img/SearchProjects.png">
+<img src="public/img/SearchProjects.png" alt="Search Projects Page">
 
 ---
 
-<img src="public/img/SearchUser.png">
+<img src="public/img/SearchUser.png" alt="Search User Page">
 
 ---
 

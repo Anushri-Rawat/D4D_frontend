@@ -86,12 +86,19 @@ body::-webkit-scrollbar-thumb {
   object-fit: cover;
 }
 /*-------loader-----*/
-.loading-container {
-  height: 75vh;
-  width: 100%;
+.sb-loading {
+  height: 40vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.sb-loading--full-page {
+  height: 100dvh;
+}
+.loading-container {
+  height: 75vh;
+  width: 100%;
 }
 @keyframes spinner {
   0% {

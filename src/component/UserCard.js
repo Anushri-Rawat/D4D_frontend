@@ -65,7 +65,7 @@ const UserCard = ({ data, selectedUser, setSelectedUser }) => {
                   height="40px"
                   width="40px"
                   src={data.profile_image}
-                  alt=""
+                  alt={`${data.first_name + " " + data.last_name} image`}
                 />
               ) : (
                 `${data.first_name.slice(0, 1).toUpperCase()}${data.last_name

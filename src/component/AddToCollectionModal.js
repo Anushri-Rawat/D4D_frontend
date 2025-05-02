@@ -237,7 +237,7 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
               {type === "project" && (
                 <img
                   src={data?.images_url?.[0]}
-                  alt="image"
+                  alt="project-image"
                   style={{ width: "100%", height: "150px", objectFit: "cover" }}
                 />
               )}
@@ -250,7 +250,7 @@ const AddToCollectionModal = ({ open, setOpen, data, type }) => {
                       height="100%"
                       width="100%"
                       src={data?.profile_image}
-                      alt=""
+                      alt="developer-image"
                       style={{ objectFit: "cover" }}
                     />
                   ) : (

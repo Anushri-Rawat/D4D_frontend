@@ -126,7 +126,7 @@ const ChatPage = (props) => {
             width: matches ? "calc(100% - 70px)" : "100%",
           }}
         >
-          {loading && <Spinner class={"loading-container"} />}
+          {loading && <Spinner customClass={"loading-container"} />}
           {!loading &&
             !error &&
             !(location.pathname !== "/chat" && matchesMd) &&

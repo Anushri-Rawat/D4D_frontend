@@ -29,7 +29,7 @@ const CollectionDetailsPage = () => {
   }, [id, error, userInfo]);
 
   return loading ? (
-    <Spinner class={"loading-container"} />
+    <Spinner customClass={"loading-container"} />
   ) : (
     <Container>
       <div

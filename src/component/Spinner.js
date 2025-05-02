@@ -1,16 +1,12 @@
-const Spinner = (props) => {
+import React from "react";
+const Spinner = ({ fullPage, customClass }) => {
   return (
     <div
-      className={props.class === "loading-container" ? "loading-container" : ""}
+      className={`sb-loading${fullPage ? " sb-loading--full-page" : ""}${
+        customClass?.length > 0 ? ` ${customClass}` : ""
+      }`}
     >
-      <div
-        className="spinner"
-        style={{
-          borderColor: props.color,
-          height: props.height,
-          width: props.width,
-        }}
-      ></div>
+      <div className="spinner"></div>
     </div>
   );
 };

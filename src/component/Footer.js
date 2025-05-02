@@ -43,7 +43,7 @@ const Footer = () => {
         <Box>
           <img
             src={logo}
-            alt="D4D"
+            alt="D4D logo"
             style={{ height: "80px", cursor: "pointer" }}
           />
           <Box sx={BoxStyle}>
@@ -54,7 +54,7 @@ const Footer = () => {
               <LinkedIn />
             </IconButton>
           </Box>
-          {/* <p>
+          <p>
             Created by &copy;{" "}
             <span style={{ fontWeight: "600" }}>Anushri Rawat</span> and{" "}
             <span style={{ fontWeight: "600" }}>Nikita Bhatnagar</span>
@@ -82,7 +82,7 @@ const Footer = () => {
                 <Mail />
               </IconButton>
             </Box>
-          ))} */}
+          ))}
         </Box>
       </Container>
     </footer>

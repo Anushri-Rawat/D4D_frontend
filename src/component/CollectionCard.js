@@ -55,7 +55,7 @@ const CollectionCard = ({ data }) => {
           <CardMedia>
             <img
               src={collection.image}
-              alt="collection-name"
+              alt={`${collection?.name} collection`}
               style={{ width: "100%", objectFit: "cover", height: "200px" }}
             />
           </CardMedia>

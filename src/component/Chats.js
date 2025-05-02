@@ -152,6 +152,7 @@ const Chats = (props) => {
         >
           {curReceiver?.profile_image && (
             <img
+            alt={`${curReceiver?.first_name + " " + curReceiver?.last_name} image`}
               style={{ height: "40px", width: "40px", borderRadius: "50%" }}
               src={curReceiver?.profile_image}
             />
@@ -190,7 +191,7 @@ const Chats = (props) => {
           }}
         >
           <ScrollableFeed>
-            {loading && <Spinner class={"loading-container"} />}
+            {loading && <Spinner customClass={"loading-container"} />}
             {!loading &&
               !error &&
               curMessages &&

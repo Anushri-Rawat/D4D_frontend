@@ -15,7 +15,7 @@ import {
 // });
 
 const HomePage = memo(() => {
-  console.log("hello");
+  const dispatch = useDispatch();
   const {
     success: likedProjectsSuccess,
     error: likedProjectsError,
@@ -29,6 +29,11 @@ const HomePage = memo(() => {
     projects: viewedProjects,
     loading: viewedProjectsLoading,
   } = useSelector((state) => state.viewedProjects);
+
+  useEffect(() => {
+    dispatch(getMostLikedProjects());
+    dispatch(getMostViewedProjects());
+  }, []);
 
   return (
     <>
@@ -53,7 +58,9 @@ const HomePage = memo(() => {
               justifyContent: "center",
             }}
           >
-            {likedProjectsLoading && <Spinner class={"loading-container"} />}
+            {likedProjectsLoading && (
+              <Spinner customClass={"loading-container"} />
+            )}
 
             {!likedProjectsLoading &&
               likedProjectsSuccess &&
@@ -91,7 +98,9 @@ const HomePage = memo(() => {
               justifyContent: "center",
             }}
           >
-            {viewedProjectsLoading && <Spinner class={"loading-container"} />}
+            {viewedProjectsLoading && (
+              <Spinner customClass={"loading-container"} />
+            )}
             {!viewedProjectsLoading &&
               viewedProjectsSuccess &&
               viewedProjects.map((elem) => {

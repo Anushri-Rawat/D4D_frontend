@@ -33,7 +33,6 @@ const SearchProfilePage = (props) => {
   };
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("Page reload");
     if (!profiles.profiles || page !== 1)
       dispatch(getProfiles(tech, title, name, page));
   }, [page]);
@@ -156,7 +155,7 @@ const SearchProfilePage = (props) => {
           justifyContent: "center",
         }}
       >
-        {loading && <Spinner class={"loading-container"} />}
+        {loading && <Spinner customClass={"loading-container"} />}
         {!loading &&
           !error &&
           profileList.map((elem) => {

@@ -72,7 +72,7 @@ const CollectionsPage = () => {
         >
           Your Collections
         </Typography>
-        {loading && <Spinner class={"loading-container"} />}
+        {loading && <Spinner customClass={"loading-container"} />}
         {collections.length === 0 && <p>No Collection made yet!!</p>}
         {!loading && !error && (
           <TabContext value={value}>

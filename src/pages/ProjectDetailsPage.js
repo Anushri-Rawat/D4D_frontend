@@ -58,7 +58,6 @@ const LikeButton = ({ data, userInfo }) => {
     data?.likes?.find((key) => key === userInfo?._id)
   );
   const [count, setCount] = useState(data?.likes?.length);
-  console.log(count);
   const likeHandler = (e) => {
     e.preventDefault();
     if (!userInfo) {
@@ -262,6 +261,7 @@ const ProjectDetailsPage = () => {
         ) : (
           <video
             controls
+            preload="metadata"
             style={{
               objectFit: "cover",
               width: "100%",
@@ -278,7 +278,7 @@ const ProjectDetailsPage = () => {
   return (
     <Container sx={{ paddingTop: "32px" }}>
       {loading || !projectInfo?._id ? (
-        <Spinner class={"loading-container"} />
+        <Spinner customClass={"loading-container"} />
       ) : !error ? (
         <Grid container spacing={5}>
           <Grid item xs={12} sm={12} md={4} lg={5}>

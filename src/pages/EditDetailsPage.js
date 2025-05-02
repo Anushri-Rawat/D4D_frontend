@@ -113,8 +113,6 @@ const EditDetailsPage = ({ mode }) => {
   ]);
 
   const handleChange = (e) => {
-    console.log(e.target.textContent);
-    console.log(tags);
     setTags(e.target.textContent);
   };
 
@@ -162,7 +160,7 @@ const EditDetailsPage = ({ mode }) => {
         </Box>
         {!id && mode !== "edit" && <StepComponent />}
         {id && loading ? (
-          <Spinner class={"loading-container"} />
+          <Spinner customClass={"loading-container"} />
         ) : (
           <Box sx={{ margin: "2rem 0" }}>
             <form onSubmit={handleSubmit} encType="multipart/form-data">

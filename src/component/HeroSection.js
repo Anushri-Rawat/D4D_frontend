@@ -81,7 +81,7 @@ const HeroSection = () => {
             <img
               src={img}
               style={{ width: "100%", objectFit: "cover" }}
-              alt="vectorimg"
+              alt="find developers vector img"
             />
           ) : (
             <Skeleton variant="rectangular" width="100%" height="370px" />

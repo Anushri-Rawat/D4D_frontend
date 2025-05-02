@@ -63,23 +63,25 @@ const Header = () => {
         >
           <img
             src={logo}
-            alt="D4D"
+            alt="D4D logo"
             style={{ height: "50px", cursor: "pointer" }}
             onClick={() => navigate("/")}
           />
-          <ul style={{ display: matches ? "none" : "flex" }}>
-            <li style={{ marginRight: "20px" }}>
-              <RouterLink to="search/projects" className="navlinks">
-                Explore Work
-              </RouterLink>
-            </li>
-            <li>
-              <RouterLink to="search/profiles" className="navlinks">
-                Find Developers
-              </RouterLink>
-            </li>
-          </ul>
-          <Box>
+          <nav>
+            <ul style={{ display: matches ? "none" : "flex" }}>
+              <li tabIndex={0} style={{ marginRight: "20px" }}>
+                <RouterLink to="search/projects" className="navlinks">
+                  Explore Work
+                </RouterLink>
+              </li>
+              <li tabIndex={0}>
+                <RouterLink to="search/profiles" className="navlinks">
+                  Find Developers
+                </RouterLink>
+              </li>
+            </ul>
+          </nav>
+          <Box as="nav">
             {userInfo ? (
               <>
                 <Tooltip title="Open settings">
