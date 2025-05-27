@@ -13,6 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Pagination from "@mui/material/Pagination";
 import { Pages } from "@mui/icons-material";
 import { technologies, keywords } from "../utils/data";
+import { SearchResultSkeleton } from "../component/skeletons/SkeletonComponents";
 
 const SearchProjectPage = (props) => {
   const [page, setPage] = useState(1);
@@ -150,9 +151,19 @@ const SearchProjectPage = (props) => {
           marginLeft: matches ? "20px" : "0px",
         }}
       >
-        {loading && <Spinner class={"loading-container"} />}
-        {!loading &&
-          !error &&
+        {loading ? (
+          <SearchResultSkeleton count={4} xs={12} sm={6} md={3} />
+        ) : error ? (
+          <Typography
+            p
+            sx={{
+              margin: "initial auto",
+              fontSize: "20px",
+            }}
+          >
+            {error || "Something went wrong. Try again"}
+          </Typography>
+        ) : projectList.length > 0 ? (
           projectList.map((elem) => {
             return (
               <Grid
@@ -167,8 +178,8 @@ const SearchProjectPage = (props) => {
                 <ProjectCard data={elem} />
               </Grid>
             );
-          })}
-        {!loading && !error && projectList.length === 0 && (
+          })
+        ) : (
           <Typography
             p
             sx={{
@@ -177,17 +188,6 @@ const SearchProjectPage = (props) => {
             }}
           >
             No projects found!
-          </Typography>
-        )}
-        {!loading && error && (
-          <Typography
-            p
-            sx={{
-              margin: "initial auto",
-              fontSize: "20px",
-            }}
-          >
-            Something went wrong. Try again.
           </Typography>
         )}
       </Grid>

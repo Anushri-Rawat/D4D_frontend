@@ -13,6 +13,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Pagination from "@mui/material/Pagination";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { technologies } from "../utils/data";
+import { SearchResultSkeleton } from "../component/skeletons/SkeletonComponents";
 
 const SearchProfilePage = (props) => {
   const [tech, setTech] = useState("");
@@ -70,7 +71,7 @@ const SearchProfilePage = (props) => {
           maxWidth: "80%",
         }}
       >
-        “Hard work beats talent when talent fails to work hard.” ― Kevin Durant
+        "Hard work beats talent when talent fails to work hard." ― Kevin Durant
       </Typography>
       <form
         style={{
@@ -155,9 +156,19 @@ const SearchProfilePage = (props) => {
           justifyContent: "center",
         }}
       >
-        {loading && <Spinner customClass={"loading-container"} />}
-        {!loading &&
-          !error &&
+        {loading ? (
+          <SearchResultSkeleton count={3} xs={12} sm={6} md={4}/>
+        ) : error ? (
+          <Typography
+            p
+            sx={{
+              margin: "initial auto",
+              fontSize: "20px",
+            }}
+          >
+            {error}
+          </Typography>
+        ) : profileList.length > 0 ? (
           profileList.map((elem) => {
             return (
               <Grid
@@ -176,29 +187,16 @@ const SearchProfilePage = (props) => {
                 />
               </Grid>
             );
-          })}
-        {!loading && !error && profileList.length === 0 && (
-          <Typography
-            p
-            sx={{
-              margin: "initial auto",
-              fontSize: "20px",
-            }}
-          >
-            No developers found!
-          </Typography>
-        )}
-        {!loading && error && (
-          <Typography
-            p
-            sx={{
-              margin: "initial auto",
-              fontSize: "20px",
-            }}
-          >
-            Something went wrong. Try again.
-          </Typography>
-        )}
+          })
+        ):(<Typography
+          p
+          sx={{
+            margin: "initial auto",
+            fontSize: "20px",
+          }}
+        >
+          No developers found!
+        </Typography>)}
       </Grid>
       <Grid container sx={{ justifyContent: "center", alignItems: "center" }}>
         {total > 0 && (

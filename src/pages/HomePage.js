@@ -9,6 +9,7 @@ import {
   getMostLikedProjects,
   getMostViewedProjects,
 } from "../actions/projectActions";
+import { TopProjectsSkeleton } from "../component/skeletons/SkeletonComponents";
 
 // const LikedProjectComponent = useMemo(() => {
 //   return;
@@ -50,34 +51,34 @@ const HomePage = memo(() => {
           >
             Top Liked Projects
           </h5>
-          <Grid
-            container
-            spacing={3}
-            sx={{
-              minHeight: "250px",
-              justifyContent: "center",
-            }}
-          >
-            {likedProjectsLoading && (
-              <Spinner customClass={"loading-container"} />
-            )}
-
-            {!likedProjectsLoading &&
-              likedProjectsSuccess &&
-              likedProjects.map((elem, i) => {
-                return (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
-                    <ProjectCard data={elem} />
-                  </Grid>
-                );
-              })}
-            {!likedProjectsLoading &&
-              likedProjectsSuccess &&
-              likedProjects.length === 0 && <p>No projects to display</p>}
-            {!likedProjectsLoading && likedProjectsError && (
-              <p>Something went wrong.</p>
-            )}
-          </Grid>
+          {likedProjectsLoading ? (
+            <TopProjectsSkeleton />
+          ) : (
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                minHeight: "250px",
+                justifyContent: "center",
+              }}
+            >
+              {!likedProjectsLoading &&
+                likedProjectsSuccess &&
+                likedProjects.map((elem, i) => {
+                  return (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
+                      <ProjectCard data={elem} />
+                    </Grid>
+                  );
+                })}
+              {!likedProjectsLoading &&
+                likedProjectsSuccess &&
+                likedProjects.length === 0 && <p>No projects to display</p>}
+              {!likedProjectsLoading && likedProjectsError && (
+                <p>Something went wrong.</p>
+              )}
+            </Grid>
+          )}
         </Box>
         <Box sx={{ flexGrow: 1 }}>
           <h5
@@ -90,33 +91,34 @@ const HomePage = memo(() => {
           >
             Top Viewed Projects
           </h5>
-          <Grid
-            container
-            spacing={3}
-            sx={{
-              minHeight: "250px",
-              justifyContent: "center",
-            }}
-          >
-            {viewedProjectsLoading && (
-              <Spinner customClass={"loading-container"} />
-            )}
-            {!viewedProjectsLoading &&
-              viewedProjectsSuccess &&
-              viewedProjects.map((elem) => {
-                return (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
-                    <ProjectCard data={elem} />
-                  </Grid>
-                );
-              })}
-            {!viewedProjectsLoading &&
-              viewedProjectsSuccess &&
-              viewedProjects.length === 0 && <p>No projects to display</p>}
-            {!viewedProjectsLoading && viewedProjectsError && (
-              <p>Something went wrong.</p>
-            )}
-          </Grid>
+          {viewedProjectsLoading ? (
+            <TopProjectsSkeleton />
+          ) : (
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                minHeight: "250px",
+                justifyContent: "center",
+              }}
+            >
+              {!viewedProjectsLoading &&
+                viewedProjectsSuccess &&
+                viewedProjects.map((elem) => {
+                  return (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={elem._id}>
+                      <ProjectCard data={elem} />
+                    </Grid>
+                  );
+                })}
+              {!viewedProjectsLoading &&
+                viewedProjectsSuccess &&
+                viewedProjects.length === 0 && <p>No projects to display</p>}
+              {!viewedProjectsLoading && viewedProjectsError && (
+                <p>Something went wrong.</p>
+              )}
+            </Grid>
+          )}
         </Box>
         <Box
           sx={{ display: "flex", flexDirection: "column", marginTop: "30px" }}

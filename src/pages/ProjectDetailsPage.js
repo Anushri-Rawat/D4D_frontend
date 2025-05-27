@@ -48,6 +48,7 @@ import {
 import { CommentBody, AddToCollectionModal, ShareMenu } from "../component";
 import ReactPlayer from "react-player/youtube";
 import { useTheme } from "@mui/material/styles";
+import { ProjectCardSkeleton } from "../component/skeletons/SkeletonComponents";
 
 let poster = [];
 
@@ -276,340 +277,344 @@ const ProjectDetailsPage = () => {
   }
 
   return (
-    <Container sx={{ paddingTop: "32px" }}>
-      {loading || !projectInfo?._id ? (
-        <Spinner customClass={"loading-container"} />
-      ) : !error ? (
-        <Grid container spacing={5}>
-          <Grid item xs={12} sm={12} md={4} lg={5}>
-            <ImageGallery
-              items={poster}
-              showBullets
-              showPlayButton={false}
-              showFullscreenButton={false}
-              disableKeyDown={true}
-              lazyLoad={true}
-            />
+    <Container maxWidth="lg" sx={{ mt: 3 }}>
+      {loading ? (
+        <ProjectCardSkeleton />
+      ) : error ? (
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      ) : (
+        projectInfo && (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={4} lg={5}>
+              <ImageGallery
+                items={poster}
+                showBullets
+                showPlayButton={false}
+                showFullscreenButton={false}
+                disableKeyDown={true}
+                lazyLoad={true}
+              />
 
-            <div
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                marginTop: "1rem",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Link
-                href={projectInfo?.source_code_link}
-                sx={{ fontWeight: "600", color: "#777", cursor: "pointer" }}
-              >
-                <IconButton>
-                  <Code />
-                </IconButton>
-                Source code
-              </Link>
-              <Link
-                href={projectInfo?.deployed_link}
-                sx={{ fontWeight: "600", color: "#777", cursor: "pointer" }}
-              >
-                <IconButton>
-                  <Public />
-                </IconButton>
-                Deployed Link
-              </Link>
-            </div>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={8}
-            lg={7}
-            sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: matches ? "row" : "column",
-                gap: "0.75rem",
-              }}
-            >
               <div
                 style={{
                   display: "flex",
-                  gap: ".5rem",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate(`/profile/${projectInfo?.user_id?._id}`);
-                }}
-              >
-                <Avatar
-                  sx={{ bgcolor: "red", height: "62px", width: "62px" }}
-                  aria-label="user"
-                >
-                  {projectInfo?.user_id?.profile_image &&
-                  projectInfo?.user_id?.profile_image !== "null" ? (
-                    <img
-                      height="100%"
-                      width="100%"
-                      src={projectInfo?.user_id?.profile_image}
-                      alt="user profile img"
-                    />
-                  ) : (
-                    `${projectInfo?.user_id?.first_name?.[0].toUpperCase()}${projectInfo?.user_id?.last_name?.[0].toUpperCase()}`
-                  )}
-                </Avatar>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      textTransform: "capitalize",
-                      fontWeight: "600",
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    {projectInfo?.user_id?.first_name +
-                      " " +
-                      projectInfo?.user_id?.last_name}
-                  </Typography>
-                  <Typography variant="p" sx={{ color: "rgb(115 121 128/1)" }}>
-                    {projectInfo?.user_id?.title}
-                  </Typography>
-                  <Typography variant="p" sx={{ color: "rgb(115 121 128/1)" }}>
-                    {projectInfo?.user_id?.city},{projectInfo?.user_id?.state}
-                  </Typography>
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.6rem",
-                  alignItems: "center",
-                  justifyContent: matches ? "flex-end" : "flex-start",
-                  position: "relative",
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  sx={{
-                    color: "rgb(69 72 77/1)",
-                    borderColor: "rgb(69 72 77/1)",
-                  }}
-                  onClick={shareHandler}
-                >
-                  <Share />
-                  Share
-                </Button>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    color: "rgb(69 72 77/1)",
-                    borderColor: "rgb(69 72 77/1)",
-                  }}
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                >
-                  <SaveAlt />
-                  Save
-                </Button>
-                <LikeButton data={projectInfo} userInfo={userInfo} />
-                {openShareModal && (
-                  <ShareMenu shareUrl={projectInfo?.deployed_link} />
-                )}
-              </div>
-            </Box>
-            <Typography
-              variant="h1"
-              sx={{
-                fontSize: "2.25rem",
-                lineHeight: "2.5rem",
-                fontWeight: "600",
-              }}
-            >
-              {projectInfo?.name}
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "5px",
-                margin: "7px 0 12px",
-                padding: "0 10px",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                gap: "0.5rem",
-              }}
-            >
-              {projectInfo?.required_skills?.map((skill, i) => (
-                <span
-                  key={i}
-                  style={{
-                    padding: "4px 6px",
-                    borderRadius: "5px",
-                    background: "#fff",
-                    border: "1.5px solid #777",
-                    color: "#777",
-                    fontWeight: 600,
-                  }}
-                >
-                  {skill}
-                </span>
-              ))}
-            </Box>
-            <Typography variant="p">{projectInfo?.description}</Typography>
-            <Box
-              sx={{
-                display: "flex",
-                borderBottom: "1px solid #777",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingBottom: "0.7rem",
-              }}
-            >
-              <div
-                style={{
-                  color: "rgb(23 24 26/1)",
                   gap: "0.5rem",
-                  display: "flex",
+                  marginTop: "1rem",
                   alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <Typography variant="h6" sx={{ fontWeight: "500" }}>
-                  Comments
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: "500" }}>
-                  ({commentArr?.length})
-                </Typography>
-              </div>
-              <div>
-                <Button
-                  variant="contained"
-                  sx={{ borderRadius: "4px", backgroundColor: "#4cacbc" }}
-                  onClick={() => {
-                    if (!userInfo) {
-                      navigate("/signin");
-                    } else {
-                      setOpenModal(true);
-                    }
-                  }}
-                  className="btn"
+                <Link
+                  href={projectInfo?.source_code_link}
+                  sx={{ fontWeight: "600", color: "#777", cursor: "pointer" }}
                 >
-                  Post comment
-                </Button>
+                  <IconButton>
+                    <Code />
+                  </IconButton>
+                  Source code
+                </Link>
+                <Link
+                  href={projectInfo?.deployed_link}
+                  sx={{ fontWeight: "600", color: "#777", cursor: "pointer" }}
+                >
+                  <IconButton>
+                    <Public />
+                  </IconButton>
+                  Deployed Link
+                </Link>
               </div>
-            </Box>
-            {openModal && (
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={8}
+              lg={7}
+              sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            >
               <Box
                 sx={{
-                  borderBottom: "1px solid #777",
-                  padding: "10px 0 15px",
                   display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                  flexDirection: matches ? "row" : "column",
                   gap: "0.75rem",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
-                    gap: "1rem",
-                    flex: 1,
-                    width: "100%",
+                    gap: ".5rem",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    navigate(`/profile/${projectInfo?.user_id?._id}`);
                   }}
                 >
-                  <Avatar src={user.profile_image} />
-                  <TextField
-                    placeholder={`comment as ${user.full_name}`}
-                    value={commentStatement}
-                    onChange={(e) => setCommentStatement(e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
+                  <Avatar
+                    sx={{ bgcolor: "red", height: "62px", width: "62px" }}
+                    aria-label="user"
+                  >
+                    {projectInfo?.user_id?.profile_image &&
+                    projectInfo?.user_id?.profile_image !== "null" ? (
+                      <img
+                        height="100%"
+                        width="100%"
+                        src={projectInfo?.user_id?.profile_image}
+                        alt="user profile img"
+                      />
+                    ) : (
+                      `${projectInfo?.user_id?.first_name?.[0].toUpperCase()}${projectInfo?.user_id?.last_name?.[0].toUpperCase()}`
+                    )}
+                  </Avatar>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        textTransform: "capitalize",
+                        fontWeight: "600",
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      {projectInfo?.user_id?.first_name +
+                        " " +
+                        projectInfo?.user_id?.last_name}
+                    </Typography>
+                    <Typography variant="p" sx={{ color: "rgb(115 121 128/1)" }}>
+                      {projectInfo?.user_id?.title}
+                    </Typography>
+                    <Typography variant="p" sx={{ color: "rgb(115 121 128/1)" }}>
+                      {projectInfo?.user_id?.city},{projectInfo?.user_id?.state}
+                    </Typography>
+                  </div>
                 </div>
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <Button variant="text" onClick={() => setOpenModal(false)}>
-                    Cancel
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.6rem",
+                    alignItems: "center",
+                    justifyContent: matches ? "flex-end" : "flex-start",
+                    position: "relative",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: "rgb(69 72 77/1)",
+                      borderColor: "rgb(69 72 77/1)",
+                    }}
+                    onClick={shareHandler}
+                  >
+                    <Share />
+                    Share
                   </Button>
-                  {editComment ? (
-                    <Button
-                      variant="outlined"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      onClick={() => {
-                        if (commentId) {
-                          dispatch(
-                            updateComment(
-                              userInfo,
-                              { body: commentStatement },
-                              commentId
-                            )
-                          );
-                        }
-                      }}
-                    >
-                      <Send />
-                      Update
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="outlined"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      onClick={() => {
-                        dispatch(
-                          createComment(
-                            userInfo,
-                            { body: commentStatement },
-                            projectInfo._id
-                          )
-                        );
-                      }}
-                    >
-                      <Send />
-                      Post
-                    </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: "rgb(69 72 77/1)",
+                      borderColor: "rgb(69 72 77/1)",
+                    }}
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                  >
+                    <SaveAlt />
+                    Save
+                  </Button>
+                  <LikeButton data={projectInfo} userInfo={userInfo} />
+                  {openShareModal && (
+                    <ShareMenu shareUrl={projectInfo?.deployed_link} />
                   )}
                 </div>
               </Box>
-            )}
-            {commentArr?.length > 0 ? (
-              commentArr?.map((comment) => (
-                <CommentBody
-                  comment={comment}
-                  setOpenModal={setOpenModal}
-                  setCommentStatement={setCommentStatement}
-                  setEditComment={setEditComment}
-                  setCommentId={setCommentId}
-                  key={comment._id}
-                />
-              ))
-            ) : commentLoading ? (
-              <Spinner />
-            ) : (
-              "No comments yet!!"
-            )}
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: "2.25rem",
+                  lineHeight: "2.5rem",
+                  fontWeight: "600",
+                }}
+              >
+                {projectInfo?.name}
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "5px",
+                  margin: "7px 0 12px",
+                  padding: "0 10px",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                {projectInfo?.required_skills?.map((skill, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      padding: "4px 6px",
+                      borderRadius: "5px",
+                      background: "#fff",
+                      border: "1.5px solid #777",
+                      color: "#777",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </Box>
+              <Typography variant="p">{projectInfo?.description}</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  borderBottom: "1px solid #777",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingBottom: "0.7rem",
+                }}
+              >
+                <div
+                  style={{
+                    color: "rgb(23 24 26/1)",
+                    gap: "0.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6" sx={{ fontWeight: "500" }}>
+                    Comments
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: "500" }}>
+                    ({commentArr?.length})
+                  </Typography>
+                </div>
+                <div>
+                  <Button
+                    variant="contained"
+                    sx={{ borderRadius: "4px", backgroundColor: "#4cacbc" }}
+                    onClick={() => {
+                      if (!userInfo) {
+                        navigate("/signin");
+                      } else {
+                        setOpenModal(true);
+                      }
+                    }}
+                    className="btn"
+                  >
+                    Post comment
+                  </Button>
+                </div>
+              </Box>
+              {openModal && (
+                <Box
+                  sx={{
+                    borderBottom: "1px solid #777",
+                    padding: "10px 0 15px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    gap: "0.75rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "1rem",
+                      flex: 1,
+                      width: "100%",
+                    }}
+                  >
+                    <Avatar src={user.profile_image} />
+                    <TextField
+                      placeholder={`comment as ${user.full_name}`}
+                      value={commentStatement}
+                      onChange={(e) => setCommentStatement(e.target.value)}
+                      fullWidth
+                      size="small"
+                    />
+                  </div>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <Button variant="text" onClick={() => setOpenModal(false)}>
+                      Cancel
+                    </Button>
+                    {editComment ? (
+                      <Button
+                        variant="outlined"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        onClick={() => {
+                          if (commentId) {
+                            dispatch(
+                              updateComment(
+                                userInfo,
+                                { body: commentStatement },
+                                commentId
+                              )
+                            );
+                          }
+                        }}
+                      >
+                        <Send />
+                        Update
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        onClick={() => {
+                          dispatch(
+                            createComment(
+                              userInfo,
+                              { body: commentStatement },
+                              projectInfo._id
+                            )
+                          );
+                        }}
+                      >
+                        <Send />
+                        Post
+                      </Button>
+                    )}
+                  </div>
+                </Box>
+              )}
+              {commentArr?.length > 0 ? (
+                commentArr?.map((comment) => (
+                  <CommentBody
+                    comment={comment}
+                    setOpenModal={setOpenModal}
+                    setCommentStatement={setCommentStatement}
+                    setEditComment={setEditComment}
+                    setCommentId={setCommentId}
+                    key={comment._id}
+                  />
+                ))
+              ) : commentLoading ? (
+                <Spinner />
+              ) : (
+                "No comments yet!!"
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      ) : (
-        <p>{error}</p>
+        )
       )}
       <AddToCollectionModal
         open={open}

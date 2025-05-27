@@ -44,6 +44,7 @@ import {
 } from "../actions/chatActions";
 import { CONVERSATION_CREATE_RESET } from "../constants/chatConstants";
 import { BASE_URL } from "../config";
+import { ProfileSkeleton } from "../component/skeletons/SkeletonComponents";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -160,8 +161,9 @@ const ProfilePage = () => {
         overflow: "hidden!important",
       }}
     >
-      {loading && <Spinner customClass={"loading-container"} />}
-      {!loading && !profileInfoError && (
+      {loading ? (
+        <ProfileSkeleton />
+      ) : !loading && !profileInfoError && (
         <Stack
           direction="row"
           sx={{
